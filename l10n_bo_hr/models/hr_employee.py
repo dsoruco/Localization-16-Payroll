@@ -53,3 +53,5 @@ class HrEmployee(models.Model):
                                    help='Identifica la fecha en que se jubila el empleado')
 
     afp_age = fields.Char(string="Edad")
+
+
