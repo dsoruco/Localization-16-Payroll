@@ -31,8 +31,25 @@ class HrEmployee(models.Model):
     #
     # caja_id = fields.Many2one('res.partner', string='Caja de compensación familiar', domain=[('l10n_co_caja', '=', True)])
 
-    # severance  = fields.Selection([
-    #     ('PV', 'Porvenir'),
-    #     ('PT', 'Proteccion'),
-    #     ('C', 'Colfondos')],
-    #     string='Cesantia')
+    # Datos de la AFP
+    afp_subtype = fields.Selection([
+        ('01', 'Previsión'),
+        ('02', 'Futuro'),
+        ('03', 'Gestora')],
+        string='Subtipo')
+
+    afp_nua_cua = fields.Char(string="NUA/CUA")
+
+    aft_quotation_type = fields.Selection([
+        ('1', 'Dependiente o asegurado con pensión del sip < 65 años que aporta'),
+        ('8', 'Dependiente o asegurado con pensión del sip > 65 años que aporta'),
+        ('C', 'Asegurado con pensión del sip < 65 años que no aporta'),
+        ('D', 'Asegurado con pensión del sip > 65 años que no aporta')],
+        string='Tipo de Cotización')
+
+    afp_retired = fields.Boolean('Jubilado', help='Para identificar que el empleado esta jubilado', default=False)
+
+    afp_retired_date = fields.Date(string='Retire date',
+                                   help='Identifica la fecha en que se jubila el empleado')
+
+    afp_age = fields.Char(string="Edad")

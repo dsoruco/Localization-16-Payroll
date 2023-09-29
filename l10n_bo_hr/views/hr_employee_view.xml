@@ -34,13 +34,17 @@
                     <field name="document_extension"/>
                 </group>
             </xpath>
-<!--            <xpath expr="//page[@name='personal_information']/group" position="inside">-->
-<!--                <group string="Dotación" >-->
-<!--                    <field name="shirt_size"/>-->
-<!--                    <field name="pant_size"/>-->
-<!--                    <field name="shoe_size"/>-->
-<!--                </group>-->
-<!--            </xpath>-->
+            <xpath expr="//page[@name='personal_information']/group" position="inside">
+                <group string="Datos Afp" >
+                    <field name="afp_subtype"/>
+                    <field name="afp_nua_cua"/>
+                    <field name="aft_quotation_type"/>
+                    <field name="afp_retired"/>
+                    <field name="afp_retired_date"
+                           attrs="{'invisible': [('afp_retired', '=', False)], 'required':[('afp_retired', '!=', False)]}"/>
+                    <field name="afp_age"/>
+                </group>
+            </xpath>
         </field>
     </record>
 <!--    <record id="res_partner_bank_form_inherit" model="ir.ui.view">-->
