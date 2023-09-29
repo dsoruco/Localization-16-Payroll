@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+ <!--         CONTRACT VIEW         -->
+    <record id="hr_contract_form_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.view.form.inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='information']" position="after">
+                <page string="Contrato bolivia">
+                    <group name="main_info_bolivia" >
+                        <group name="contract_info" string="Medida de personal">
+                            <field name="measurement_staff"/>
+                            <field name="reason_measurement_id"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+<!--    <record id="hr_contract_input_view_form" model="ir.ui.view">-->
+<!--            <field name="name">hr.contract.input.form</field>-->
+<!--            <field name="model">hr.contract.input</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form string="Entradas en contrato">-->
+<!--                     <sheet>-->
+<!--                        <group>-->
+<!--                            <group>-->
+<!--                                <field name="contract_input_id" invisible="1"/>-->
+<!--                                <field name="input_type_id"/>-->
+<!--                                <field name="amount"/>-->
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                    </sheet>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--    CONTRACT  MENU   -->
+
+            <menuitem
+                id="hr_menu_contract_bolivia"
+                name="Contract bolivia"
+                parent="hr.menu_human_resources_configuration"
+                groups="base.group_no_one"/>
+                sequence="100"/>
+
+</odoo>
