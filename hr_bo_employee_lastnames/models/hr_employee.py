@@ -13,7 +13,7 @@ class HrEmployee(models.Model):
     _inherit = "hr.employee"
 
     @api.model
-    def _get_name_lastnames(self, treatment, lastname, firstname, firstname2, lastname2=None, married_name:None):
+    def _get_name_lastnames(self, treatment, lastname, firstname, firstname2, lastname2=None, married_name=None):
         order = self._get_names_order()
         names = list()
         if order == "first_last":
@@ -52,8 +52,7 @@ class HrEmployee(models.Model):
         if any([field in vals for field in ("treatment", "firstname", "lastname", "firstname2", "lastname2","married_name")]):
             vals["name"] = self._get_name_lastnames(
                 vals.get("treatment"), vals.get("lastname"), vals.get("firstname"),
-                vals.get("firstname2"), vals.get("lastname2", vals.get("married_name")
-            )
+                vals.get("firstname2"), vals.get("lastname2"), vals.get("married_name"))
         elif vals.get("name"):
             name_splitted = self.split_name(vals["name"])
             vals["treatment"] = name_splitted["treatment"]
@@ -67,7 +66,7 @@ class HrEmployee(models.Model):
     def _prepare_vals_on_write_firstname_lastname(self, vals):
         values = vals.copy()
         res = super(HrEmployee, self)._prepare_vals_on_write_firstname_lastname(values)
-        if any([field in vals for field in ("treatment","firstname", "lastname", "firstname2", "lastname2", "married_name")]):
+        if any([field in vals for field in ("treatment", "firstname", "lastname", "firstname2", "lastname2", "married_name")]):
             if "treatment" in vals:
                 treatment = vals["treatment"]
             else:
@@ -88,17 +87,19 @@ class HrEmployee(models.Model):
                 lastname2 = vals["lastname2"]
             else:
                 lastname2 = self.lastname2
-            if "lastname2" in vals:
-                lastname2 = vals["lastname2"]
+            if "married_name" in vals:
+                married_name = vals["married_name"]
             else:
-                lastname2 = self.lastname2
-            vals["name"] = self._get_name_lastnames(lastname, firstname, firstname2, lastname2)
+                married_name = self.married_name
+            vals["name"] = self._get_name_lastnames(treatment, lastname, firstname, firstname2, lastname2, married_name)
         elif vals.get("name"):
             name_splitted = self.split_name(vals["name"])
+            vals["treatment"] = name_splitted["treatment"]
             vals["lastname"] = name_splitted["lastname"]
             vals["firstname"] = name_splitted["firstname"]
             vals["firstname2"] = name_splitted["firstname2"]
             vals["lastname2"] = name_splitted["lastname2"]
+            vals["married_name"] = name_splitted["married_name"]
         return res
 
     def _update_partner_firstname(self):
@@ -184,9 +185,14 @@ class HrEmployee(models.Model):
         records._inverse_name()
         _logger.info("%d employees updated installing module.", len(records))
 
-    @api.onchange("firstname", "firstname2", "lastname", "lastname2")
+    @api.onchange("treatment", "firstname", "firstname2", "lastname", "lastname2", "married_name")
     def _onchange_firstname_lastname(self):
-        if self.firstname or self.firstname2 or self.lastname or self.lastname2:
+        treatment = ""
+        if self.treatment == 'senor':
+            treatment = 'Sr.'
+        if self.treatment == 'senora':
+            treatment = 'Sra.'
+        if self.firstname or self.firstname2 or self.lastname or self.lastname2 or self.married_name:
             self.name = self._get_name_lastnames(
-                self.lastname, self.firstname, self.firstname2, self.lastname2
+                treatment, self.lastname, self.firstname, self.firstname2, self.lastname2, self.married_name
             )
