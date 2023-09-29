@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+ <!--         EMPLOYEE VIEW         -->
+    <record id="hr_employee_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+<!--            <xpath expr="//page[@name='hr_settings']" position="after">-->
+<!--                <page name="hr_conf_colombia" string="Configuración colombia">-->
+<!--                    <group name="hr_main_info_colombia" >-->
+<!--                        <group name="date_identification">-->
+<!--                            <field name="type_identification_document"/>-->
+<!--                        </group>-->
+<!--                        <group name="aseguradoras" string="Aseguradoras">-->
+<!--                            <field name="eps_id"/>-->
+<!--                            <field name="afp_id"/>-->
+<!--                            <field name="arl_id"/>-->
+<!--                        </group>-->
+<!--                        <group name="caja_sesantia" string="Caja cesantia">-->
+<!--                            <field name="caja_id"/>-->
+<!--                            <field name="severance"/>-->
+<!--                        </group>-->
+<!--                    </group>-->
+<!--                </page>-->
+<!--            </xpath>-->
+            <xpath expr="//page[@name='hr_settings']/group" position="inside">
+                <group string="ID personal" >
+                    <field name="type_identification_document"/>
+                    <field name="valid_date"/>
+                    <field name="document_number"/>
+                    <field name="document_extension"/>
+                </group>
+            </xpath>
+<!--            <xpath expr="//page[@name='personal_information']/group" position="inside">-->
+<!--                <group string="Dotación" >-->
+<!--                    <field name="shirt_size"/>-->
+<!--                    <field name="pant_size"/>-->
+<!--                    <field name="shoe_size"/>-->
+<!--                </group>-->
+<!--            </xpath>-->
+        </field>
+    </record>
+<!--    <record id="res_partner_bank_form_inherit" model="ir.ui.view">-->
+<!--        <field name="name">res.partner.bank.form.inherit</field>-->
+<!--        <field name="model">res.partner.bank</field>-->
+<!--        <field name="inherit_id" ref="account.view_partner_bank_form_inherit_account"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <field name="bank_id" position="after">-->
+<!--                <field name="account_type"/>-->
+<!--            </field>-->
+<!--        </field>-->
+<!--    </record>-->
+
+
+
+</odoo>
