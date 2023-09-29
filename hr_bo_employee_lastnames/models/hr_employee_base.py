@@ -4,7 +4,7 @@ from odoo import fields, models
 class HrEmployeeBase(models.AbstractModel):
     _inherit = "hr.employee.base"
 
-    treatment = fields.Selection([('senor', 'Sr.'), ('senora', 'Sra.')], string='Tratamiento')
+    treatment = fields.Selection([('Sr.', 'Sr.'), ('Sra.', 'Sra.')], string='Tratamiento')
     firstname = fields.Char("First name")
     firstname2 = fields.Char("Second name")
     lastname = fields.Char("Last name")

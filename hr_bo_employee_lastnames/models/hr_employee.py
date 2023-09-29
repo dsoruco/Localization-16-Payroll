@@ -187,12 +187,20 @@ class HrEmployee(models.Model):
 
     @api.onchange("treatment", "firstname", "firstname2", "lastname", "lastname2", "married_name")
     def _onchange_firstname_lastname(self):
-        treatment = ""
-        if self.treatment == 'senor':
-            treatment = 'Sr.'
-        if self.treatment == 'senora':
-            treatment = 'Sra.'
+        if self.treatment:
+            treatment = self.treatment
+        else:
+            treatment = ""
+
         if self.firstname or self.firstname2 or self.lastname or self.lastname2 or self.married_name:
             self.name = self._get_name_lastnames(
                 treatment, self.lastname, self.firstname, self.firstname2, self.lastname2, self.married_name
             )
+
+    # def _get_treatment(self, treatment):
+    #     if treatment == 'senor':
+    #         return 'Sr.'
+    #     if treatment == 'senora':
+    #         return 'Sra.'
+    #     else:
+    #         return ""
