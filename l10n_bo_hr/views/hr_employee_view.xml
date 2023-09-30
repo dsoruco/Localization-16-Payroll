@@ -61,7 +61,12 @@
                 <page name="attachment" string="Attachment" groups="hr.group_hr_user">
                     <group>
                         <group string="Data prima" name="active_group">
-                            <field name="attachment_ids" string="Media Attachments"/>\
+                            <field name="attachment_ids" string="Media Attachments">
+                                <tree editable="top">
+                                    <field name="name" />
+                                    <field name="attachment"/>
+                                </tree>
+                            </field>
                         </group>
                     </group>
                 </page>

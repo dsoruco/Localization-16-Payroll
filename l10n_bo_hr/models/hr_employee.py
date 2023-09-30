@@ -75,12 +75,7 @@ class HrEmployee(models.Model):
                                required=False
     )
     
-    attachment_ids = fields.One2many(
-        comodel_name="ir.attachment",
-        inverse_name="res_id",
-        domain=[("res_model", "=", "'hr.employee")],
-        string="Media Attachments",
-    )
+    attachment_ids = fields.One2many('l10n_bo_hr.employee_docs', 'employee_id', string='Attachments')
     
 
 
