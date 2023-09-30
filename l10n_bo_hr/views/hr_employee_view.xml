@@ -33,6 +33,13 @@
                     <field name="document_number"/>
                     <field name="document_extension"/>
                 </group>
+                <group string="Asignación Organizativa" >
+                    <field name="staff_division_id"/>
+                    <field name="staffing_subdivision_id"/>
+                    <field name="personnel_area_id"/>
+                    <field name="personnel_group_id"/>
+                    <field name="payroll_area_id"/>
+                </group>
             </xpath>
             <xpath expr="//page[@name='personal_information']/group" position="inside">
                 <group string="Datos Afp" >
@@ -58,6 +65,11 @@
 <!--        </field>-->
 <!--    </record>-->
 
-
+            <menuitem
+                id="hr_menu_empleado_bolivia"
+                name="Empleado bolivia"
+                parent="hr.menu_human_resources_configuration"
+                groups="base.group_no_one"/>
+                sequence="100"/>
 
 </odoo>

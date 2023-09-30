@@ -23,14 +23,6 @@ class HrEmployee(models.Model):
         ('CB', 'CB Cochabamba ')],
         string='Extensión de documento', default='SC')
 
-    # eps_id = fields.Many2one('res.partner', string='Entidad promotora de salud', domain=[('l10n_co_eps', '=', True)])
-    #
-    # afp_id = fields.Many2one('res.partner', string='Administradora de fondo de penciones', domain=[('l10n_co_afp', '=', True)])
-    #
-    # arl_id = fields.Many2one('res.partner', string='Administradora de riesgos laborales', domain=[('l10n_co_arl', '=', True)])
-    #
-    # caja_id = fields.Many2one('res.partner', string='Caja de compensación familiar', domain=[('l10n_co_caja', '=', True)])
-
     # Datos de la AFP
     afp_subtype = fields.Selection([
         ('01', 'Previsión'),
@@ -54,4 +46,9 @@ class HrEmployee(models.Model):
 
     afp_age = fields.Char(string="Edad")
 
-
+    # Asignación organizativa
+    staff_division_id = fields.Many2one('hr.employee.staff.division', string='División de personal')
+    staffing_subdivision_id = fields.Many2one('hr.employee.staffing.subdivision', string='SubDivisión de personal')
+    personnel_area_id = fields.Many2one('hr.employee.personnel.area', string='Área de personal')
+    personnel_group_id = fields.Many2one('hr.employee.personnel.group', string='Grupo de personal')
+    payroll_area_id = fields.Many2one('hr.employee.payroll.area', string='Área de nómina')
