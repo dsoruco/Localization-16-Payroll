@@ -58,6 +58,13 @@
                         </group>
                     </group>
                 </page>
+                <page name="attachment" string="Attachment" groups="hr.group_hr_user">
+                    <group>
+                        <group string="Data prima" name="active_group">
+                            <field name="attachment_ids" string="Media Attachments"/>\
+                        </group>
+                    </group>
+                </page>
             </xpath>
         </field>
     </record>

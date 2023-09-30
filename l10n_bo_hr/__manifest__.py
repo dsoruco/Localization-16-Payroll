@@ -8,6 +8,7 @@
     'description': """
     Bolivia Payroll Localization
     """,
+    "depends": ["mail"],
     'data': [
         # 'data/',
         'security/ir.model.access.csv',

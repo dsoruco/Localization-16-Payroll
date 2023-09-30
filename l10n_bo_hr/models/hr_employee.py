@@ -6,8 +6,8 @@ from datetime import date
 
 
 class HrEmployee(models.Model):
-    _inherit = 'hr.employee'
-
+    # _inherit = 'hr.employee'
+    _inherit = "hr.employee"
     type_identification_document = fields.Selection([
         ('01', 'Cédula de identidad'),
         ('02', 'Licencia de Conducir'),
@@ -73,6 +73,13 @@ class HrEmployee(models.Model):
     amount_paid = fields.Float(string='Amount paid',
                                help='Campo calculado del monto de prima pagado para la gestión',
                                required=False
+    )
+    
+    attachment_ids = fields.One2many(
+        comodel_name="ir.attachment",
+        inverse_name="res_id",
+        domain=[("res_model", "=", "'hr.employee")],
+        string="Media Attachments",
     )
     
 
