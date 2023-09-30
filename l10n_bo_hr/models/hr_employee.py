@@ -53,5 +53,27 @@ class HrEmployee(models.Model):
                                    help='Identifica la fecha en que se jubila el empleado')
 
     afp_age = fields.Char(string="Edad")
+    
+    
+    earned_average = fields.Float(string='Earned Average',
+                                  help='Campo calculado promedio sobre el total ganado de los 3 meses ',
+                               required=False
+    )
+    
+    paid_percentage = fields.Float(string='Paid Percentage',
+                                   help='Porcentaje a pagar de prima',
+                               required=False
+    )
+    
+    days_considered = fields.Integer(string='Days considered',
+                                   help='Días trabajados en la gestión a pagar por el cual se paga el monto de prima',
+                               required=False
+    )
+    
+    amount_paid = fields.Float(string='Amount paid',
+                               help='Campo calculado del monto de prima pagado para la gestión',
+                               required=False
+    )
+    
 
 
