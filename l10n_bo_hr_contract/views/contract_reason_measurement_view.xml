@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+<!--    CONTRACT MOTIVO DE MEDIDA   -->
+    <record id="hr_contract_reason_measurement_view_form" model="ir.ui.view">
+            <field name="name">hr.contract.reason.measurement.form</field>
+            <field name="model">hr.contract.reason.measurement</field>
+            <field name="arch" type="xml">
+                <form string="Motivo de medida">
+                    <group col="4">
+                        <field colspan="4" name="code"/>
+                        <field colspan="4" name="name"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_contract_reason_measurement_view_tree" model="ir.ui.view">
+            <field name="name">hr.contract.reason.measurement.tree</field>
+            <field name="model">hr.contract.reason.measurement</field>
+            <field name="arch" type="xml">
+                <tree string="Contrato motivo de medida">
+                      <field colspan="4" name="code"/>
+                      <field colspan="4" name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_contract_reason_measurement_view_search" model="ir.ui.view">
+            <field name="name">hr.contract.reason.measurement.search</field>
+            <field name="model">hr.contract.reason.measurement</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Contrato Motivo de medida">
+                    <field name="code" string="Motivo de medida código"/>
+                    <field name="name" string="Motivo de medida"/>
+               </search>
+            </field>
+        </record>
+
+        <record id="action_hr_contract_reason_measurement" model="ir.actions.act_window">
+            <field name="name">Contrato motivo de medida</field>
+            <field name="res_model">hr.contract.reason.measurement</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="hr_contract_reason_measurement_view_search"/>
+        </record>
+
+        <menuitem
+            id="hr_menu_contract_reason_measurement"
+            action="action_hr_contract_reason_measurement"
+            parent="hr_menu_contract_bolivia"
+            sequence="3"
+            groups="base.group_no_one"/>
+</odoo>

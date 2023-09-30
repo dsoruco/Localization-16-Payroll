@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+         <record id="hr_contract_reason_measurement_1" model="hr.contract.reason.measurement">
+             <field name="code">01</field>
+             <field name="name">Creación de nuevo cargo</field>
+        </record>
+         <record id="hr_contract_reason_measurement_2" model="hr.contract.reason.measurement">
+             <field name="code">02</field>
+             <field name="name">Reemplazo</field>
+        </record>
+
+
+    </data>
+</odoo>
