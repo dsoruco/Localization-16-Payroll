@@ -58,16 +58,14 @@
                         </group>
                     </group>
                 </page>
-                <page name="attachment" string="Attachment" groups="hr.group_hr_user">
-                    <group>
-                        <group string="Data prima" name="active_group">
-                            <field name="attachment_ids" string="Media Attachments">
-                                <tree editable="top">
-                                    <field name="name" />
-                                    <field name="attachment"/>
-                                </tree>
-                            </field>
-                        </group>
+                <page name="attachment" string="Attachments" groups="hr.group_hr_user">
+                    <group string="Employee's Documents">
+                        <field name="attachment_ids">
+                            <tree editable="top">
+                                <field name="name" />
+                                <field name="attachment" widget="attachment"/>
+                            </tree>
+                        </field>
                     </group>
                 </page>
             </xpath>
