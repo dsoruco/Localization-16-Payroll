@@ -52,3 +52,6 @@ class HrEmployee(models.Model):
     personnel_area_id = fields.Many2one('hr.employee.personnel.area', string='Área de personal')
     personnel_group_id = fields.Many2one('hr.employee.personnel.group', string='Grupo de personal')
     payroll_area_id = fields.Many2one('hr.employee.payroll.area', string='Área de nómina')
+
+    # Para mostrar el código de la plaza
+    ceco = fields.Char(related='job_id.ceco', readonly=True, string="CECO")

@@ -8,24 +8,9 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
-<!--            <xpath expr="//page[@name='hr_settings']" position="after">-->
-<!--                <page name="hr_conf_colombia" string="Configuración colombia">-->
-<!--                    <group name="hr_main_info_colombia" >-->
-<!--                        <group name="date_identification">-->
-<!--                            <field name="type_identification_document"/>-->
-<!--                        </group>-->
-<!--                        <group name="aseguradoras" string="Aseguradoras">-->
-<!--                            <field name="eps_id"/>-->
-<!--                            <field name="afp_id"/>-->
-<!--                            <field name="arl_id"/>-->
-<!--                        </group>-->
-<!--                        <group name="caja_sesantia" string="Caja cesantia">-->
-<!--                            <field name="caja_id"/>-->
-<!--                            <field name="severance"/>-->
-<!--                        </group>-->
-<!--                    </group>-->
-<!--                </page>-->
-<!--            </xpath>-->
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="ceco"/>
+            </xpath>
             <xpath expr="//page[@name='hr_settings']/group" position="inside">
                 <group string="ID personal" >
                     <field name="type_identification_document"/>
