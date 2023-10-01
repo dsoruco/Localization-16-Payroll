@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+<!--    EMPLOYEE GRUPO DE PERSONAL   -->
+    <record id="hr_employee_personnel_group_form" model="ir.ui.view">
+            <field name="name">hr.employee.personnel.group.form</field>
+            <field name="model">hr.employee.personnel.group</field>
+            <field name="arch" type="xml">
+                <form string="Grupo de Personal">
+                    <group col="4">
+                        <field colspan="4" name="code"/>
+                        <field colspan="4" name="name"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_employee_personnel_group_tree" model="ir.ui.view">
+            <field name="name">hr.employee.personnel.group.tree</field>
+            <field name="model">hr.employee.personnel.group</field>
+            <field name="arch" type="xml">
+                <tree string="Grupo de Personal">
+                      <field colspan="4" name="code"/>
+                      <field colspan="4" name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_employee_personnel_group_search" model="ir.ui.view">
+            <field name="name">hr.employee.personnel.group.search</field>
+            <field name="model">hr.employee.personnel.group</field>
+            <field name="arch" type="xml">
+                <search string="Search Grupo de Personal">
+                    <field name="code" string="Code"/>
+                    <field name="name" string="Grupo de Personal"/>
+               </search>
+            </field>
+        </record>
+
+        <record id="action_hr_employee_personnel_group" model="ir.actions.act_window">
+            <field name="name">Grupo de Personal</field>
+            <field name="res_model">hr.employee.personnel.group</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="hr_employee_personnel_group_search"/>
+        </record>
+
+        <menuitem
+            id="menu_hr_employee_personnel_group"
+            action="action_hr_employee_personnel_group"
+            parent="hr_menu_empleado_bolivia"
+            sequence="3"
+            groups="base.group_no_one"/>
+</odoo>

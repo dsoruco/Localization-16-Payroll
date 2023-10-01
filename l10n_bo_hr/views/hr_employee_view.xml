@@ -33,6 +33,13 @@
                     <field name="document_number"/>
                     <field name="document_extension"/>
                 </group>
+                <group string="Asignación Organizativa" >
+                    <field name="staff_division_id"/>
+                    <field name="staffing_subdivision_id"/>
+                    <field name="personnel_area_id"/>
+                    <field name="personnel_group_id"/>
+                    <field name="payroll_area_id"/>
+                </group>
             </xpath>
             <xpath expr="//page[@name='personal_information']/group" position="inside">
                 <group string="Datos Afp" >
@@ -86,18 +93,22 @@
             </xpath>
         </field>
     </record>
-    
-    <!--    <record id="res_partner_bank_form_inherit" model="ir.ui.view">-->
-    <!--        <field name="name">res.partner.bank.form.inherit</field>-->
-    <!--        <field name="model">res.partner.bank</field>-->
-    <!--        <field name="inherit_id" ref="account.view_partner_bank_form_inherit_account"/>-->
-    <!--        <field name="arch" type="xml">-->
-    <!--            <field name="bank_id" position="after">-->
-    <!--                <field name="account_type"/>-->
-    <!--            </field>-->
-    <!--        </field>-->
-    <!--    </record>-->
-    
-    
-    
+<!--    <record id="res_partner_bank_form_inherit" model="ir.ui.view">-->
+<!--        <field name="name">res.partner.bank.form.inherit</field>-->
+<!--        <field name="model">res.partner.bank</field>-->
+<!--        <field name="inherit_id" ref="account.view_partner_bank_form_inherit_account"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <field name="bank_id" position="after">-->
+<!--                <field name="account_type"/>-->
+<!--            </field>-->
+<!--        </field>-->
+<!--    </record>-->
+
+            <menuitem
+                id="hr_menu_empleado_bolivia"
+                name="Empleado bolivia"
+                parent="hr.menu_human_resources_configuration"
+                groups="base.group_no_one"
+                sequence="100"/>
+
 </odoo>
