@@ -45,9 +45,11 @@
                     <field name="afp_age"/>
                 </group>
             </xpath>
-            
-            <!-- PRIMA -->
+            <xpath expr="//group[@name='departure']" position="replace">
+                
+            </xpath>
             <xpath expr="//page[@name='hr_settings']" position="after">
+                <!-- PRIMA -->
                 <page name="hr_prima" string="HR Prima" groups="hr.group_hr_user">
                     <group>
                         <group string="Data prima" name="active_group">
@@ -58,19 +60,33 @@
                         </group>
                     </group>
                 </page>
+                <!-- ATTACHMENTS -->
                 <page name="attachment" string="Attachments" groups="hr.group_hr_user">
-                    <group string="Employee's Documents">
-                        <field name="attachment_ids">
-                            <tree editable="top">
-                                <field name="name" />
-                                <field name="attachment" widget="attachment"/>
-                            </tree>
-                        </field>
-                    </group>
+                    <field name="attachment_ids" widget="one2many">
+                        <tree editable="top" expand="true">
+                            <field name="name" />
+                            <field name="attachment" widget="attachment"/>
+                        </tree>
+                    </field>
+                </page>
+                <page name="public" string="Departure" attrs="{'invisible': [('active', '=', True)]}">
+                    <div id="o_work_employee_container" class="d-lg-flex"> <!-- These two div are used to position org_chart -->
+                        <div id="o_work_employee_main" class="flex-grow-1">
+                            <group name="departure" string="Departure" attrs="{'invisible': [('active', '=', True)]}">
+                                <field name="departure_reason_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
+                                <field name="departure_description"/>
+                                <field name="departure_date"/>
+                                <field name="date_of_pay"/>
+                                <field name="pay_in"/>
+                                <field name="bank_id" attrs="{'invisible': [('pay_in', '!=' , 'chk')]}"/>
+                            </group>
+                        </div>
+                    </div>
                 </page>
             </xpath>
         </field>
     </record>
+    
     <!--    <record id="res_partner_bank_form_inherit" model="ir.ui.view">-->
     <!--        <field name="name">res.partner.bank.form.inherit</field>-->
     <!--        <field name="model">res.partner.bank</field>-->

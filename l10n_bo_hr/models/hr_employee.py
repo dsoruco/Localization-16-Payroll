@@ -47,35 +47,43 @@ class HrEmployee(models.Model):
         ('D', 'Asegurado con pensión del sip > 65 años que no aporta')],
         string='Tipo de Cotización')
 
-    afp_retired = fields.Boolean('Jubilado', help='Para identificar que el empleado esta jubilado', default=False)
+    afp_retired = fields.Boolean(
+        'Jubilado', help='Para identificar que el empleado esta jubilado', default=False)
 
     afp_retired_date = fields.Date(string='Retire date',
                                    help='Identifica la fecha en que se jubila el empleado')
 
     afp_age = fields.Char(string="Edad")
-    
-    
+
     earned_average = fields.Float(string='Earned Average',
                                   help='Campo calculado promedio sobre el total ganado de los 3 meses ',
-                               required=False
-    )
-    
+                                  required=False
+                                  )
+
     paid_percentage = fields.Float(string='Paid Percentage',
                                    help='Porcentaje a pagar de prima',
-                               required=False
-    )
-    
+                                   required=False
+                                   )
+
     days_considered = fields.Integer(string='Days considered',
-                                   help='Días trabajados en la gestión a pagar por el cual se paga el monto de prima',
-                               required=False
-    )
-    
+                                     help='Días trabajados en la gestión a pagar por el cual se paga el monto de prima',
+                                     required=False
+                                     )
+
     amount_paid = fields.Float(string='Amount paid',
                                help='Campo calculado del monto de prima pagado para la gestión',
                                required=False
+                               )
+
+    attachment_ids = fields.One2many('l10n_bo_hr.employee_docs', 'employee_id')
+
+    pay_in = fields.Selection(
+        string='Pay in',
+        selection=[('chk', 'Cheque'), ('ef', 'Efectivo')]
     )
-    
-    attachment_ids = fields.One2many('l10n_bo_hr.employee_docs', 'employee_id', string='Attachments')
-    
 
+    bank_id = fields.Many2one('res.bank', string='Bank')
 
+    date_of_pay = fields.Date(string='Date of pay',
+                                default=fields.Date.context_today,
+                            )
