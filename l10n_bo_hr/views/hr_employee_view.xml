@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+ <!--         EMPLOYEE VIEW         -->
+    <record id="hr_employee_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="ceco"/>
+            </xpath>
+            <xpath expr="//page[@name='hr_settings']/group" position="inside">
+                <group string="ID personal" >
+                    <field name="type_identification_document"/>
+                    <field name="valid_date"/>
+                    <field name="document_number"/>
+                    <field name="document_extension"/>
+                </group>
+                <group string="Asignación Organizativa" >
+                    <field name="staff_division_id"/>
+                    <field name="staffing_subdivision_id"/>
+                    <field name="personnel_area_id"/>
+                    <field name="personnel_group_id"/>
+                    <field name="payroll_area_id"/>
+                </group>
+            </xpath>
+            <xpath expr="//page[@name='personal_information']/group" position="inside">
+                <group string="Datos Afp" >
+                    <field name="afp_subtype"/>
+                    <field name="afp_nua_cua"/>
+                    <field name="aft_quotation_type"/>
+                    <field name="afp_retired"/>
+                    <field name="afp_retired_date"
+                           attrs="{'invisible': [('afp_retired', '=', False)], 'required':[('afp_retired', '!=', False)]}"/>
+                    <field name="afp_age"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+<!--    <record id="res_partner_bank_form_inherit" model="ir.ui.view">-->
+<!--        <field name="name">res.partner.bank.form.inherit</field>-->
+<!--        <field name="model">res.partner.bank</field>-->
+<!--        <field name="inherit_id" ref="account.view_partner_bank_form_inherit_account"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <field name="bank_id" position="after">-->
+<!--                <field name="account_type"/>-->
+<!--            </field>-->
+<!--        </field>-->
+<!--    </record>-->
+
+            <menuitem
+                id="hr_menu_empleado_bolivia"
+                name="Empleado bolivia"
+                parent="hr.menu_human_resources_configuration"
+                groups="base.group_no_one"/>
+                sequence="100"/>
+
+</odoo>
