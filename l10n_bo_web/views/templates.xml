@@ -1,0 +1,40 @@
+<odoo>
+  <data>
+    <!--
+         <template id="listing">
+         <ul>
+         <li t-foreach="objects" t-as="object">
+         <a t-attf-href="#{ root }/objects/#{ object.id }">
+         <t t-esc="object.display_name"/>
+         </a>
+         </li>
+         </ul>
+         </template>
+         <template id="object">
+         <h1><t t-esc="object.display_name"/></h1>
+         <dl>
+         <t t-foreach="object._fields" t-as="field">
+         <dt><t t-esc="field"/></dt>
+         <dd><t t-esc="object[field]"/></dd>
+         </t>
+         </dl>
+         </template>
+    -->
+    <template id="my_login" name="Alain Login" inherit_id="web.login">
+      <xpath expr="//t[@t-if='debug']" position="replace">
+        
+      </xpath>
+    </template>
+    <template id="l10n_bo_web.login_layout" name="My Login Layout" inherit_id="web.login_layout">
+      <xpath expr="//div[@t-if='not disable_footer']" position="replace">
+        
+      </xpath>
+    </template>
+
+    <template id="l10n_bo_web.login" inherit_id="auth_signup.login" name="My Sign up - Reset Password">
+            <xpath expr="//div[hasclass('justify-content-between')]" position="replace">
+                
+            </xpath>
+    </template>
+  </data>
+</odoo>
