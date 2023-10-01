@@ -25,13 +25,13 @@
         
       </xpath>
     </template>
-    <template id="user_manager.login_layout" name="My Login Layout" inherit_id="web.login_layout">
+    <template id="l10n_bo_web.login_layout" name="My Login Layout" inherit_id="web.login_layout">
       <xpath expr="//div[@t-if='not disable_footer']" position="replace">
         
       </xpath>
     </template>
 
-    <template id="user_manager.login" inherit_id="auth_signup.login" name="My Sign up - Reset Password">
+    <template id="l10n_bo_web.login" inherit_id="auth_signup.login" name="My Sign up - Reset Password">
             <xpath expr="//div[hasclass('justify-content-between')]" position="replace">
                 
             </xpath>
