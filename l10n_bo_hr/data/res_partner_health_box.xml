@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record model='res.partner' id='res_partner_health_box_1'>
+            <field name='name'>Caja Nacional de Salud</field>
+            <field name="company_type">company</field>
+            <field name='l10n_bo_health_box_code'>B1</field>
+            <field name="country_id" ref="base.co"/>
+            <field name="l10n_bo_health_box">True</field>
+        </record>
+        <record model='res.partner' id='res_partner_health_box_2'>
+            <field name='name'>Caja Petrolera de Salud</field>
+            <field name="company_type">company</field>
+            <field name='l10n_bo_health_box_code'>B2</field>
+            <field name="country_id" ref="base.co"/>
+            <field name="l10n_bo_health_box">True</field>
+        </record>
+        <record model='res.partner' id='res_partner_health_box_3'>
+            <field name='name'>Caja Bancaria de Salud</field>
+            <field name="company_type">company</field>
+            <field name='l10n_bo_health_box_code'>B3</field>
+            <field name="country_id" ref="base.co"/>
+            <field name="l10n_bo_health_box">True</field>
+        </record>
+        <record model='res.partner' id='res_partner_health_box_4'>
+            <field name='name'>Seguro Social Universitario</field>
+            <field name="company_type">company</field>
+            <field name='l10n_bo_health_box_code'>B4</field>
+            <field name="country_id" ref="base.co"/>
+            <field name="l10n_bo_health_box">True</field>
+        </record>
+        <record model='res.partner' id='res_partner_health_box_5'>
+            <field name='name'>Caja de Salud Cordes</field>
+            <field name="company_type">company</field>
+            <field name='l10n_bo_health_box_code'>B5</field>
+            <field name="country_id" ref="base.co"/>
+            <field name="l10n_bo_health_box">True</field>
+        </record>
+        <record model='res.partner' id='res_partner_health_box_6'>
+            <field name='name'>Caja Bancaria Estatal</field>
+            <field name="company_type">company</field>
+            <field name='l10n_bo_health_box_code'>B6</field>
+            <field name="country_id" ref="base.co"/>
+            <field name="l10n_bo_health_box">True</field>
+        </record>
+        <record model='res.partner' id='res_partner_health_box_7'>
+            <field name='name'>Caja de Salud Caminos</field>
+            <field name="company_type">company</field>
+            <field name='l10n_bo_health_box_code'>B7</field>
+            <field name="country_id" ref="base.co"/>
+            <field name="l10n_bo_health_box">True</field>
+        </record>
+        <record model='res.partner' id='res_partner_health_box_B8'>
+            <field name='name'>Corp. Seguro Social Militar</field>
+            <field name="company_type">company</field>
+            <field name='l10n_bo_health_box_code'>B8</field>
+            <field name="country_id" ref="base.co"/>
+            <field name="l10n_bo_health_box">True</field>
+        </record>
+        <record model='res.partner' id='res_partner_health_box_B9'>
+            <field name='name'>Seguro Integral de Salud</field>
+            <field name="company_type">company</field>
+            <field name='l10n_bo_health_box_code'>B9</field>
+            <field name="country_id" ref="base.co"/>
+            <field name="l10n_bo_health_box">True</field>
+        </record>
+    </data>
+</odoo>

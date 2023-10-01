@@ -8,24 +8,9 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
-            <!--            <xpath expr="//page[@name='hr_settings']" position="after">-->
-            <!--                <page name="hr_conf_colombia" string="Configuración colombia">-->
-            <!--                    <group name="hr_main_info_colombia" >-->
-            <!--                        <group name="date_identification">-->
-            <!--                            <field name="type_identification_document"/>-->
-            <!--                        </group>-->
-            <!--                        <group name="aseguradoras" string="Aseguradoras">-->
-            <!--                            <field name="eps_id"/>-->
-            <!--                            <field name="afp_id"/>-->
-            <!--                            <field name="arl_id"/>-->
-            <!--                        </group>-->
-            <!--                        <group name="caja_sesantia" string="Caja cesantia">-->
-            <!--                            <field name="caja_id"/>-->
-            <!--                            <field name="severance"/>-->
-            <!--                        </group>-->
-            <!--                    </group>-->
-            <!--                </page>-->
-            <!--            </xpath>-->
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="ceco"/>
+            </xpath>
             <xpath expr="//page[@name='hr_settings']/group" position="inside">
                 <group string="ID personal" >
                     <field name="type_identification_document"/>
@@ -43,13 +28,19 @@
             </xpath>
             <xpath expr="//page[@name='personal_information']/group" position="inside">
                 <group string="Datos Afp" >
-                    <field name="afp_subtype"/>
+                    <field name="afp_code"/>
+                    <field name="afp_id"/>
                     <field name="afp_nua_cua"/>
                     <field name="aft_quotation_type"/>
                     <field name="afp_retired"/>
                     <field name="afp_retired_date"
                            attrs="{'invisible': [('afp_retired', '=', False)], 'required':[('afp_retired', '!=', False)]}"/>
                     <field name="afp_age"/>
+                </group>
+                <group string="Datos del seguro" >
+                    <field name="health_box_code"/>
+                    <field name="health_box_id"/>
+                    <field name="insured_number"/>
                 </group>
             </xpath>
             <xpath expr="//group[@name='departure']" position="replace">
