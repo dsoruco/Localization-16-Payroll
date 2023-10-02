@@ -100,3 +100,12 @@ class HrEmployee(models.Model):
     health_box_code = fields.Char(related='health_box_id.l10n_bo_health_box_code', readonly=True, string="Código")
 
     insured_number = fields.Char(string="Número de Asegurado")
+
+    # Datos de la cuenta
+
+    currency_id = fields.Many2one(related='bank_account_id.currency_id', readonly=True, string="Moneda de pago")
+    payment_method = fields.Selection([
+        ('T', 'Tranferencia bancaria'),
+        ('C', 'Cheque'),
+        ('E', 'Efectivo')],
+        string='Moneda de pago', default='T')

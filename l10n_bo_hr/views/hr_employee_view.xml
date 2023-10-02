@@ -11,6 +11,10 @@
             <xpath expr="//field[@name='job_id']" position="after">
                 <field name="ceco"/>
             </xpath>
+            <xpath expr="//field[@name='bank_account_id']" position="after">
+                <field name="currency_id"/>
+                <field name="payment_method"/>
+            </xpath>
             <xpath expr="//page[@name='hr_settings']/group" position="inside">
                 <group string="ID personal" >
                     <field name="type_identification_document"/>
