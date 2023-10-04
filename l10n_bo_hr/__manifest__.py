@@ -8,14 +8,12 @@
     'description': """
     Bolivia Payroll Localization
     """,
-    "depends": ["mail"],
     'data': [
         'data/res_partner_afp.xml',
         'data/res_partner_health_box.xml',
         'security/ir.model.access.csv',
         'views/hr_job_views.xml',
         'views/hr_employee_view.xml',
-        'wizard/hr_departure_wizard_views.xml',
         'views/hr_payroll_area_view.xml',
         'views/hr_personnel_area_view.xml',
         'views/hr_personnel_group_view.xml',
