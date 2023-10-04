@@ -14,7 +14,7 @@
         'security/ir.model.access.csv',
         'views/hr_job_views.xml',
         'views/hr_employee_view.xml',
-        'wizard/hr_departure_wizard_views.xml',
+        # 'wizard/hr_departure_wizard_views.xml',
         'views/hr_payroll_area_view.xml',
         'views/hr_personnel_area_view.xml',
         'views/hr_personnel_group_view.xml',
