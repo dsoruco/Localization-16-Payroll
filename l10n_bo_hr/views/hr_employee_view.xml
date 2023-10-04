@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-    
-    <!--         EMPLOYEE VIEW         -->
+
+ <!--         EMPLOYEE VIEW         -->
     <record id="hr_employee_view_form_inherit" model="ir.ui.view">
         <field name="name">hr.employee.view.form.inherit</field>
         <field name="model">hr.employee</field>
@@ -48,7 +48,7 @@
                 </group>
             </xpath>
             <xpath expr="//group[@name='departure']" position="replace">
-                
+
             </xpath>
             <xpath expr="//page[@name='hr_settings']" position="after">
                 <!-- PRIMA -->
@@ -103,7 +103,7 @@
                 id="hr_menu_empleado_bolivia"
                 name="Empleado bolivia"
                 parent="hr.menu_human_resources_configuration"
-                groups="base.group_no_one"
+                groups="base.group_no_one"/>
                 sequence="100"/>
 
 </odoo>
