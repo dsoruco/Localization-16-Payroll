@@ -52,11 +52,11 @@
                     <field name="afp_age"/>
                 </group>
             </xpath>
-            <xpath expr="//group[@name='departure']" position="replace">
+            <!-- <xpath expr="//group[@name='departure']" position="replace">
                 
             </xpath>
             <xpath expr="//page[@name='hr_settings']" position="after">
-                <!-- PRIMA -->
+                
                 <page name="hr_prima" string="HR Prima" groups="hr.group_hr_user">
                     <group>
                         <group string="Data prima" name="active_group">
@@ -67,7 +67,6 @@
                         </group>
                     </group>
                 </page>
-                <!-- ATTACHMENTS -->
                 <page name="attachment" string="Attachments" groups="hr.group_hr_user">
                     <field name="attachment_ids" widget="one2many">
                         <tree editable="top" expand="true">
@@ -77,7 +76,7 @@
                     </field>
                 </page>
                 <page name="public" string="Departure" attrs="{'invisible': [('active', '=', True)]}">
-                    <div id="o_work_employee_container" class="d-lg-flex"> <!-- These two div are used to position org_chart -->
+                    <div id="o_work_employee_container" class="d-lg-flex"> 
                         <div id="o_work_employee_main" class="flex-grow-1">
                             <group name="departure" string="Departure" attrs="{'invisible': [('active', '=', True)]}">
                                 <field name="departure_reason_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
@@ -90,7 +89,7 @@
                         </div>
                     </div>
                 </page>
-            </xpath>
+            </xpath> -->
         </field>
     </record>
 <!--    <record id="res_partner_bank_form_inherit" model="ir.ui.view">-->
