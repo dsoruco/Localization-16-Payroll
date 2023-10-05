@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_hr_contract_reason_measurement_manager,hr.contract.reason.measurement.manager,model_hr_contract_reason_measurement,hr_contract.group_hr_contract_manager,1,1,1,1
+access_hr_organizational_structure_report_manager,hr.organizational.structure.report.manager,model_hr_organizational_structure_report,hr_contract.group_hr_contract_manager,1,1,1,1
 

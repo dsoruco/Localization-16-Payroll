@@ -1,6 +1,6 @@
 {
     'name': "Datec: Nómina Bolivia",
-    'version': '16.0.0.0.0',
+    'version': '16.0.0.0.1',
     'depends': ['l10n_bo_hr'],
     'author': "Datec",
     'license': 'OPL-1',
@@ -13,6 +13,7 @@
         'security/ir.model.access.csv',
         'views/contract_view.xml',
         'views/contract_reason_measurement_view.xml',
+        'views/bi_organizational_structure_reports_view.xml',
         # 'report/hr_employee_payroll_report_views.xml',
 
     ],
