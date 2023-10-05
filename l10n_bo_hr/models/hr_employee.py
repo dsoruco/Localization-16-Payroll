@@ -6,8 +6,8 @@ from datetime import date
 
 
 class HrEmployee(models.Model):
-    # _inherit = 'hr.employee'
     _inherit = "hr.employee"
+
     type_identification_document = fields.Selection([
         ('01', 'Cédula de identidad'),
         ('02', 'Licencia de Conducir'),
@@ -71,7 +71,7 @@ class HrEmployee(models.Model):
                                required=False
                                )
 
-    attachment_ids = fields.One2many('l10n_bo_hr.employee_docs', 'employee_id')
+    # attachment_ids = fields.One2many('l10n_bo_hr.employee_docs', 'employee_id')
 
     pay_in = fields.Selection(
         string='Pay in',
