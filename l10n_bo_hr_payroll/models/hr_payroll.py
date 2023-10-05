@@ -45,7 +45,7 @@ class HrPayrollQuinquennialData(models.Model):
 
     payslip_id = fields.Many2one('hr.payslip')
     contract_id = fields.Many2one('hr.contract', 'Contract', required=True)
-    employee_id = fields.Many2one('hr.employee', 'Employee',required=True)
+    employee_id = fields.Many2one('hr.employee', 'Employee', required=True)
     # Campo calculado entre la fecha de consulta y la fecha de inicio de contrato menos la cantidad
     # de años pagados
     Balance = fields.Float(string="Saldo", required=True)
