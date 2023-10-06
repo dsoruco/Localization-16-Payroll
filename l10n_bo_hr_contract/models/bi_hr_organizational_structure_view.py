@@ -23,9 +23,9 @@ class HrOrganizationalStructureReport(models.Model):
     ], 'Sexo')
     staff_division_id = fields.Many2one('hr.employee.staff.division', string='División de personal')
     staffing_subdivision_id = fields.Many2one('hr.employee.staffing.subdivision', string='SubDivisión de personal')
-    # personnel_area_id = fields.Many2one('hr.employee.personnel.area', string='Área de personal')
-    # personnel_group_id = fields.Many2one('hr.employee.personnel.group', string='Grupo de personal')
-    # payroll_area_id = fields.Many2one('hr.employee.payroll.area', string='Área de nómina')
+    personnel_area_id = fields.Many2one('hr.employee.personnel.area', string='Área de personal')
+    personnel_group_id = fields.Many2one('hr.employee.personnel.group', string='Grupo de personal')
+    payroll_area_id = fields.Many2one('hr.employee.payroll.area', string='Área de nómina')
 
     def init(self):
         query = """              
@@ -36,7 +36,10 @@ class HrOrganizationalStructureReport(models.Model):
                 e."name",
                 e.gender,
                 e.staff_division_id,
-                e.staffing_subdivision_id
+                e.staffing_subdivision_id,
+                e.personnel_area_id,
+                e.personnel_group_id,
+                e.payroll_area_id
                 FROM hr_employee AS e
                 INNER JOIN hr_contract AS ct ON ct.employee_id = e."id"
                 WHERE ct."state" = 'open'
