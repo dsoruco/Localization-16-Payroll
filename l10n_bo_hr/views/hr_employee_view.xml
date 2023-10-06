@@ -39,7 +39,7 @@
                     <field name="afp_retired"/>
                     <field name="afp_retired_date"
                            attrs="{'invisible': [('afp_retired', '=', False)], 'required':[('afp_retired', '!=', False)]}"/>
-                    <field name="afp_age"/>
+                    <field name="afp_age_str"/>
                 </group>
                 <group string="Datos del seguro" >
                     <field name="health_box_code"/>

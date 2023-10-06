@@ -3,6 +3,9 @@
 
 from odoo import fields, models, api, _
 from datetime import date
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+from odoo.tools.misc import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
 
 class HrEmployee(models.Model):
@@ -27,29 +30,37 @@ class HrEmployee(models.Model):
     afp_id = fields.Many2one('res.partner', string='Administradora de fondo de penciones',
                              domain=[('l10n_bo_afp', '=', True)])
     afp_code = fields.Char(related='afp_id.l10n_bo_afp_code', readonly=True, string="Código")
-
-    # afp_subtype = fields.Selection([
-    #     ('01', 'Previsión'),
-    #     ('02', 'Futuro'),
-    #     ('03', 'Gestora')],
-    #     string='Subtipo')
-
     afp_nua_cua = fields.Char(string="NUA/CUA")
-
     aft_quotation_type = fields.Selection([
         ('1', 'Dependiente o asegurado con pensión del sip < 65 años que aporta'),
         ('8', 'Dependiente o asegurado con pensión del sip > 65 años que aporta'),
         ('C', 'Asegurado con pensión del sip < 65 años que no aporta'),
         ('D', 'Asegurado con pensión del sip > 65 años que no aporta')],
         string='Tipo de Cotización')
-
     afp_retired = fields.Boolean(
         'Jubilado', help='Para identificar que el empleado esta jubilado', default=False)
-
     afp_retired_date = fields.Date(string='Retire date',
                                    help='Identifica la fecha en que se jubila el empleado')
+    current_date = fields.Date(string='Current date', default=datetime.now().strftime('%Y-%m-%d'))
+    afp_age_str = fields.Char(string="Edad", readonly=True, compute='_compute_age', store=True)
+    afp_age = fields.Integer('Años')
+    afp_age_months = fields.Integer(string="Meses")
+    afp_age_days = fields.Integer(string="Días")
 
-    afp_age = fields.Char(string="Edad")
+
+    @api.depends('birthday', 'current_date')
+    def _compute_age(self):
+        for rec in self:
+            if rec.birthday:
+                # db_day = datetime.strptime(rec.birthday, DEFAULT_SERVER_DATE_FORMAT).date()
+                db_day = rec.birthday
+                db_today = datetime.now().date()
+                diff = relativedelta(db_today, db_day)
+                rec.afp_age = diff.years
+                rec.afp_age_months = diff.months
+                rec.afp_age_days = diff.days
+                rec.afp_age_str = str(rec.afp_age) + ' años ' + str(rec.afp_age_months) + ' meses ' + str(rec.afp_age_days) + ' días'
+                # rec.age = dToday.year - dBday.year - ((dToday.month, dToday.day) < (dBday.month, dBday.day))
 
     earned_average = fields.Float(string='Earned Average',
                                   help='Campo calculado promedio sobre el total ganado de los 3 meses ',
