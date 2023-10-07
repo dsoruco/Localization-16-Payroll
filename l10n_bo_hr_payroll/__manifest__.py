@@ -10,6 +10,7 @@
     """,
     'data': [
         'security/ir.model.access.csv',
+        'views/hr_employee_view.xml',
         'views/hr_payroll_closing_table_view.xml',
         # 'report/hr_employee_payroll_report_views.xml',
 
