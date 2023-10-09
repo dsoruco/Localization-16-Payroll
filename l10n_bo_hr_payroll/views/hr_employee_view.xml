@@ -8,24 +8,39 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//page[@name='hr_settings']" position="after">
-                <page name="hr_quinquenio" string="Datos quinquenio" groups="hr.group_hr_user">
-                    <group>
-                        <field name="balance"/>
-                        <field name="years_of_service"/>
-                        <field name="quinquennial_ids">
-                            <tree>
-                                <field name="contract_id"/>
-                                <field name="employee_id"/>
-                                <field name="type_of_payment"/>
-                                <field name="amount_years"/>
-                                <field name="date_from"/>
-                                <field name="date_to"/>
-                            </tree>
-                        </field>
-                    </group>
-                </page>
+            <xpath expr="//page[@name='payroll_date']" position="inside">
+                <group string="Datos Quinquenio">
+                    <field name="balance"/>
+                    <field name="quinquennial_ids">
+                        <tree>
+                            <field name="contract_id"/>
+                            <field name="employee_id"/>
+                            <field name="type_of_payment"/>
+                            <field name="amount_years"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="date_pay"/>
+                        </tree>
+                    </field>
+                </group>
             </xpath>
         </field>
     </record>
+
+<!--    DATOS QUINQUENAL   -->
+    <record id="hr_employee_hr_payroll_quinquennial_data_view_form" model="ir.ui.view">
+            <field name="name">hr.payroll.quinquennial.data.form</field>
+            <field name="model">hr.payroll.quinquennial.data</field>
+            <field name="arch" type="xml">
+                <form string="Datos Quinquenal">
+                    <group col="4">
+                        <field name="type_of_payment"/>
+                        <field name="amount_years"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="date_pay"/>
+                    </group>
+                </form>
+            </field>
+        </record>
 </odoo>

@@ -1,7 +1,7 @@
 {
     'name': "Datec: Nómina Bolivia",
     'version': '16.0.0.0.0',
-    'depends': ['hr_payroll', 'l10n_bo_hr', 'hr_holidays', 'hr_bo_employee_lastnames'],
+    'depends': ['hr_payroll', 'l10n_bo_hr', 'l10n_bo_hr_holidays', 'hr_bo_employee_lastnames'],
     'author': "Datec",
     'license': 'OPL-1',
     'category': 'Payroll Localization',

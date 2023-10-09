@@ -1,7 +1,7 @@
 import logging
 
 from odoo import fields, models, api, _
-from dateutil.relativedelta import relativedelta
+from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -11,19 +11,7 @@ class HrEmployee(models.Model):
 
     # Datos quinquenio
     balance = fields.Float(string="Saldo", compute='_compute_balance', store=True)
-    years_of_service = fields.Integer(string="Años de antigüedad", compute='_compute_years_of_service', store=True)
     quinquennial_ids = fields.One2many('hr.payroll.quinquennial.data', 'employee_id', string='Pago quinquenal')
-
-    @api.depends('contract_ids.date_start')
-    def _compute_years_of_service(self):
-        for record in self:
-            if record.contract_ids:
-                date_hired = min(record.contract_ids.mapped('date_start'))
-                current_date = fields.Date.today()
-                delta_years = relativedelta(current_date, date_hired).years
-                record.years_of_service = delta_years
-            else:
-                record.years_of_service = 0
 
     @api.depends('years_of_service', 'quinquennial_ids.amount_years')
     def _compute_balance(self):
@@ -38,8 +26,8 @@ class HrPayrollQuinquennialData(models.Model):
     _rec_name = "employee_id"
 
     payslip_id = fields.Many2one('hr.payslip')
-    contract_id = fields.Many2one('hr.contract', 'Contract', required=True)
     employee_id = fields.Many2one('hr.employee', 'Employee', required=True)
+    contract_id = fields.Many2one(related='employee_id.contract_id', string="contract employee")
     # Campo calculado entre la fecha de consulta y la fecha de inicio de contrato menos la cantidad
     # de años pagados
 
@@ -52,3 +40,9 @@ class HrPayrollQuinquennialData(models.Model):
     date_from = fields.Date(string='Fecha de inicio', help="Fecha de inicio de formulario de pago de quinquenio", required=True)
     date_to = fields.Date(string='Fecha fin', help="Fecha fin de formulario de pago de quinquenio", required=True)
     date_pay = fields.Date(string='Fecha de pago',  help="Fecha de pago de quinquenio", required=True)
+
+    @api.constrains('employee_id')
+    def _check_employee_contract(self):
+        for record in self:
+            if not record.employee_id.contract_id:
+                raise ValidationError("Error: No se puede adicionar pago quinquenal sin contrato asociado para el empleado.")
