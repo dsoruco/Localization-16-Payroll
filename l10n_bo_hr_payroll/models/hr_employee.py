@@ -46,3 +46,5 @@ class HrPayrollQuinquennialData(models.Model):
         for record in self:
             if not record.employee_id.contract_id:
                 raise ValidationError("Error: No se puede adicionar pago quinquenal sin contrato asociado para el empleado.")
+
+

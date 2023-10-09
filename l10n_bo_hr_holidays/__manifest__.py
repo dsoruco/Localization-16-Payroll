@@ -12,7 +12,7 @@
         'data/hr_work_entry_type.xml',
         'data/hr_holidays_data.xml',
         'data/hr_vacation_quota_table_data.xml',
-        'data/hr_vacation_quota_table_data.xml',
+        'data/hr_antiquity_bonus_table_data.xml',
         'security/ir.model.access.csv',
         'views/hr_employee_view.xml',
         'views/res_company_bo_config_view.xml',
