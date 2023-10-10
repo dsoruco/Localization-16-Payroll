@@ -1,5 +1,5 @@
 {
-    'name': "Datec: Nómina Bolivia",
+    'name': "Datec: Nómina Bolivia ausencia",
     'version': '16.0.0.0.5',
     'depends': ['l10n_bo_hr_contract', 'hr_holidays'],
     'author': "Datec",

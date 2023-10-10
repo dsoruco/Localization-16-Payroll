@@ -1,5 +1,5 @@
 {
-    'name': "Datec: Nómina Bolivia",
+    'name': "Datec: Nómina Bolivia contrato",
     'version': '16.0.0.0.4',
     'depends': ['l10n_bo_hr', 'hr_contract'],
     'author': "Datec",
