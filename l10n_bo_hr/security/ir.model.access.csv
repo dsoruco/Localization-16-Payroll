@@ -4,3 +4,5 @@ access_hr_employee_personnel_area_manager,hr.employee.personnel.area.manager,mod
 access_hr_employee_personnel_group_manager,hr.employee.personnel.group.manager,model_hr_employee_personnel_group,hr_contract.group_hr_contract_manager,1,1,1,1
 access_hr_employee_staff_division_manager,hr.employee.staff.division.manager,model_hr_employee_staff_division,hr_contract.group_hr_contract_manager,1,1,1,1
 access_hr_employee_staffing_subdivision_manager,hr.employee.staffing.subdivision.manager,model_hr_employee_staffing_subdivision,hr_contract.group_hr_contract_manager,1,1,1,1
+access_hr_aft_quotation_type_manager,hr.aft.quotation.type.manager,model_hr_aft_quotation_type,hr_contract.group_hr_contract_manager,1,1,1,1
+access_hr_aft_quotation_type_details_manager,hr.aft.quotation.type.details.manager,model_hr_aft_quotation_type_details,hr_contract.group_hr_contract_manager,1,1,1,1

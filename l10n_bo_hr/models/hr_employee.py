@@ -31,12 +31,55 @@ class HrEmployee(models.Model):
                              domain=[('l10n_bo_afp', '=', True)])
     afp_code = fields.Char(related='afp_id.l10n_bo_afp_code', readonly=True, string="Código")
     afp_nua_cua = fields.Char(string="NUA/CUA")
-    aft_quotation_type = fields.Selection([
-        ('1', 'Dependiente o asegurado con pensión del sip < 65 años que aporta'),
-        ('8', 'Dependiente o asegurado con pensión del sip > 65 años que aporta'),
-        ('C', 'Asegurado con pensión del sip < 65 años que no aporta'),
-        ('D', 'Asegurado con pensión del sip > 65 años que no aporta')],
-        string='Tipo de Cotización')
+    aft_quotation_type = fields.Many2one('hr.aft.quotation.type', 'Tipo de Cotización')
+    monthly_quotation = fields.Float(string="Cotización mensual ", compute="_get_monthly_quotation", store=True)
+
+    @api.depends('aft_quotation_type')
+    def _get_monthly_quotation(self):
+        for record in self:
+            if record.aft_quotation_type:
+                details = self.env['hr.aft.quotation.type.details'].search([('code', '=', 'cm'), ('aft_quotation_type_id', '=', record.aft_quotation_type.id)])
+                if details:
+                    record.monthly_quotation = details.percent
+                else:
+                    record.monthly_quotation = 0
+
+    common_risk_premium = fields.Float(string="Prima riesgo común", compute="get_common_risk_premium", store=True)
+
+    @api.depends('aft_quotation_type')
+    def get_common_risk_premium(self):
+        for record in self:
+            if record.aft_quotation_type:
+                details = self.env['hr.aft.quotation.type.details'].search([('code', '=', 'prc'), ('aft_quotation_type_id', '=', record.aft_quotation_type.id)])
+                if details:
+                    record.common_risk_premium = details.percent
+                else:
+                    record.common_risk_premium = 0
+
+    solidarity_contribution = fields.Float(string="Aporte solidario", compute="get_solidarity_contribution", readonly=True, store=True)
+
+    @api.depends('aft_quotation_type')
+    def get_solidarity_contribution(self):
+        for record in self:
+            if record.aft_quotation_type:
+                details = self.env['hr.aft.quotation.type.details'].search([('code', '=', 'as'), ('aft_quotation_type_id', '=', record.aft_quotation_type.id)])
+                if details:
+                    record.solidarity_contribution = details.percent
+                else:
+                    record.solidarity_contribution = details.percent
+
+    afp_commission = fields.Float(string="Comisión AFP", compute="get_afp_commission", readonly=True, store=True)
+
+    @api.depends('aft_quotation_type')
+    def get_afp_commission(self):
+        for record in self:
+            if record.aft_quotation_type:
+                details = self.env['hr.aft.quotation.type.details'].search([('code', '=', 'c_afp'), ('aft_quotation_type_id', '=', record.aft_quotation_type.id)])
+                if details:
+                    record.afp_commission = details.percent
+                else:
+                    record.afp_commission = details.percent
+
     afp_retired = fields.Boolean(
         'Jubilado', help='Para identificar que el empleado esta jubilado', default=False)
     afp_retired_date = fields.Date(string='Retire date',
@@ -120,3 +163,39 @@ class HrEmployee(models.Model):
         ('C', 'Cheque'),
         ('E', 'Efectivo')],
         string='Moneda de pago', default='T')
+
+
+class HrAftQuotationType(models.Model):
+    _name = "hr.aft.quotation.type"
+    _description = "Tipo de cotización"
+    _rec_name = 'description'
+
+    code = fields.Char('Código', required=True)
+    name = fields.Char(string="Tipo cotización", translate=True, required=True)
+    percent = fields.Float("Porciento")
+    description = fields.Char(string="Descripción", readonly=True, compute='_compute_description', store=True)
+
+    aft_quotation_type_details_ids = fields.One2many(
+        comodel_name='hr.aft.quotation.type.details',
+        inverse_name='aft_quotation_type_id',
+    )
+
+    @api.depends('code', 'name')
+    def _compute_description(self):
+        code = ''
+        name = ''
+        for rec in self:
+            if rec.code:
+                code = rec.code
+            if rec.name:
+                name = rec.name
+            rec.description = code + ' ' + name
+
+
+class HrAftQuotationTypeDetails(models.Model):
+    _name = "hr.aft.quotation.type.details"
+
+    code = fields.Char('Código', required=True)
+    name = fields.Char(string="Desglose AFP", translate=True, required=True)
+    percent = fields.Float("Porciento")
+    aft_quotation_type_id = fields.Many2one('hr.aft.quotation.type', ondelete="cascade")
