@@ -162,7 +162,7 @@ class HrEmployee(models.Model):
         ('T', 'Tranferencia bancaria'),
         ('C', 'Cheque'),
         ('E', 'Efectivo')],
-        string='Moneda de pago', default='T')
+        string='Metodo de pago', default='T')
 
 
 class HrAftQuotationType(models.Model):
