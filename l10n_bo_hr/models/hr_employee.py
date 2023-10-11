@@ -199,3 +199,5 @@ class HrAftQuotationTypeDetails(models.Model):
     name = fields.Char(string="Desglose AFP", translate=True, required=True)
     percent = fields.Float("Porciento")
     aft_quotation_type_id = fields.Many2one('hr.aft.quotation.type', ondelete="cascade")
+
+

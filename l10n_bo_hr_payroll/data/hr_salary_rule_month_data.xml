@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!--    SALARIO MENSUAL    ************************************    -->
+
+    <record id="orbiware_l10n_bo_hr_payroll_smn" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">SALARIO MINIMO NACIONAL</field>
+        <field name="code">SMN</field>
+        <field name="sequence">10</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = payslip.rule_parameter('SMN')
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+<!--    Reglas de AFP                   -->
+<!--    Cotización mensual              -->
+    <record id="orbiware_l10n_bo_hr_payroll_afp_cm" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">Cotización mensual </field>
+        <field name="code">AFP_CM</field>
+        <field name="sequence">101</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = GROSS * employee.monthly_quotation/100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+<!--    Prima riesgo común               -->
+    <record id="orbiware_l10n_bo_hr_payroll_afp_prc" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">Prima riesgo común</field>
+        <field name="code">AFP_PRC</field>
+        <field name="sequence">101</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = GROSS * employee.common_risk_premium/100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+<!--    Aporte solidario              -->
+    <record id="orbiware_l10n_bo_hr_payroll_afp_as" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">Aporte solidario</field>
+        <field name="code">AFP_AS</field>
+        <field name="sequence">101</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = GROSS * employee.solidarity_contribution/100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+<!--   Comisión AFP               -->
+    <record id="orbiware_l10n_bo_hr_payroll_afp_comis" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">Comisión AFP</field>
+        <field name="code">AFP_COM</field>
+        <field name="sequence">101</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = GROSS * employee.afp_commission/100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+<!--   DESCUENTO AFP               -->
+    <record id="orbiware_l10n_bo_hr_payroll_afp_discount" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">DESCUENTO AFP</field>
+        <field name="code">AFP_DISCOUNT</field>
+        <field name="sequence">101</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = GROSS * employee.aft_quotation_type.percent/100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+
+<!--   MONTO ANC 1%              -->
+    <record id="orbiware_l10n_bo_hr_payroll_anc_amount_1" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">MONTO ANC 1%</field>
+        <field name="code">ANC_ONE</field>
+        <field name="sequence">101</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+if ((GROSS-13000)*1)/100 &lt; 0:
+    result = 0
+else:
+    result = ((GROSS-13000)*1)/100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+<!--   MONTO ANC 5%              -->
+    <record id="orbiware_l10n_bo_hr_payroll_anc_amount_5" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">MONTO ANC 5%</field>
+        <field name="code">ANC_FIVE</field>
+        <field name="sequence">101</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+if ((GROSS-25000)*5)/100 &lt; 0:
+    result = 0
+else:
+    result = ((GROSS-25000)*5)/100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+<!--   MONTO ANC 10%              -->
+    <record id="orbiware_l10n_bo_hr_payroll_anc_amount_10" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">MONTO ANC 10%</field>
+        <field name="code">ANC_TEN</field>
+        <field name="sequence">101</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+if ((GROSS-35000)*10)/100 &lt; 0:
+    result = 0
+else:
+    result = ((GROSS-35000)*10)/100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+<!-- REGLAS TEMPORALES A MODIFICAR                          -->
+    <record id="orbiware_l10n_bo_hr_payroll_last_ufv" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">UFV MES ANTERIOR</field>
+        <field name="code">LAST_UFV</field>
+        <field name="sequence">10</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = payslip.rule_parameter('LAST_UFV')
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="orbiware_l10n_bo_hr_payroll_current_ufv" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">UFV MES ACTUAL</field>
+        <field name="code">CURRENT_UFV</field>
+        <field name="sequence">10</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = payslip.rule_parameter('CURRENT_UFV')
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+<!--    FIN SALARIO MENSUAL    *********************************    -->
+
+</odoo>
+
