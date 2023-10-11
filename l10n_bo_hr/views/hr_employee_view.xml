@@ -87,16 +87,16 @@
             </xpath>
         </field>
     </record>
-    <record id="res_partner_bank_form_inherit" model="ir.ui.view">
-        <field name="name">res.partner.bank.form.inherit</field>
-        <field name="model">res.partner.bank</field>
-        <field name="inherit_id" ref="account.view_partner_bank_form_inherit_account"/>
-        <field name="arch" type="xml">
-            <field name="bank_id" position="after">
-                <field name="account_type"/>
-            </field>
-        </field>
-    </record>
+<!--    <record id="res_partner_bank_form_inherit" model="ir.ui.view">-->
+<!--        <field name="name">res.partner.bank.form.inherit</field>-->
+<!--        <field name="model">res.partner.bank</field>-->
+<!--        <field name="inherit_id" ref="account.view_partner_bank_form_inherit_account"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <field name="bank_id" position="after">-->
+<!--                <field name="account_type"/>-->
+<!--            </field>-->
+<!--        </field>-->
+<!--    </record>-->
 
             <menuitem
                 id="hr_menu_empleado_bolivia"
