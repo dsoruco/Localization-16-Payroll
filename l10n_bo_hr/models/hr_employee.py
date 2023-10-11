@@ -24,11 +24,15 @@ class HrEmployee(models.Model):
         string='Extensión de documento', default='SC')
 
     # Datos de la AFP
-    afp_subtype = fields.Selection([
-        ('01', 'Previsión'),
-        ('02', 'Futuro'),
-        ('03', 'Gestora')],
-        string='Subtipo')
+    afp_id = fields.Many2one('res.partner', string='Administradora de fondo de penciones',
+                             domain=[('l10n_bo_afp', '=', True)])
+    afp_code = fields.Char(related='afp_id.l10n_bo_afp_code', readonly=True, string="Código")
+
+    # afp_subtype = fields.Selection([
+    #     ('01', 'Previsión'),
+    #     ('02', 'Futuro'),
+    #     ('03', 'Gestora')],
+    #     string='Subtipo')
 
     afp_nua_cua = fields.Char(string="NUA/CUA")
 
@@ -88,3 +92,20 @@ class HrEmployee(models.Model):
 
     # Para mostrar el código de la plaza
     ceco = fields.Char(related='job_id.ceco', readonly=True, string="CECO")
+
+
+    # Datos salud
+    health_box_id = fields.Many2one('res.partner', string='Seguro de la caja de salud',
+                             domain=[('l10n_bo_health_box', '=', True)])
+    health_box_code = fields.Char(related='health_box_id.l10n_bo_health_box_code', readonly=True, string="Código")
+
+    insured_number = fields.Char(string="Número de Asegurado")
+
+    # Datos de la cuenta
+
+    currency_id = fields.Many2one(related='bank_account_id.currency_id', readonly=True, string="Moneda de pago")
+    payment_method = fields.Selection([
+        ('T', 'Tranferencia bancaria'),
+        ('C', 'Cheque'),
+        ('E', 'Efectivo')],
+        string='Moneda de pago', default='T')
