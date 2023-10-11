@@ -125,7 +125,7 @@ class HrEmployee(models.Model):
                                required=False
                                )
 
-    # attachment_ids = fields.One2many('l10n_bo_hr.employee_docs', 'employee_id')
+    attachment_ids = fields.One2many('l10n_bo_hr.employee_docs', 'employee_id')
 
     pay_in = fields.Selection(
         string='Pay in',
