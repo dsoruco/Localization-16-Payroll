@@ -52,7 +52,7 @@
                     <field name="afp_age"/>
                 </group>
             </xpath>
-            <!-- <xpath expr="//group[@name='departure']" position="replace">
+            <xpath expr="//group[@name='departure']" position="replace">
                 
             </xpath>
             <xpath expr="//page[@name='hr_settings']" position="after">
@@ -89,7 +89,7 @@
                         </div>
                     </div>
                 </page>
-            </xpath> -->
+            </xpath>
         </field>
     </record>
 <!--    <record id="res_partner_bank_form_inherit" model="ir.ui.view">-->
