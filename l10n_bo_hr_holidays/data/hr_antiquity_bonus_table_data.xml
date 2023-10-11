@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--Bono de Antigüedad -->
+        <record id="hr_antiquity_bonus_table_1" model="hr.antiquity.bonus.table">
+            <field name="years_of_antiquity_bonus_start">2</field>
+            <field name="years_of_antiquity_bonus_end">4</field>
+            <field name="percentage">5</field>
+        </record>
+        <record id="hr_antiquity_bonus_table_2" model="hr.antiquity.bonus.table">
+            <field name="years_of_antiquity_bonus_start">5</field>
+            <field name="years_of_antiquity_bonus_end">7</field>
+            <field name="percentage">11</field>
+        </record>
+        <record id="hr_antiquity_bonus_table_3" model="hr.antiquity.bonus.table">
+            <field name="years_of_antiquity_bonus_start">8</field>
+            <field name="years_of_antiquity_bonus_end">10</field>
+            <field name="percentage">18</field>
+        </record>
+        <record id="hr_antiquity_bonus_table_4" model="hr.antiquity.bonus.table">
+            <field name="years_of_antiquity_bonus_start">11</field>
+            <field name="years_of_antiquity_bonus_end">14</field>
+            <field name="percentage">26</field>
+        </record>
+        <record id="hr_antiquity_bonus_table_5" model="hr.antiquity.bonus.table">
+            <field name="years_of_antiquity_bonus_start">15</field>
+            <field name="years_of_antiquity_bonus_end">19</field>
+            <field name="percentage">34</field>
+        </record>
+        <record id="hr_antiquity_bonus_table_6" model="hr.antiquity.bonus.table">
+            <field name="years_of_antiquity_bonus_start">20</field>
+            <field name="years_of_antiquity_bonus_end">24</field>
+            <field name="percentage">42</field>
+        </record>
+        <record id="hr_antiquity_bonus_table_7" model="hr.antiquity.bonus.table">
+            <field name="years_of_antiquity_bonus_start">25</field>
+            <field name="years_of_antiquity_bonus_end">50</field>
+            <field name="percentage">50</field>
+        </record>
+    </data>
+</odoo>

@@ -3,11 +3,14 @@
 
 from odoo import fields, models, api, _
 from datetime import date
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+from odoo.tools.misc import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
 
 
 class HrEmployee(models.Model):
-    # _inherit = 'hr.employee'
     _inherit = "hr.employee"
+
     type_identification_document = fields.Selection([
         ('01', 'Cédula de identidad'),
         ('02', 'Licencia de Conducir'),
@@ -27,29 +30,80 @@ class HrEmployee(models.Model):
     afp_id = fields.Many2one('res.partner', string='Administradora de fondo de penciones',
                              domain=[('l10n_bo_afp', '=', True)])
     afp_code = fields.Char(related='afp_id.l10n_bo_afp_code', readonly=True, string="Código")
-
-    # afp_subtype = fields.Selection([
-    #     ('01', 'Previsión'),
-    #     ('02', 'Futuro'),
-    #     ('03', 'Gestora')],
-    #     string='Subtipo')
-
     afp_nua_cua = fields.Char(string="NUA/CUA")
+    aft_quotation_type = fields.Many2one('hr.aft.quotation.type', 'Tipo de Cotización')
+    monthly_quotation = fields.Float(string="Cotización mensual ", compute="_get_monthly_quotation", store=True)
 
-    aft_quotation_type = fields.Selection([
-        ('1', 'Dependiente o asegurado con pensión del sip < 65 años que aporta'),
-        ('8', 'Dependiente o asegurado con pensión del sip > 65 años que aporta'),
-        ('C', 'Asegurado con pensión del sip < 65 años que no aporta'),
-        ('D', 'Asegurado con pensión del sip > 65 años que no aporta')],
-        string='Tipo de Cotización')
+    @api.depends('aft_quotation_type')
+    def _get_monthly_quotation(self):
+        for record in self:
+            if record.aft_quotation_type:
+                details = self.env['hr.aft.quotation.type.details'].search([('code', '=', 'cm'), ('aft_quotation_type_id', '=', record.aft_quotation_type.id)])
+                if details:
+                    record.monthly_quotation = details.percent
+                else:
+                    record.monthly_quotation = 0
+
+    common_risk_premium = fields.Float(string="Prima riesgo común", compute="get_common_risk_premium", store=True)
+
+    @api.depends('aft_quotation_type')
+    def get_common_risk_premium(self):
+        for record in self:
+            if record.aft_quotation_type:
+                details = self.env['hr.aft.quotation.type.details'].search([('code', '=', 'prc'), ('aft_quotation_type_id', '=', record.aft_quotation_type.id)])
+                if details:
+                    record.common_risk_premium = details.percent
+                else:
+                    record.common_risk_premium = 0
+
+    solidarity_contribution = fields.Float(string="Aporte solidario", compute="get_solidarity_contribution", readonly=True, store=True)
+
+    @api.depends('aft_quotation_type')
+    def get_solidarity_contribution(self):
+        for record in self:
+            if record.aft_quotation_type:
+                details = self.env['hr.aft.quotation.type.details'].search([('code', '=', 'as'), ('aft_quotation_type_id', '=', record.aft_quotation_type.id)])
+                if details:
+                    record.solidarity_contribution = details.percent
+                else:
+                    record.solidarity_contribution = details.percent
+
+    afp_commission = fields.Float(string="Comisión AFP", compute="get_afp_commission", readonly=True, store=True)
+
+    @api.depends('aft_quotation_type')
+    def get_afp_commission(self):
+        for record in self:
+            if record.aft_quotation_type:
+                details = self.env['hr.aft.quotation.type.details'].search([('code', '=', 'c_afp'), ('aft_quotation_type_id', '=', record.aft_quotation_type.id)])
+                if details:
+                    record.afp_commission = details.percent
+                else:
+                    record.afp_commission = details.percent
 
     afp_retired = fields.Boolean(
         'Jubilado', help='Para identificar que el empleado esta jubilado', default=False)
-
     afp_retired_date = fields.Date(string='Retire date',
                                    help='Identifica la fecha en que se jubila el empleado')
+    current_date = fields.Date(string='Current date', default=datetime.now().strftime('%Y-%m-%d'))
+    afp_age_str = fields.Char(string="Edad", readonly=True, compute='_compute_age', store=True)
+    afp_age = fields.Integer('Años')
+    afp_age_months = fields.Integer(string="Meses")
+    afp_age_days = fields.Integer(string="Días")
 
-    afp_age = fields.Char(string="Edad")
+
+    @api.depends('birthday', 'current_date')
+    def _compute_age(self):
+        for rec in self:
+            if rec.birthday:
+                # db_day = datetime.strptime(rec.birthday, DEFAULT_SERVER_DATE_FORMAT).date()
+                db_day = rec.birthday
+                db_today = datetime.now().date()
+                diff = relativedelta(db_today, db_day)
+                rec.afp_age = diff.years
+                rec.afp_age_months = diff.months
+                rec.afp_age_days = diff.days
+                rec.afp_age_str = str(rec.afp_age) + ' años ' + str(rec.afp_age_months) + ' meses ' + str(rec.afp_age_days) + ' días'
+                # rec.age = dToday.year - dBday.year - ((dToday.month, dToday.day) < (dBday.month, dBday.day))
 
     earned_average = fields.Float(string='Earned Average',
                                   help='Campo calculado promedio sobre el total ganado de los 3 meses ',
@@ -71,7 +125,7 @@ class HrEmployee(models.Model):
                                required=False
                                )
 
-    attachment_ids = fields.One2many('l10n_bo_hr.employee_docs', 'employee_id')
+    # attachment_ids = fields.One2many('l10n_bo_hr.employee_docs', 'employee_id')
 
     pay_in = fields.Selection(
         string='Pay in',
@@ -109,3 +163,41 @@ class HrEmployee(models.Model):
         ('C', 'Cheque'),
         ('E', 'Efectivo')],
         string='Moneda de pago', default='T')
+
+
+class HrAftQuotationType(models.Model):
+    _name = "hr.aft.quotation.type"
+    _description = "Tipo de cotización"
+    _rec_name = 'description'
+
+    code = fields.Char('Código', required=True)
+    name = fields.Char(string="Tipo cotización", translate=True, required=True)
+    percent = fields.Float("Porciento")
+    description = fields.Char(string="Descripción", readonly=True, compute='_compute_description', store=True)
+
+    aft_quotation_type_details_ids = fields.One2many(
+        comodel_name='hr.aft.quotation.type.details',
+        inverse_name='aft_quotation_type_id',
+    )
+
+    @api.depends('code', 'name')
+    def _compute_description(self):
+        code = ''
+        name = ''
+        for rec in self:
+            if rec.code:
+                code = rec.code
+            if rec.name:
+                name = rec.name
+            rec.description = code + ' ' + name
+
+
+class HrAftQuotationTypeDetails(models.Model):
+    _name = "hr.aft.quotation.type.details"
+
+    code = fields.Char('Código', required=True)
+    name = fields.Char(string="Desglose AFP", translate=True, required=True)
+    percent = fields.Float("Porciento")
+    aft_quotation_type_id = fields.Many2one('hr.aft.quotation.type', ondelete="cascade")
+
+

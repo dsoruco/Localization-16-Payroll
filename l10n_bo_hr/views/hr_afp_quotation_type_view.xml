@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+<!--    TIPO DE COTIZACION   -->
+    <record id="hr_aft_quotation_type_form" model="ir.ui.view">
+            <field name="name">hr.aft.quotation.type.form</field>
+            <field name="model">hr.aft.quotation.type</field>
+            <field name="arch" type="xml">
+                <form string="Tipo de cotización afp">
+                    <group col="4">
+                        <field colspan="4" name="code"/>
+                        <field colspan="4" name="name"/>
+                        <field colspan="4" name="percent"/>
+                    </group>
+                    <field name="aft_quotation_type_details_ids">
+                        <tree>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="percent"/>
+                        </tree>
+                    </field>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_aft_quotation_type_tree" model="ir.ui.view">
+            <field name="name">hr.aft.quotation.type.tree</field>
+            <field name="model">hr.aft.quotation.type</field>
+            <field name="arch" type="xml">
+                <tree string="Tipo de cotización afp">
+                      <field colspan="4" name="code"/>
+                      <field colspan="4" name="name"/>
+                      <field colspan="4" name="percent"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_aft_quotation_type_search" model="ir.ui.view">
+            <field name="name">hr.aft.quotation.type.search</field>
+            <field name="model">hr.aft.quotation.type</field>
+            <field name="arch" type="xml">
+                <search string="Search Tipo de cotización">
+                    <field name="code" string="Code"/>
+                    <field name="name" string="Área de nómina"/>
+               </search>
+            </field>
+        </record>
+
+        <record id="action_hr_aft_quotation_type" model="ir.actions.act_window">
+            <field name="name">Tipo de cotización AFP</field>
+            <field name="res_model">hr.aft.quotation.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="hr_aft_quotation_type_search"/>
+        </record>
+
+        <menuitem
+            id="menu_hr_aft_quotation_type"
+            action="action_hr_aft_quotation_type"
+            parent="hr_menu_empleado_bolivia"
+            sequence="3"
+            groups="base.group_no_one"/>
+</odoo>

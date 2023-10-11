@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="hr_work_entry_type_VAC" model="hr.work.entry.type">
+            <field name="name">Vacaciones</field>
+            <field name="code">VAC</field>
+            <field name="sequence">27</field>
+        </record>
+    </data>
+</odoo>

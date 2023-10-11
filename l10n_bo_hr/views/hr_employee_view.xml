@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-    
-    <!--         EMPLOYEE VIEW         -->
+
+ <!--         EMPLOYEE VIEW         -->
     <record id="hr_employee_view_form_inherit" model="ir.ui.view">
         <field name="name">hr.employee.view.form.inherit</field>
         <field name="model">hr.employee</field>
@@ -39,7 +39,7 @@
                     <field name="afp_retired"/>
                     <field name="afp_retired_date"
                            attrs="{'invisible': [('afp_retired', '=', False)], 'required':[('afp_retired', '!=', False)]}"/>
-                    <field name="afp_age"/>
+                    <field name="afp_age_str"/>
                 </group>
                 <group string="Datos del seguro" >
                     <field name="health_box_code"/>
@@ -48,7 +48,7 @@
                 </group>
             </xpath>
             <xpath expr="//group[@name='departure']" position="replace">
-                
+
             </xpath>
             <xpath expr="//page[@name='hr_settings']" position="after">
                 
@@ -71,7 +71,7 @@
                     </field>
                 </page>
                 <page name="public" string="Departure" attrs="{'invisible': [('active', '=', True)]}">
-                    <div id="o_work_employee_container" class="d-lg-flex"> 
+                    <div id="o_work_employee_container" class="d-lg-flex"> <!-- These two div are used to position org_chart -->
                         <div id="o_work_employee_main" class="flex-grow-1">
                             <group name="departure" string="Departure" attrs="{'invisible': [('active', '=', True)]}">
                                 <field name="departure_reason_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
@@ -87,22 +87,22 @@
             </xpath>
         </field>
     </record>
-<!--    <record id="res_partner_bank_form_inherit" model="ir.ui.view">-->
-<!--        <field name="name">res.partner.bank.form.inherit</field>-->
-<!--        <field name="model">res.partner.bank</field>-->
-<!--        <field name="inherit_id" ref="account.view_partner_bank_form_inherit_account"/>-->
-<!--        <field name="arch" type="xml">-->
-<!--            <field name="bank_id" position="after">-->
-<!--                <field name="account_type"/>-->
-<!--            </field>-->
-<!--        </field>-->
-<!--    </record>-->
+    <record id="res_partner_bank_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.bank.form.inherit</field>
+        <field name="model">res.partner.bank</field>
+        <field name="inherit_id" ref="account.view_partner_bank_form_inherit_account"/>
+        <field name="arch" type="xml">
+            <field name="bank_id" position="after">
+                <field name="account_type"/>
+            </field>
+        </field>
+    </record>
 
             <menuitem
                 id="hr_menu_empleado_bolivia"
                 name="Empleado bolivia"
                 parent="hr.menu_human_resources_configuration"
-                groups="base.group_no_one"
+                groups="base.group_no_one"/>
                 sequence="100"/>
 
 </odoo>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+<!--        Dependiente o asegurado con pensión del sip &lt; 65 años que aporta<-->
+        <record id='hr_aft_quotation_type_1_details_1' model='hr.aft.quotation.type.details'>
+            <field name='code'>cm</field>
+            <field name='name'>Cotización mensual </field>
+            <field name="percent">10</field>
+            <field name="aft_quotation_type_id" ref="l10n_bo_hr.hr_aft_quotation_type_1"/>
+        </record>
+        <record id='hr_aft_quotation_type_1_details_2' model='hr.aft.quotation.type.details'>
+            <field name='code'>prc</field>
+            <field name='name'>Prima riesgo común</field>
+            <field name="percent">1.71</field>
+            <field name="aft_quotation_type_id" ref="hr_aft_quotation_type_1"/>
+        </record>
+        <record id='hr_aft_quotation_type_1_details_3' model='hr.aft.quotation.type.details'>
+            <field name='code'>as</field>
+            <field name='name'>Aporte solidario</field>
+            <field name="percent">0.50</field>
+            <field name="aft_quotation_type_id" ref="hr_aft_quotation_type_1"/>
+        </record>
+        <record id='hr_aft_quotation_type_1_details_4' model='hr.aft.quotation.type.details'>
+            <field name='code'>c_afp</field>
+            <field name='name'>Comisión AFP</field>
+            <field name="percent">0.50</field>
+            <field name="aft_quotation_type_id" ref="hr_aft_quotation_type_1"/>
+        </record>
+<!--        Dependiente o asegurado con pensión del sip > 65 años que aporta-->
+        <record id='hr_aft_quotation_type_8_details_1' model='hr.aft.quotation.type.details'>
+            <field name='code'>cm</field>
+            <field name='name'>Cotización mensual </field>
+            <field name="percent">10</field>
+            <field name="aft_quotation_type_id" ref="hr_aft_quotation_type_8"/>
+        </record>
+        <record id='hr_aft_quotation_type_8_details_2' model='hr.aft.quotation.type.details'>
+            <field name='code'>prc</field>
+            <field name='name'>Prima riesgo común</field>
+            <field name="percent">0</field>
+            <field name="aft_quotation_type_id" ref="hr_aft_quotation_type_8"/>
+        </record>
+        <record id='hr_aft_quotation_type_8_details_3' model='hr.aft.quotation.type.details'>
+            <field name='code'>as</field>
+            <field name='name'>Aporte solidario</field>
+            <field name="percent">0.50</field>
+            <field name="aft_quotation_type_id" ref="hr_aft_quotation_type_8"/>
+        </record>
+        <record id='hr_aft_quotation_type_8_details_4' model='hr.aft.quotation.type.details'>
+            <field name='code'>c_afp</field>
+            <field name='name'>Comisión AFP</field>
+            <field name="percent">0.50</field>
+            <field name="aft_quotation_type_id" ref="hr_aft_quotation_type_8"/>
+        </record>
+
+    </data>
+</odoo>
