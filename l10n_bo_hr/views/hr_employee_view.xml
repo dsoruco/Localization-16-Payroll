@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-    
-    <!--         EMPLOYEE VIEW         -->
+
+ <!--         EMPLOYEE VIEW         -->
     <record id="hr_employee_view_form_inherit" model="ir.ui.view">
         <field name="name">hr.employee.view.form.inherit</field>
         <field name="model">hr.employee</field>
@@ -39,7 +39,7 @@
                     <field name="afp_retired"/>
                     <field name="afp_retired_date"
                            attrs="{'invisible': [('afp_retired', '=', False)], 'required':[('afp_retired', '!=', False)]}"/>
-                    <field name="afp_age"/>
+                    <field name="afp_age_str"/>
                 </group>
                 <group string="Datos del seguro" >
                     <field name="health_box_code"/>
@@ -48,7 +48,7 @@
                 </group>
             </xpath>
             <xpath expr="//group[@name='departure']" position="replace">
-                
+
             </xpath>
             <xpath expr="//page[@name='hr_settings']" position="after">
                 <!-- PRIMA -->
@@ -63,28 +63,28 @@
                     </group>
                 </page>
                 <!-- ATTACHMENTS -->
-                <page name="attachment" string="Attachments" groups="hr.group_hr_user">
-                    <field name="attachment_ids" widget="one2many">
-                        <tree editable="top" expand="true">
-                            <field name="name" />
-                            <field name="attachment" widget="attachment"/>
-                        </tree>
-                    </field>
-                </page>
-                <page name="public" string="Departure" attrs="{'invisible': [('active', '=', True)]}">
-                    <div id="o_work_employee_container" class="d-lg-flex"> <!-- These two div are used to position org_chart -->
-                        <div id="o_work_employee_main" class="flex-grow-1">
-                            <group name="departure" string="Departure" attrs="{'invisible': [('active', '=', True)]}">
-                                <field name="departure_reason_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>
-                                <field name="departure_description"/>
-                                <field name="departure_date"/>
-                                <field name="date_of_pay"/>
-                                <field name="pay_in"/>
-                                <field name="bank_id" attrs="{'invisible': [('pay_in', '!=' , 'chk')]}"/>
-                            </group>
-                        </div>
-                    </div>
-                </page>
+<!--                <page name="attachment" string="Attachments" groups="hr.group_hr_user">-->
+<!--                    <field name="attachment_ids" widget="one2many">-->
+<!--                        <tree editable="top" expand="true">-->
+<!--                            <field name="name" />-->
+<!--                            <field name="attachment" widget="attachment"/>-->
+<!--                        </tree>-->
+<!--                    </field>-->
+<!--                </page>-->
+<!--                <page name="public" string="Departure" attrs="{'invisible': [('active', '=', True)]}">-->
+<!--                    <div id="o_work_employee_container" class="d-lg-flex"> &lt;!&ndash; These two div are used to position org_chart &ndash;&gt;-->
+<!--                        <div id="o_work_employee_main" class="flex-grow-1">-->
+<!--                            <group name="departure" string="Departure" attrs="{'invisible': [('active', '=', True)]}">-->
+<!--                                <field name="departure_reason_id" options="{'no_edit': True, 'no_create': True, 'no_open': True}"/>-->
+<!--                                <field name="departure_description"/>-->
+<!--                                <field name="departure_date"/>-->
+<!--                                <field name="date_of_pay"/>-->
+<!--                                <field name="pay_in"/>-->
+<!--                                <field name="bank_id" attrs="{'invisible': [('pay_in', '!=' , 'chk')]}"/>-->
+<!--                            </group>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </page>-->
             </xpath>
         </field>
     </record>
@@ -103,7 +103,7 @@
                 id="hr_menu_empleado_bolivia"
                 name="Empleado bolivia"
                 parent="hr.menu_human_resources_configuration"
-                groups="base.group_no_one"
+                groups="base.group_no_one"/>
                 sequence="100"/>
 
 </odoo>
