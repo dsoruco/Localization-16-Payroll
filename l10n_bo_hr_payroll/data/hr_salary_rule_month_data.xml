@@ -260,6 +260,78 @@ result = IMPUESTO - TAX_2_SMN
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
+
+    <record id="orbiware_l10n_bo_hr_payroll_iva_form_110" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">IVA FORM.110</field>
+        <field name="code">IVA_FORM_110</field>
+        <field name="sequence">206</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = 0
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="orbiware_l10n_bo_hr_payroll_saldo_fisco" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">SALDO A FAVOR DE FISCO</field>
+        <field name="code">SALDO_A_FAVOR_FISCO</field>
+        <field name="sequence">207</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+if IMP_NETO_RC_IVA > IVA_FORM_110:
+    result = IMP_NETO_RC_IVA - IVA_FORM_110
+else:
+    result = 0
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="orbiware_l10n_bo_hr_payroll_saldo_depend" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">SALDO A FAVOR DEL DESPENDIENTE</field>
+        <field name="code">SALDO_A_FAVOR_DEPEND</field>
+        <field name="sequence">208</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+if IVA_FORM_110 > IMP_NETO_RC_IVA:
+    result = IVA_FORM_110 - IMP_NETO_RC_IVA
+else:
+    result = 0
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="orbiware_l10n_bo_hr_payroll_saldo_favor_mes_ant" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">SALDO A FAVOR MES ANTERIOR</field>
+        <field name="code">SALDO_A_FAVOR_MES_ANT</field>
+        <field name="sequence">209</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = 1500
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="orbiware_l10n_bo_hr_payroll_saldo_actualizacion" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">ACTUALIZACION</field>
+        <field name="code">ACTUALIZACION</field>
+        <field name="sequence">210</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = SALDO_A_FAVOR_MES_ANT * CURRENT_UFV/LAST_UFV -SALDO_A_FAVOR_MES_ANT
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
 <!-- REGLAS TEMPORALES A MODIFICAR                          -->
     <record id="orbiware_l10n_bo_hr_payroll_last_ufv" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
