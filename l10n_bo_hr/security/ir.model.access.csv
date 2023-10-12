@@ -1,9 +1,9 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_l10n_bo_hr_employee_docs,l10n_bo_hr.employee_docs,model_l10n_bo_hr_employee_docs,,1,1,1,1
-access_hr_employee_payroll_area_manager,hr.employee.payroll.area.manager,model_hr_employee_payroll_area,hr_contract.group_hr_contract_manager,1,1,1,1
-access_hr_employee_personnel_area_manager,hr.employee.personnel.area.manager,model_hr_employee_personnel_area,hr_contract.group_hr_contract_manager,1,1,1,1
-access_hr_employee_personnel_group_manager,hr.employee.personnel.group.manager,model_hr_employee_personnel_group,hr_contract.group_hr_contract_manager,1,1,1,1
-access_hr_employee_staff_division_manager,hr.employee.staff.division.manager,model_hr_employee_staff_division,hr_contract.group_hr_contract_manager,1,1,1,1
-access_hr_employee_staffing_subdivision_manager,hr.employee.staffing.subdivision.manager,model_hr_employee_staffing_subdivision,hr_contract.group_hr_contract_manager,1,1,1,1
-access_hr_aft_quotation_type_manager,hr.aft.quotation.type.manager,model_hr_aft_quotation_type,hr_contract.group_hr_contract_manager,1,1,1,1
-access_hr_aft_quotation_type_details_manager,hr.aft.quotation.type.details.manager,model_hr_aft_quotation_type_details,hr_contract.group_hr_contract_manager,1,1,1,1
+access_hr_employee_payroll_area_manager,hr.employee.payroll.area.manager,model_hr_employee_payroll_area,hr.group_hr_manager,1,1,1,1
+access_hr_employee_personnel_area_manager,hr.employee.personnel.area.manager,model_hr_employee_personnel_area,hr.group_hr_manager,1,1,1,1
+access_hr_employee_personnel_group_manager,hr.employee.personnel.group.manager,model_hr_employee_personnel_group,hr.group_hr_manager,1,1,1,1
+access_hr_employee_staff_division_manager,hr.employee.staff.division.manager,model_hr_employee_staff_division,hr.group_hr_manager,1,1,1,1
+access_hr_employee_staffing_subdivision_manager,hr.employee.staffing.subdivision.manager,model_hr_employee_staffing_subdivision,hr.group_hr_manager,1,1,1,1
+access_hr_aft_quotation_type_manager,hr.aft.quotation.type.manager,model_hr_aft_quotation_type,hr.group_hr_manager,1,1,1,1
+access_hr_aft_quotation_type_details_manager,hr.aft.quotation.type.details.manager,model_hr_aft_quotation_type_details,hr.group_hr_manager,1,1,1,1

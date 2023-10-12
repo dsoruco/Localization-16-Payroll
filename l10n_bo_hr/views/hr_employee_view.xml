@@ -102,7 +102,7 @@
                 id="hr_menu_empleado_bolivia"
                 name="Empleado bolivia"
                 parent="hr.menu_human_resources_configuration"
-                groups="base.group_no_one"/>
+                groups="hr.group_hr_manager"
                 sequence="100"/>
 
 </odoo>

@@ -50,5 +50,5 @@
             action="action_hr_contract_reason_measurement"
             parent="hr_menu_contract_bolivia"
             sequence="3"
-            groups="base.group_no_one"/>
+            groups="hr_contract.group_hr_contract_manager"/>
 </odoo>
