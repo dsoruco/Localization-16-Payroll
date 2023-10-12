@@ -1,31 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-    
-    <!--         EMPLOYEE VIEW         -->
+
+ <!--         EMPLOYEE VIEW         -->
     <record id="hr_employee_view_form_inherit" model="ir.ui.view">
         <field name="name">hr.employee.view.form.inherit</field>
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
-            <!--            <xpath expr="//page[@name='hr_settings']" position="after">-->
-            <!--                <page name="hr_conf_colombia" string="Configuración colombia">-->
-            <!--                    <group name="hr_main_info_colombia" >-->
-            <!--                        <group name="date_identification">-->
-            <!--                            <field name="type_identification_document"/>-->
-            <!--                        </group>-->
-            <!--                        <group name="aseguradoras" string="Aseguradoras">-->
-            <!--                            <field name="eps_id"/>-->
-            <!--                            <field name="afp_id"/>-->
-            <!--                            <field name="arl_id"/>-->
-            <!--                        </group>-->
-            <!--                        <group name="caja_sesantia" string="Caja cesantia">-->
-            <!--                            <field name="caja_id"/>-->
-            <!--                            <field name="severance"/>-->
-            <!--                        </group>-->
-            <!--                    </group>-->
-            <!--                </page>-->
-            <!--            </xpath>-->
+            <xpath expr="//field[@name='job_id']" position="after">
+                <field name="ceco"/>
+            </xpath>
+            <xpath expr="//field[@name='bank_account_id']" position="after">
+                <field name="currency_id"/>
+                <field name="payment_method"/>
+            </xpath>
             <xpath expr="//page[@name='hr_settings']/group" position="inside">
                 <group string="ID personal" >
                     <field name="type_identification_document"/>
@@ -36,27 +25,33 @@
                 <group string="Asignación Organizativa" >
                     <field name="staff_division_id"/>
                     <field name="staffing_subdivision_id"/>
-                    <field name="personnel_area_id"/>
                     <field name="personnel_group_id"/>
+                    <field name="personnel_area_id"/>
                     <field name="payroll_area_id"/>
                 </group>
             </xpath>
             <xpath expr="//page[@name='personal_information']/group" position="inside">
                 <group string="Datos Afp" >
-                    <field name="afp_subtype"/>
+                    <field name="afp_code"/>
+                    <field name="afp_id"/>
                     <field name="afp_nua_cua"/>
                     <field name="aft_quotation_type"/>
                     <field name="afp_retired"/>
                     <field name="afp_retired_date"
                            attrs="{'invisible': [('afp_retired', '=', False)], 'required':[('afp_retired', '!=', False)]}"/>
-                    <field name="afp_age"/>
+                    <field name="afp_age_str"/>
+                </group>
+                <group string="Datos del seguro" >
+                    <field name="health_box_code"/>
+                    <field name="health_box_id"/>
+                    <field name="insured_number"/>
                 </group>
             </xpath>
             <xpath expr="//group[@name='departure']" position="replace">
-                
+
             </xpath>
             <xpath expr="//page[@name='hr_settings']" position="after">
-                <!-- PRIMA -->
+                
                 <page name="hr_prima" string="HR Prima" groups="hr.group_hr_user">
                     <group>
                         <group string="Data prima" name="active_group">
@@ -67,7 +62,6 @@
                         </group>
                     </group>
                 </page>
-                <!-- ATTACHMENTS -->
                 <page name="attachment" string="Attachments" groups="hr.group_hr_user">
                     <field name="attachment_ids" widget="one2many">
                         <tree editable="top" expand="true">
@@ -108,7 +102,7 @@
                 id="hr_menu_empleado_bolivia"
                 name="Empleado bolivia"
                 parent="hr.menu_human_resources_configuration"
-                groups="base.group_no_one"
+                groups="hr.group_hr_manager"
                 sequence="100"/>
 
 </odoo>

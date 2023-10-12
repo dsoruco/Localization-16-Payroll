@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record model='res.partner' id='res_partner_afp_1'>
+            <field name='name'>Previsión</field>
+            <field name="company_type">company</field>
+            <field name="country_id" ref="base.co"/>
+            <field name="l10n_bo_afp">True</field>
+            <field name='l10n_bo_afp_code'>01</field>
+        </record>
+        <record model='res.partner' id='res_partner_afp_2'>
+            <field name='name'>Futuro</field>
+            <field name="company_type">company</field>
+            <field name="country_id" ref="base.co"/>
+            <field name="l10n_bo_afp">True</field>
+            <field name='l10n_bo_afp_code'>02</field>
+        </record>
+        <record model='res.partner' id='res_partner_afp_3'>
+            <field name='name'>Gestora</field>
+            <field name="company_type">company</field>
+            <field name="country_id" ref="base.co"/>
+            <field name="l10n_bo_afp">True</field>
+            <field name='l10n_bo_afp_code'>03</field>
+        </record>
+    </data>
+</odoo>

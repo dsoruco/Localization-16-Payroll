@@ -11,9 +11,9 @@ class EmployeeStaffingSubdivision(models.Model):
     _name = "hr.employee.staffing.subdivision"
     _description = "SubDivisión de personal"
 
-
     code = fields.Char('Código', required=True)
     name = fields.Char(string="SubDivisión de personal", translate=True, required=True)
+    division_id = fields.Many2one('hr.employee.staff.division', string="División de personal", required=True)
 
     _sql_constraints = [
         ('code_uniq', 'unique (code)', "El código ya existe !"),

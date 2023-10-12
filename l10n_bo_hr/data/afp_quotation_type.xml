@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id='hr_aft_quotation_type_1' model='hr.aft.quotation.type'>
+            <field name='code'>1</field>
+            <field name='name'>Dependiente o asegurado con pensión del sip &lt; 65 años que aporta</field>
+            <field name="percent">12.71</field>
+        </record>
+        <record id='hr_aft_quotation_type_8' model='hr.aft.quotation.type'>
+            <field name='code'>8</field>
+            <field name='name'>Dependiente o asegurado con pensión del sip > 65 años que aporta</field>
+            <field name="percent">11</field>
+        </record>
+        <record id='hr_aft_quotation_type_C' model='hr.aft.quotation.type'>
+            <field name='code'>C</field>
+            <field name='name'>Asegurado con pensión del sip &lt; 65 años que no aporta</field>
+            <field name="percent">2.71</field>
+        </record>
+        <record id='hr_aft_quotation_type_D' model='hr.aft.quotation.type'>
+            <field name='code'>D</field>
+            <field name='name'>Asegurado con pensión del sip > 65 años que no aporta</field>
+            <field name="percent">1</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+ <!--         EMPLOYEE VIEW DATOS NOMINA        -->
+    <record id="hr_employee_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='hr_settings']" position="after">
+                <page name="payroll_date" string="Datos nómina" groups="hr.group_hr_user">
+                    <group>
+                        <group string="Datos generales">
+                            <field name="years_of_service"/>
+                        </group>
+                        <group string="Datos vacaciones">
+                            <field name="allowed_vacation_days"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

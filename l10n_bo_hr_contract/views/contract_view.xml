@@ -45,7 +45,7 @@
                 id="hr_menu_contract_bolivia"
                 name="Contract bolivia"
                 parent="hr.menu_human_resources_configuration"
-                groups="base.group_no_one"/>
+                groups="hr_contract.group_hr_contract_manager"
                 sequence="100"/>
 
 </odoo>
