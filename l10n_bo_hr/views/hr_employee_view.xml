@@ -25,8 +25,8 @@
                 <group string="Asignación Organizativa" >
                     <field name="staff_division_id"/>
                     <field name="staffing_subdivision_id"/>
-                    <field name="personnel_area_id"/>
                     <field name="personnel_group_id"/>
+                    <field name="personnel_area_id"/>
                     <field name="payroll_area_id"/>
                 </group>
             </xpath>

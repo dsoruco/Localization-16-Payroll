@@ -139,9 +139,9 @@ class HrEmployee(models.Model):
                             )
     # Asignación organizativa
     staff_division_id = fields.Many2one('hr.employee.staff.division', string='División de personal')
-    staffing_subdivision_id = fields.Many2one('hr.employee.staffing.subdivision', string='SubDivisión de personal')
-    personnel_area_id = fields.Many2one('hr.employee.personnel.area', string='Área de personal')
+    staffing_subdivision_id = fields.Many2one('hr.employee.staffing.subdivision', string='SubDivisión de personal', domain="[('division_id', '=', staff_division_id)]")
     personnel_group_id = fields.Many2one('hr.employee.personnel.group', string='Grupo de personal')
+    personnel_area_id = fields.Many2one('hr.employee.personnel.area', string='Área de personal', domain="[('personnel_group_id', '=', personnel_group_id)]")
     payroll_area_id = fields.Many2one('hr.employee.payroll.area', string='Área de nómina')
 
     # Para mostrar el código de la plaza

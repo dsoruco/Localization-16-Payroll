@@ -49,6 +49,6 @@
             id="menu_hr_employee_staff_division"
             action="action_hr_employee_staff_division"
             parent="hr_menu_empleado_bolivia"
-            sequence="3"
+            sequence="1"
             groups="hr.group_hr_manager"/>
 </odoo>
