@@ -139,6 +139,127 @@ else:
         <field name="struct_id" ref="structure_month"/>
     </record>
 
+<!--   MONTO ANC TOTAL%              -->
+    <record id="orbiware_l10n_bo_hr_payroll_anc_amount_discount_anc" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">DESCUENTO ANC</field>
+        <field name="code">DESCUENTO_ANC</field>
+        <field name="sequence">102</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+anc = 0
+if ANC_ONE:
+    anc += ANC_ONE
+if ANC_FIVE:
+    anc += ANC_FIVE
+if ANC_TEN:
+    anc += ANC_TEN
+result = anc
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+<!--   MONTO TOTAL AFP              -->
+    <record id="orbiware_l10n_bo_hr_payroll_anc_amount_total_afp" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="name">TOTAL AFP</field>
+        <field name="code">TOTAL_AFP</field>
+        <field name="sequence">104</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+total_afp = 0
+if AFP_DISCOUNT:
+    total_afp += AFP_DISCOUNT
+if DESCUENTO_ANC:
+    total_afp += DESCUENTO_ANC
+result = -total_afp
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <!--   2 SMN              -->
+    <record id="orbiware_l10n_bo_hr_payroll_anc_amount_two_smn" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">2 SMN</field>
+        <field name="code">TWO_SMN</field>
+        <field name="sequence">201</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = SMN * 2
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+    <!--   BASE IMPONIBLE               -->
+    <record id="orbiware_l10n_bo_hr_payroll_anc_amount_taxable_base" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">BASE IMPONIBLE</field>
+        <field name="code">BASE_IMPONIBLE</field>
+        <field name="sequence">202</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = NET - TWO_SMN
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="orbiware_l10n_bo_hr_payroll_percen_tax" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">% IMPUESTO</field>
+        <field name="code">PERCEN_TAX</field>
+        <field name="sequence">10</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = payslip.rule_parameter('TAX')
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="orbiware_l10n_bo_hr_payroll_tax" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">IMPUESTO</field>
+        <field name="code">IMPUESTO</field>
+        <field name="sequence">203</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = BASE_IMPONIBLE * PERCEN_TAX / 100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="orbiware_l10n_bo_hr_payroll_tax_smn" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">TAX * 2 SMN</field>
+        <field name="code">TAX_2_SMN</field>
+        <field name="sequence">204</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+if IMPUESTO == 0:
+    result = 0
+else:
+    result = TWO_SMN * PERCEN_TAX / 100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="orbiware_l10n_bo_hr_payroll_tax_neto_rc_iva" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">IMPUESTO NETO RC-IVA</field>
+        <field name="code">IMP_NETO_RC_IVA</field>
+        <field name="sequence">205</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = IMPUESTO - TAX_2_SMN
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
 <!-- REGLAS TEMPORALES A MODIFICAR                          -->
     <record id="orbiware_l10n_bo_hr_payroll_last_ufv" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
