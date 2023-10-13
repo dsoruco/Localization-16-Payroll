@@ -23,6 +23,7 @@
         'views/hr_personnel_area_view.xml',
         'views/res_partner_view.xml',
         'views/hr_afp_quotation_type_view.xml',
+        'wizard/hr_departure_wizard_views.xml',
         # 'report/hr_employee_payroll_report_views.xml',
 
     ],
