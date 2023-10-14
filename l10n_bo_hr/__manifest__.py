@@ -14,7 +14,6 @@
         'data/afp_quotation_type.xml',
         'data/afp_quotation_type_details.xml',
         'security/ir.model.access.csv',
-        'views/hr_job_views.xml',
         'views/hr_employee_view.xml',
         'views/hr_staff_division_view.xml',
         'views/hr_staffing_subdivision_view.xml',
@@ -26,4 +25,7 @@
         # 'report/hr_employee_payroll_report_views.xml',
 
     ],
+    "development_status": "Beta",
+    "application": True,
+    "installable": True,
 }

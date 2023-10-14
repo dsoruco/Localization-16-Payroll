@@ -19,4 +19,7 @@
         # 'report/hr_employee_payroll_report_views.xml',
 
     ],
+    "development_status": "Beta",
+    "application": True,
+    "installable": True,
 }

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from . import hr_job
 from . import res_partner
 from . import hr_payrolll_area
 from . import hr_personnel_area

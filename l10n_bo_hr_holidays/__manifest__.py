@@ -19,4 +19,7 @@
 
 
     ],
+    "development_status": "Beta",
+    "application": True,
+    "installable": True,
 }

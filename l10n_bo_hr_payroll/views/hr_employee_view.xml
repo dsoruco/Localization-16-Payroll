@@ -12,7 +12,7 @@
                 <group string="Datos Quinquenio">
                     <field name="balance"/>
                     <field name="quinquennial_ids">
-                        <tree>
+                        <tree create="0" edit="0" delete="0" editable="top">
                             <field name="contract_id"/>
                             <field name="employee_id"/>
                             <field name="type_of_payment"/>
@@ -34,11 +34,11 @@
             <field name="arch" type="xml">
                 <form string="Datos Quinquenal">
                     <group col="4">
-                        <field name="type_of_payment"/>
-                        <field name="amount_years"/>
-                        <field name="date_from"/>
-                        <field name="date_to"/>
-                        <field name="date_pay"/>
+                        <field name="type_of_payment" readonly="1"/>
+                        <field name="amount_years" readonly="1"/>
+                        <field name="date_from" readonly="1"/>
+                        <field name="date_to" readonly="1"/>
+                        <field name="date_pay" readonly="1"/>
                     </group>
                 </form>
             </field>
