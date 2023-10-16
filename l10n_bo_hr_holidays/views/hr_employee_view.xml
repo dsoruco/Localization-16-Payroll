@@ -12,6 +12,7 @@
                 <page name="payroll_date" string="Datos nómina" groups="hr.group_hr_user">
                     <group>
                         <group string="Datos generales">
+                            <field name="date_hired"/>
                             <field name="years_of_service"/>
                         </group>
                         <group string="Datos vacaciones">

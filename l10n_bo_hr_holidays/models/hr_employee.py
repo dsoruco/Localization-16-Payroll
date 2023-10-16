@@ -13,12 +13,23 @@ class HrEmployee(models.Model):
 
     years_of_service = fields.Integer(string="Años de antigüedad", compute='_compute_years_of_service', store=True)
     allowed_vacation_days = fields.Integer(string="Días de vacaciones permitidos", readonly=True, compute='_compute_allowed_vacation_days', store=True)
+    date_hired = fields.Date(string='Fecha Contratación', help="Fecha de inicio del primer contrato", compute='_compute_date_hired', store=True)
+
+    @api.depends('contract_ids.date_start')
+    def _compute_date_hired(self):
+        for record in self:
+            if record.contract_ids:
+                date_hired = min(record.contract_ids.mapped('date_start'))
+                record.date_hired = date_hired
+            else:
+                record.date_hired = 0
 
     @api.depends('contract_ids.date_start')
     def _compute_years_of_service(self):
         for record in self:
             if record.contract_ids:
-                date_hired = min(record.contract_ids.mapped('date_start'))
+                date_hired = record.date_hired
+                # date_hired = min(record.contract_ids.mapped('date_start'))
                 current_date = fields.Date.today()
                 delta_years = relativedelta(current_date, date_hired).years
                 record.years_of_service = delta_years
