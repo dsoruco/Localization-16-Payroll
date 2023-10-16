@@ -12,7 +12,8 @@
                 <group string="Datos Quinquenio">
                     <field name="balance"/>
                     <field name="quinquennial_ids">
-                        <tree create="0" edit="0" delete="0" editable="top">
+<!--                        <tree create="0" edit="0" delete="0" editable="top">-->
+                        <tree>
                             <field name="contract_id"/>
                             <field name="employee_id"/>
                             <field name="type_of_payment"/>
@@ -20,6 +21,9 @@
                             <field name="date_from"/>
                             <field name="date_to"/>
                             <field name="date_pay"/>
+                            <field name="state" readonly ="1"/>
+                            <button string="Listo" name="action_set_open" type="object" attrs="{'invisible': [('state', '!=', 'draft')]}" class="oe_highlight" help="Poner listo para ser calculado por la nómina"/>
+                            <button string="Borrador" name="action_set_draft" type="object" attrs="{'invisible': [('state', '!=', 'open')]}" help="Ponerlo en borrador para modificarlo"/>
                         </tree>
                     </field>
                 </group>
@@ -34,11 +38,13 @@
             <field name="arch" type="xml">
                 <form string="Datos Quinquenal">
                     <group col="4">
-                        <field name="type_of_payment" readonly="1"/>
-                        <field name="amount_years" readonly="1"/>
-                        <field name="date_from" readonly="1"/>
-                        <field name="date_to" readonly="1"/>
-                        <field name="date_pay" readonly="1"/>
+                        <field name="state" invisible="1"/>
+                        <field name="type_of_payment" attrs="{'readonly': [('state', 'in', ['done', 'paid'])]}"/>
+                        <field name="amount_years" attrs="{'readonly': [('state', 'in', ['done', 'paid'])]}"/>
+                        <field name="date_from" attrs="{'readonly': [('state', 'in', ['done', 'paid'])]}"/>
+                        <field name="date_to" attrs="{'readonly': [('state', 'in', ['done', 'paid'])]}"/>
+                        <field name="date_pay" attrs="{'readonly': [('state', 'in', ['done', 'paid'])]}"/>
+                        <field name="state" readonly ="1"/>
                     </group>
                 </form>
             </field>
