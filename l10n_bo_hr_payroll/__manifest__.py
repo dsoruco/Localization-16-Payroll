@@ -13,6 +13,7 @@
         'data/hr_payroll_category_data.xml',
         'data/hr_payroll_structure_data.xml',
         'data/hr_salary_rule_month_data.xml',
+        'data/hr_payslip_input_type.xml',
         'security/ir.model.access.csv',
         'views/hr_employee_view.xml',
         'views/hr_payroll_closing_table_view.xml',

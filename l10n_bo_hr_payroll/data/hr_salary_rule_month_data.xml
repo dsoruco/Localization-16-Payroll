@@ -266,10 +266,14 @@ result = IMPUESTO - TAX_2_SMN
         <field name="name">IVA FORM.110</field>
         <field name="code">IVA_FORM_110</field>
         <field name="sequence">206</field>
-        <field name="condition_select">none</field>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = inputs.IVA_Form_110</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = 0
+if inputs.IVA_Form_110:
+    result = inputs.IVA_Form_110.amount
+else:
+    result=0
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
