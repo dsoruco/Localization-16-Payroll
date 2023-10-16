@@ -332,6 +332,19 @@ result = SALDO_A_FAVOR_MES_ANT * CURRENT_UFV/LAST_UFV -SALDO_A_FAVOR_MES_ANT
         <field name="struct_id" ref="structure_month"/>
     </record>
 
+    <record id="orbiware_l10n_bo_hr_payroll_antiquity_bonus" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">BONO ANTIGUEDAD</field>
+        <field name="code">BONO_ANT</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = (payslip.rule_parameter('SMN') * 3 * leave_antiquity_bonus(payslip,employee))/100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
 <!-- REGLAS TEMPORALES A MODIFICAR                          -->
     <record id="orbiware_l10n_bo_hr_payroll_last_ufv" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
