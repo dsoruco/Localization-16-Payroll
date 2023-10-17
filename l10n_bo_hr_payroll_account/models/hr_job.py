@@ -8,4 +8,4 @@ from odoo.addons.web_editor.controllers.main import handle_history_divergence
 class HrJob(models.Model):
     _inherit = 'hr.job'
 
-    ceco = fields.Char(string="CECO")
+    ceco = fields.Many2one('account.analytic.account', string="CECO", required=True)
