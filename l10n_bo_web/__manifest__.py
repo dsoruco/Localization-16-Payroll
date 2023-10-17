@@ -10,7 +10,7 @@
     """,
     'author': "Datec",
     'category': 'Sitio Web',
-    'version': '0.1.0.0.0.2',
+    'version': '0.1.0.0.0.3',
     'depends': ['base'],
     # always loaded
     'data': [
