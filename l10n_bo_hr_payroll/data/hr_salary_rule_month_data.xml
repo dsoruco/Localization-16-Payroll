@@ -336,6 +336,38 @@ result = SALDO_A_FAVOR_MES_ANT * CURRENT_UFV/LAST_UFV -SALDO_A_FAVOR_MES_ANT
         <field name="struct_id" ref="structure_month"/>
     </record>
 
+    <record id="orbiware_l10n_bo_hr_payroll_sal_ant_act" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">SALDO ANTERIOR ACTUALIZADO</field>
+        <field name="code">SAL_ANT_ACT</field>
+        <field name="sequence">211</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = SALDO_A_FAVOR_MES_ANT + ACTUALIZACION
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="orbiware_l10n_bo_hr_payroll_sal_use" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">SALDO UTILIZADO</field>
+        <field name="code">SALDO_UTILIZADO</field>
+        <field name="sequence">212</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+if SAL_ANT_ACT &lt;= SALDO_A_FAVOR_FISCO:
+    result = SAL_ANT_ACT
+else:
+    if SALDO_A_FAVOR_FISCO &lt;= SAL_ANT_ACT:
+        result = SALDO_A_FAVOR_FISCO;
+    else:
+        result = 0
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
     <record id="orbiware_l10n_bo_hr_payroll_antiquity_bonus" model="hr.salary.rule">
         <field name="category_id" ref="hr_payroll.ALW"/>
         <field name="name">BONO ANTIGUEDAD</field>
