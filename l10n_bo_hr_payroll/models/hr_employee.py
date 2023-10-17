@@ -20,6 +20,33 @@ class HrEmployee(models.Model):
             total_amount_years = sum(record.quinquennial_ids.mapped('amount_years'))
             record.balance = record.years_of_service - total_amount_years
 
+    def get_total_average_earned(self, date_to, employee, months):
+        domain = [('date_to', '<=', date_to), ('employee_id', '=', employee.id)]
+
+        registers = self.env['hr.payroll.closing.table'].search(domain, order='date_to desc', limit=months)
+        if not registers:
+            return 0
+        else:
+            sum_day = 0
+            sum_salary = 0
+            for register in registers:
+                sum_salary += register.net_salary
+                sum_day += register.worked_days
+            return sum_salary/months
+
+    def GetQuinquennial(self, date_from, date_to):
+        domain = [('date_pay', '<=', date_to),
+                  ('date_pay', '>=', date_from),
+                  ('state', '=', 'open'),
+                  ('employee_id', '=', self.id)]
+
+        register = self.env['hr.payroll.quinquennial.data'].search(domain, order='date_to desc', limit=1)
+        if register:
+            average = self.get_total_average_earned(date_to, self, 3)
+            return average * register.amount_years
+        else:
+            return 0
+
 
 class HrPayrollQuinquennialData(models.Model):
     _name = 'hr.payroll.quinquennial.data'
