@@ -3,7 +3,7 @@
 {
     'name': 'Datec: Nómina y contabilidad Bolivia',
     'version': '16.0.0.0.1',
-    'depends': ['l10n_bo_hr_payroll', 'hr_payroll_account'],
+    'depends': ['l10n_bo_hr_payroll', 'hr_payroll_account', 'analytic'],
     'author': "Datec",
     'license': 'OPL-1',
     'category': 'Payroll Localization',
@@ -13,6 +13,10 @@
     """,
     'data': [
         'security/ir.model.access.csv',
-        # 'views/hr_payroll_account_views.xml',
+        'views/hr_job_views.xml',
+        'views/hr_employee_view.xml',
     ],
+    "development_status": "Beta",
+    "application": True,
+    "installable": True,
 }
