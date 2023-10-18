@@ -57,12 +57,19 @@ class HrEmployee(models.Model):
                 vals.get("firstname2"), vals.get("lastname2"), vals.get("married_name"))
         elif vals.get("name"):
             name_splitted = self.split_name(vals["name"])
-            vals["treatment"] = name_splitted["treatment"]
-            vals["firstname"] = name_splitted["firstname"]
-            vals["firstname2"] = name_splitted["firstname2"]
-            vals["lastname"] = name_splitted["lastname"]
-            vals["lastname2"] = name_splitted["lastname2"]
-            vals["married_name"] = name_splitted["married_name"]
+            keys = vals.keys()
+            if 'treatment' in keys:
+                vals["treatment"] = name_splitted["treatment"]
+            if 'lastname' in keys:
+                vals["lastname"] = name_splitted["lastname"]
+            if 'firstname' in keys:
+                vals["firstname"] = name_splitted["firstname"]
+            if 'firstname2' in keys:
+                vals["firstname2"] = name_splitted["firstname2"]
+            if 'lastname2' in keys:
+                vals["lastname2"] = name_splitted["lastname2"]
+            if 'married_name' in keys:
+                vals["married_name"] = name_splitted["married_name"]
         return res
 
     def _prepare_vals_on_write_firstname_lastname(self, vals):
