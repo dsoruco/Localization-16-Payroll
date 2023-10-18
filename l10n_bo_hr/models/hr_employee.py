@@ -200,7 +200,7 @@ class HrAftQuotationType(models.Model):
 
 class HrAftQuotationTypeDetails(models.Model):
     _name = "hr.aft.quotation.type.details"
-    _decription = "HrAftQuotationTypeDetails"
+    _description = "HrAftQuotationTypeDetails"
     code = fields.Char('Código', required=True)
     name = fields.Char(string="Desglose AFP", translate=True, required=True)
     percent = fields.Float("Porciento")
