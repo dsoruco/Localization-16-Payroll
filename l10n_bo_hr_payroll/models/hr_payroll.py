@@ -21,6 +21,7 @@ class HrPayrollClosingTable(models.Model):
     date_to = fields.Date(string='Date To', required=True)
 # Reglas --------------------------------------------------
     net_salary = fields.Float(string="Salario neto", required=True)
+    credit_next_month = fields.Float(string="Saldo proximo mes", required=True)
 
 # Categorias ----------------------------------------------
     gross = fields.Float(string="Salario devengado", required=True)

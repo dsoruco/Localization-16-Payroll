@@ -26,6 +26,7 @@
                         <group col="3">
                             <group>
                                 <field name="net_salary" attrs="{'readonly': [('payslip_id', '!=', False)]}" />
+                                <field name="credit_next_month" attrs="{'readonly': [('payslip_id', '!=', False)]}" />
                             </group>
                             <group>
                                 <field name="gross" attrs="{'readonly': [('payslip_id', '!=', False)]}" />

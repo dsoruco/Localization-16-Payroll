@@ -318,7 +318,7 @@ else:
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = 1500
+result = credit_balance_previous_month(payslip,employee)
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
@@ -367,6 +367,36 @@ else:
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
+
+    <record id="orbiware_l10n_bo_hr_payroll_tax_ret" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">IMPUESTO RETENIDO A PAGAR</field>
+        <field name="code">IMP_RET_PAGAR</field>
+        <field name="sequence">213</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+if SALDO_A_FAVOR_FISCO &lt;= SALDO_UTILIZADO:
+    result = SALDO_A_FAVOR_FISCO - SALDO_UTILIZADO
+else:
+    result = 0
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="orbiware_l10n_bo_hr_payroll_amount_next_month" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">SALDO A FAVOR MES SIGUIENTE </field>
+        <field name="code">SAL_PROX_MES</field>
+        <field name="sequence">213</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = SALDO_A_FAVOR_DEPEND + SAL_ANT_ACT - SALDO_UTILIZADO
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
 
     <record id="orbiware_l10n_bo_hr_payroll_antiquity_bonus" model="hr.salary.rule">
         <field name="category_id" ref="hr_payroll.ALW"/>
