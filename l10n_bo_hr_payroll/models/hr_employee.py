@@ -1,7 +1,8 @@
 import logging
 
 from odoo import fields, models, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import AccessError, UserError, ValidationError
+
 
 _logger = logging.getLogger(__name__)
 
@@ -18,6 +19,33 @@ class HrEmployee(models.Model):
         for record in self:
             total_amount_years = sum(record.quinquennial_ids.mapped('amount_years'))
             record.balance = record.years_of_service - total_amount_years
+
+    def get_total_average_earned(self, date_to, employee, months):
+        domain = [('date_to', '<=', date_to), ('employee_id', '=', employee.id)]
+
+        registers = self.env['hr.payroll.closing.table'].search(domain, order='date_to desc', limit=months)
+        if not registers:
+            return 0
+        else:
+            sum_day = 0
+            sum_salary = 0
+            for register in registers:
+                sum_salary += register.net_salary
+                sum_day += register.worked_days
+            return sum_salary/months
+
+    def GetQuinquennial(self, date_from, date_to):
+        domain = [('date_pay', '<=', date_to),
+                  ('date_pay', '>=', date_from),
+                  ('state', '=', 'open'),
+                  ('employee_id', '=', self.id)]
+
+        register = self.env['hr.payroll.quinquennial.data'].search(domain, order='date_to desc', limit=1)
+        if register:
+            average = self.get_total_average_earned(date_to, self, 3)
+            return average * register.amount_years
+        else:
+            return 0
 
 
 class HrPayrollQuinquennialData(models.Model):
@@ -40,6 +68,27 @@ class HrPayrollQuinquennialData(models.Model):
     date_from = fields.Date(string='Fecha de inicio', help="Fecha de inicio de formulario de pago de quinquenio", required=True)
     date_to = fields.Date(string='Fecha fin', help="Fecha fin de formulario de pago de quinquenio", required=True)
     date_pay = fields.Date(string='Fecha de pago',  help="Fecha de pago de quinquenio", required=True)
+    state = fields.Selection([
+        ('draft', 'Borrador'),
+        ('open', 'Listo'),
+        ('paid', 'Pagado'),
+    ], default='draft', string="Estado")
+
+    @api.constrains('amount_years')
+    def _check_amount_years(self):
+        for record in self:
+            paid_records = self.search([
+                ('state', 'in', ['draft', 'paid']),
+                ('id', '!=', record.id),
+            ])
+            if paid_records:
+                total_years = sum(paid_records.mapped('amount_years'))
+                balance = record.employee_id.years_of_service - total_years - record.amount_years
+            else:
+                balance = record.employee_id.years_of_service - record.amount_years
+
+            if balance < 0:
+                raise ValidationError("No puede pedir esa cantidad de años.")
 
     @api.constrains('employee_id')
     def _check_employee_contract(self):
@@ -47,4 +96,48 @@ class HrPayrollQuinquennialData(models.Model):
             if not record.employee_id.contract_id:
                 raise ValidationError("Error: No se puede adicionar pago quinquenal sin contrato asociado para el empleado.")
 
+    @api.constrains('date_from', 'date_to')
+    def _check_date_overlap(self):
+        for record in self:
+            if record.date_from and record.date_to:
+                if record.date_from >= record.date_to:
+                    raise ValidationError("La fecha de inicio debe ser anterior a la fecha de fin.")
 
+                unpaid_records = self.search([
+                    ('date_from', '<=', record.date_to),
+                    ('date_to', '>=', record.date_from),
+                    ('state', 'in', ['draft', 'done']),
+                    ('id', '!=', record.id),
+                ])
+
+                if unpaid_records:
+                    raise ValidationError("No deben existir registros anteriores sin pagar, confecione un solo registro par el pago.")
+
+                overlapping_records = self.search([
+                    ('date_from', '<=', record.date_to),
+                    ('date_to', '>=', record.date_from),
+                    ('id', '!=', record.id),
+                ])
+
+                if overlapping_records:
+                    raise ValidationError("Las fechas se solapan con otro registro existente.")
+
+            if record.date_from:
+                if record.date_from < record.employee_id.date_hired:
+                    raise ValidationError("La fecha de iniciodebe ser mayor a la fecha de contratación.")
+
+    def action_set_draft(self):
+        self.write({'state': 'draft'})
+        return True
+
+    def action_set_open(self):
+        self.write({'state': 'open'})
+        return True
+
+    def unlink(self):
+        for line in self:
+            if line.state != 'draft':
+                raise UserError(
+                    _('No puede borrar el registro si no esta en estado borrador.')
+                )
+        return super(HrPayrollQuinquennialData, self).unlink()

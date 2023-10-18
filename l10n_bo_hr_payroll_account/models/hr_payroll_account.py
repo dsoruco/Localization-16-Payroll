@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from collections import defaultdict
@@ -7,6 +7,7 @@ from markupsafe import Markup
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import float_compare, float_is_zero, plaintext2html
+
 
 class HrPayslip(models.Model):
     _inherit = 'hr.payslip'
@@ -26,6 +27,7 @@ class HrPayslip(models.Model):
         """
         res = super(HrPayslip, self).action_payslip_done()
         self._action_create_closing_table()
+        self._action_quinquennial_pay()
         return res
 
     # def _action_close_suplementary_work(self):
@@ -50,6 +52,10 @@ class HrPayslip(models.Model):
             closing_table = {'payslip_id': slip.id, 'contract_id': slip.contract_id.id,
                              'employee_id': slip.employee_id.id, 'date_from': slip.date_from, 'date_to': slip.date_to,
                              'net_salary': 0.0, 'gross': 0.0, 'worked_days': 0.0}
+            # Para el caso que el pago quinquenal no archivar en la tabla de cierre, si es una estructura aparte
+            for line in slip.line_ids.filtered(lambda x: x.code in ['QUINQUENAL']):
+                if line.code == 'QUINQUENAL':
+                    return 0
             for line in slip.line_ids.filtered(lambda x: x.code in ['NET']):
                 if line.code == 'NET':
                     closing_table['net_salary'] = line.amount
@@ -63,7 +69,7 @@ class HrPayslip(models.Model):
             }
             for line in slip.line_ids:
                 category_code = line.category_id.code
-                if category_code in ('GROSS', ):
+                if category_code in ('GROSS',):
                     if category_code not in categories:
                         categories[category_code] = line.amount
                     else:
@@ -75,12 +81,37 @@ class HrPayslip(models.Model):
 
             closing_table_env = self.env['hr.payroll.closing.table']
             closing_table_element = closing_table_env.search([('contract_id', '=', slip.contract_id.id),
-                                                  ('date_from', '=', slip.date_from),
-                                                  ('date_to', '=', slip.date_to)])
+                                                              ('date_from', '=', slip.date_from),
+                                                              ('date_to', '=', slip.date_to)])
             if closing_table_element:
                 move = closing_table_element.sudo().write(closing_table)
             else:
                 move = closing_table_env.sudo().create(closing_table)
 
-            #Para marcar el registro quinquenal como pagado
+    # Para marcar el registro quinquenal como pagado
+    def _action_quinquennial_pay(self):
+        precision = self.env['decimal.precision'].precision_get('Payroll')
+
+        # Add payslip without run
+        payslips_to_post = self.filtered(lambda slip: not slip.payslip_run_id)
+
+        # Adding pay slips from a batch and deleting pay slips with a batch that is not ready for validation.
+        payslip_runs = (self - payslips_to_post).mapped('payslip_run_id')
+        for run in payslip_runs:
+            if run._are_payslips_ready():
+                payslips_to_post |= run.slip_ids
+
+        # A payslip need to have a done state and not an accounting move.
+        payslips_to_post = payslips_to_post.filtered(lambda slip: slip.state == 'done' and not slip.closing_table)
+
+        for slip in payslips_to_post:
+            for line in slip.line_ids.filtered(lambda x: x.code in ['QUINQUENAL']):
+                if line.code == 'QUINQUENAL':
+                    quinquennial_env = self.env['hr.payroll.quinquennial.data']
+                    quinquennial_element = quinquennial_env.search([('contract_id', '=', slip.contract_id.id),
+                                                                    ('date_pay', '>=', slip.date_from),
+                                                                    ('date_pay', '<=', slip.date_to),
+                                                                    ('state', '=', 'open')])
+                    if quinquennial_element:
+                        move = quinquennial_element.sudo().write({'state': 'paid'})
 

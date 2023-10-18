@@ -1,6 +1,6 @@
 {
     'name': "Datec: Nómina Bolivia ausencia",
-    'version': '16.0.0.0.5',
+    'version': '16.0.0.0.6',
     'depends': ['l10n_bo_hr_contract', 'hr_holidays'],
     'author': "Datec",
     'license': 'OPL-1',
@@ -19,4 +19,7 @@
 
 
     ],
+    "development_status": "Beta",
+    "application": True,
+    "installable": True,
 }

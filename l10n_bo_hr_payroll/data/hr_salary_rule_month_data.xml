@@ -266,10 +266,14 @@ result = IMPUESTO - TAX_2_SMN
         <field name="name">IVA FORM.110</field>
         <field name="code">IVA_FORM_110</field>
         <field name="sequence">206</field>
-        <field name="condition_select">none</field>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = inputs.IVA_Form_110</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = 0
+if inputs.IVA_Form_110:
+    result = inputs.IVA_Form_110.amount
+else:
+    result=0
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
@@ -332,6 +336,19 @@ result = SALDO_A_FAVOR_MES_ANT * CURRENT_UFV/LAST_UFV -SALDO_A_FAVOR_MES_ANT
         <field name="struct_id" ref="structure_month"/>
     </record>
 
+    <record id="orbiware_l10n_bo_hr_payroll_antiquity_bonus" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">BONO ANTIGUEDAD</field>
+        <field name="code">BONO_ANT</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = (payslip.rule_parameter('SMN') * 3 * leave_antiquity_bonus(payslip,employee))/100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
 <!-- REGLAS TEMPORALES A MODIFICAR                          -->
     <record id="orbiware_l10n_bo_hr_payroll_last_ufv" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
@@ -359,6 +376,21 @@ result = payslip.rule_parameter('CURRENT_UFV')
         <field name="struct_id" ref="structure_month"/>
     </record>
 <!--    FIN SALARIO MENSUAL    *********************************    -->
+
+
+<!--     Relgas para quinquenal   -->
+    <record id="orbiware_l10n_bo_hr_payroll_quinquenial" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">QUINQUENAL</field>
+        <field name="code">QUINQUENAL</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = employee.GetQuinquennial(payslip.date_from, payslip.date_to)
+        </field>
+        <field name="struct_id" ref="structure_quinquennial"/>
+    </record>
 
 </odoo>
 

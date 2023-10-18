@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="payslip_input_type_iva_form_110" model="hr.payslip.input.type">
+            <field name="name">IVA Form. 110</field>
+            <field name="code">IVA_Form_110</field>
+            <field name="struct_ids" eval="[(4, ref('structure_month'))]"/>
+        </record>
+    </data>
+</odoo>

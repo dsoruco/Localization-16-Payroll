@@ -1,6 +1,6 @@
 {
     'name': "Datec: Nómina Bolivia contrato",
-    'version': '16.0.0.0.4',
+    'version': '16.0.0.0.5',
     'depends': ['l10n_bo_hr', 'hr_contract'],
     'author': "Datec",
     'license': 'OPL-1',
@@ -17,4 +17,7 @@
         # 'report/hr_employee_payroll_report_views.xml',
 
     ],
+    "development_status": "Beta",
+    "application": True,
+    "installable": True,
 }
