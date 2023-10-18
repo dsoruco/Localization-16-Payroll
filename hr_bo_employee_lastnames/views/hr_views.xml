@@ -11,13 +11,13 @@
                 </xpath>
                 <xpath expr="//group//field[@name='lastname']" position="replace">
                     <group>
-                        <field name="lastname" />
-                        <field name="firstname" />
+                        <field name="lastname" string="Apellido paterno "/>
+                        <field name="firstname" string="Nombre" />
                         <field name="married_name" />
                     </group>
                     <group>
-                        <field name="lastname2" />
-                        <field name="firstname2" />
+                        <field name="lastname2" string="Apellido materno" />
+                        <field name="firstname2" string="2do nombre " />
                     </group>
                 </xpath>
 <!--                <xpath expr="//field[@name='firstname']" position="before">-->
