@@ -51,12 +51,26 @@ class HrPayslip(models.Model):
         for slip in payslips_to_post:
             closing_table = {'payslip_id': slip.id, 'contract_id': slip.contract_id.id,
                              'employee_id': slip.employee_id.id, 'date_from': slip.date_from, 'date_to': slip.date_to,
+                             'basic': 0.0, 'antiquity_bonus': 0.0, 'production_bonus': 0.0, 'frontier_subsidy': 0.0,
+                             'overtime_night_work': 0.0, 'sunday_and_sun_work': 0.0, 'other_bonuses': 0.0,
                              'net_salary': 0.0, 'credit_next_month': 0.0, 'gross': 0.0, 'worked_days': 0.0}
             # Para el caso que el pago quinquenal no archivar en la tabla de cierre, si es una estructura aparte
             for line in slip.line_ids.filtered(lambda x: x.code in ['QUINQUENAL']):
                 if line.code == 'QUINQUENAL':
                     return 0
-            for line in slip.line_ids.filtered(lambda x: x.code in ['NET', 'SAL_PROX_MES']):
+            for line in slip.line_ids.filtered(lambda x: x.code in ['BASIC', 'BONO_ANT', 'BONO_PROD', 'SUBS_FRONTERA', 'NOCTURNIDAD', 'DOMINGO', 'NET', 'SAL_PROX_MES']):
+                if line.code == 'BASIC':
+                    closing_table['basic'] = line.amount
+                if line.code == 'BONO_ANT':
+                    closing_table['antiquity_bonus'] = line.amount
+                if line.code == 'BONO_PROD':
+                    closing_table['production_bonus'] = line.amount
+                if line.code == 'SUBS_FRONTERA':
+                    closing_table['frontier_subsidy'] = line.amount
+                if line.code == 'NOCTURNIDAD':
+                    closing_table['overtime_night_work'] = line.amount
+                if line.code == 'DOMINGO':
+                    closing_table['sunday_and_sun_work'] = line.amount
                 if line.code == 'NET':
                     closing_table['net_salary'] = line.amount
                 if line.code == 'SAL_PROX_MES':

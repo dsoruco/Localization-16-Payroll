@@ -3,7 +3,7 @@
 
 <!--    SALARIO MENSUAL    ************************************    -->
 
-    <record id="orbiware_l10n_bo_hr_payroll_smn" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_smn" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">SALARIO MINIMO NACIONAL</field>
         <field name="code">SMN</field>
@@ -18,7 +18,7 @@ result = payslip.rule_parameter('SMN')
 
 <!--    Reglas de AFP                   -->
 <!--    Cotización mensual              -->
-    <record id="orbiware_l10n_bo_hr_payroll_afp_cm" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_afp_cm" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">Cotización mensual </field>
         <field name="code">AFP_CM</field>
@@ -32,7 +32,7 @@ result = GROSS * employee.monthly_quotation/100
     </record>
 
 <!--    Prima riesgo común               -->
-    <record id="orbiware_l10n_bo_hr_payroll_afp_prc" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_afp_prc" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">Prima riesgo común</field>
         <field name="code">AFP_PRC</field>
@@ -46,7 +46,7 @@ result = GROSS * employee.common_risk_premium/100
     </record>
 
 <!--    Aporte solidario              -->
-    <record id="orbiware_l10n_bo_hr_payroll_afp_as" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_afp_as" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">Aporte solidario</field>
         <field name="code">AFP_AS</field>
@@ -60,7 +60,7 @@ result = GROSS * employee.solidarity_contribution/100
     </record>
 
 <!--   Comisión AFP               -->
-    <record id="orbiware_l10n_bo_hr_payroll_afp_comis" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_afp_comis" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">Comisión AFP</field>
         <field name="code">AFP_COM</field>
@@ -74,7 +74,7 @@ result = GROSS * employee.afp_commission/100
     </record>
 
 <!--   DESCUENTO AFP               -->
-    <record id="orbiware_l10n_bo_hr_payroll_afp_discount" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_afp_discount" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">DESCUENTO AFP</field>
         <field name="code">AFP_DISCOUNT</field>
@@ -89,7 +89,7 @@ result = GROSS * employee.aft_quotation_type.percent/100
 
 
 <!--   MONTO ANC 1%              -->
-    <record id="orbiware_l10n_bo_hr_payroll_anc_amount_1" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_anc_amount_1" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">MONTO ANC 1%</field>
         <field name="code">ANC_ONE</field>
@@ -106,7 +106,7 @@ else:
     </record>
 
 <!--   MONTO ANC 5%              -->
-    <record id="orbiware_l10n_bo_hr_payroll_anc_amount_5" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_anc_amount_5" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">MONTO ANC 5%</field>
         <field name="code">ANC_FIVE</field>
@@ -123,7 +123,7 @@ else:
     </record>
 
 <!--   MONTO ANC 10%              -->
-    <record id="orbiware_l10n_bo_hr_payroll_anc_amount_10" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_anc_amount_10" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">MONTO ANC 10%</field>
         <field name="code">ANC_TEN</field>
@@ -140,7 +140,7 @@ else:
     </record>
 
 <!--   MONTO ANC TOTAL%              -->
-    <record id="orbiware_l10n_bo_hr_payroll_anc_amount_discount_anc" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_anc_amount_discount_anc" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">DESCUENTO ANC</field>
         <field name="code">DESCUENTO_ANC</field>
@@ -161,7 +161,7 @@ result = anc
     </record>
 
 <!--   MONTO TOTAL AFP              -->
-    <record id="orbiware_l10n_bo_hr_payroll_anc_amount_total_afp" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_anc_amount_total_afp" model="hr.salary.rule">
         <field name="category_id" ref="hr_payroll.DED"/>
         <field name="name">TOTAL AFP</field>
         <field name="code">TOTAL_AFP</field>
@@ -180,7 +180,7 @@ result = -total_afp
     </record>
 
     <!--   2 SMN              -->
-    <record id="orbiware_l10n_bo_hr_payroll_anc_amount_two_smn" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_anc_amount_two_smn" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">2 SMN</field>
         <field name="code">TWO_SMN</field>
@@ -193,7 +193,7 @@ result = SMN * 2
         <field name="struct_id" ref="structure_month"/>
     </record>
     <!--   BASE IMPONIBLE               -->
-    <record id="orbiware_l10n_bo_hr_payroll_anc_amount_taxable_base" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_anc_amount_taxable_base" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">BASE IMPONIBLE</field>
         <field name="code">BASE_IMPONIBLE</field>
@@ -206,7 +206,7 @@ result = NET - TWO_SMN
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="orbiware_l10n_bo_hr_payroll_percen_tax" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_percen_tax" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">% IMPUESTO</field>
         <field name="code">PERCEN_TAX</field>
@@ -219,7 +219,7 @@ result = payslip.rule_parameter('TAX')
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="orbiware_l10n_bo_hr_payroll_tax" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_tax" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">IMPUESTO</field>
         <field name="code">IMPUESTO</field>
@@ -232,7 +232,7 @@ result = BASE_IMPONIBLE * PERCEN_TAX / 100
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="orbiware_l10n_bo_hr_payroll_tax_smn" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_tax_smn" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">TAX * 2 SMN</field>
         <field name="code">TAX_2_SMN</field>
@@ -248,7 +248,7 @@ else:
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="orbiware_l10n_bo_hr_payroll_tax_neto_rc_iva" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_tax_neto_rc_iva" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">IMPUESTO NETO RC-IVA</field>
         <field name="code">IMP_NETO_RC_IVA</field>
@@ -261,7 +261,7 @@ result = IMPUESTO - TAX_2_SMN
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="orbiware_l10n_bo_hr_payroll_iva_form_110" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_iva_form_110" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">IVA FORM.110</field>
         <field name="code">IVA_FORM_110</field>
@@ -278,7 +278,7 @@ else:
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="orbiware_l10n_bo_hr_payroll_saldo_fisco" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_saldo_fisco" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">SALDO A FAVOR DE FISCO</field>
         <field name="code">SALDO_A_FAVOR_FISCO</field>
@@ -294,7 +294,7 @@ else:
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="orbiware_l10n_bo_hr_payroll_saldo_depend" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_saldo_depend" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">SALDO A FAVOR DEL DESPENDIENTE</field>
         <field name="code">SALDO_A_FAVOR_DEPEND</field>
@@ -310,7 +310,7 @@ else:
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="orbiware_l10n_bo_hr_payroll_saldo_favor_mes_ant" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_saldo_favor_mes_ant" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">SALDO A FAVOR MES ANTERIOR</field>
         <field name="code">SALDO_A_FAVOR_MES_ANT</field>
@@ -323,7 +323,7 @@ result = credit_balance_previous_month(payslip,employee)
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="orbiware_l10n_bo_hr_payroll_saldo_actualizacion" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_saldo_actualizacion" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">ACTUALIZACION</field>
         <field name="code">ACTUALIZACION</field>
@@ -336,7 +336,7 @@ result = SALDO_A_FAVOR_MES_ANT * CURRENT_UFV/LAST_UFV -SALDO_A_FAVOR_MES_ANT
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="orbiware_l10n_bo_hr_payroll_sal_ant_act" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_sal_ant_act" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">SALDO ANTERIOR ACTUALIZADO</field>
         <field name="code">SAL_ANT_ACT</field>
@@ -349,7 +349,7 @@ result = SALDO_A_FAVOR_MES_ANT + ACTUALIZACION
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="orbiware_l10n_bo_hr_payroll_sal_use" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_sal_use" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">SALDO UTILIZADO</field>
         <field name="code">SALDO_UTILIZADO</field>
@@ -368,7 +368,7 @@ else:
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="orbiware_l10n_bo_hr_payroll_tax_ret" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_tax_ret" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">IMPUESTO RETENIDO A PAGAR</field>
         <field name="code">IMP_RET_PAGAR</field>
@@ -384,7 +384,7 @@ else:
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="orbiware_l10n_bo_hr_payroll_amount_next_month" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_amount_next_month" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">SALDO A FAVOR MES SIGUIENTE </field>
         <field name="code">SAL_PROX_MES</field>
@@ -398,7 +398,7 @@ result = SALDO_A_FAVOR_DEPEND + SAL_ANT_ACT - SALDO_UTILIZADO
     </record>
 
 
-    <record id="orbiware_l10n_bo_hr_payroll_antiquity_bonus" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_antiquity_bonus" model="hr.salary.rule">
         <field name="category_id" ref="hr_payroll.ALW"/>
         <field name="name">BONO ANTIGUEDAD</field>
         <field name="code">BONO_ANT</field>
@@ -411,8 +411,60 @@ result = (payslip.rule_parameter('SMN') * 3 * leave_antiquity_bonus(payslip,empl
         <field name="struct_id" ref="structure_month"/>
     </record>
 
+    <record id="datec_l10n_bo_hr_payroll_production_bonus" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">BONO PRODUCCION</field>
+        <field name="code">BONO_PROD</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = 0
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_frontier_subsidy" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">SUBSIDIO FRONTERA</field>
+        <field name="code">SUBS_FRONTERA</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = 0
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_overtime_night_work" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">TRABAJO EXTRAORDINARIO Y NOCTURNO</field>
+        <field name="code">NOCTURNIDAD</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = 0
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_overtime_night_work" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">Dominical y Dom. Trab. </field>
+        <field name="code">DOMINGO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = 0
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
 <!-- REGLAS TEMPORALES A MODIFICAR                          -->
-    <record id="orbiware_l10n_bo_hr_payroll_last_ufv" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_last_ufv" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">UFV MES ANTERIOR</field>
         <field name="code">LAST_UFV</field>
@@ -425,7 +477,7 @@ result = payslip.rule_parameter('LAST_UFV')
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="orbiware_l10n_bo_hr_payroll_current_ufv" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_current_ufv" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
         <field name="name">UFV MES ACTUAL</field>
         <field name="code">CURRENT_UFV</field>
@@ -440,8 +492,8 @@ result = payslip.rule_parameter('CURRENT_UFV')
 <!--    FIN SALARIO MENSUAL    *********************************    -->
 
 
-<!--     Relgas para quinquenal   -->
-    <record id="orbiware_l10n_bo_hr_payroll_quinquenial" model="hr.salary.rule">
+<!--     Reglas para quinquenal   -->
+    <record id="datec_l10n_bo_hr_payroll_quinquenial" model="hr.salary.rule">
         <field name="category_id" ref="hr_payroll.ALW"/>
         <field name="name">QUINQUENAL</field>
         <field name="code">QUINQUENAL</field>
@@ -452,6 +504,20 @@ result = payslip.rule_parameter('CURRENT_UFV')
 result = employee.GetQuinquennial(payslip.date_from, payslip.date_to)
         </field>
         <field name="struct_id" ref="structure_quinquennial"/>
+    </record>
+
+<!--     Reglas para aguinaldo   -->
+    <record id="datec_l10n_bo_hr_payroll_christmas_bonus" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">AGUINALDO</field>
+        <field name="code">AGUINALDO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = employee.GetQuinquennial(payslip.date_from, payslip.date_to)
+        </field>
+        <field name="struct_id" ref="structure_christmas_bonus"/>
     </record>
 
 </odoo>
