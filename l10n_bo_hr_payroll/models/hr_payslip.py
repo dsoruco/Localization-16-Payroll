@@ -2,6 +2,7 @@
 
 from odoo import api, fields, models, tools, _
 from datetime import date
+import calendar
 from datetime import datetime
 
 # This will generate 16th of days
@@ -28,7 +29,7 @@ class HrPayslip(models.Model):
             percent = leave_antiquity.percentage
         return percent
 
-    def get_day_month_past(self,date_now):
+    def get_day_month_past(self, date_now):
         month_past = date_now.month - 1  # Obtener el mes anterior
         # Manejar el caso especial de enero, donde el mes anterior es diciembre del año anterior
         if month_past == 0:
@@ -36,9 +37,14 @@ class HrPayslip(models.Model):
             year_past = date_now.year - 1
         else:
             year_past = date_now.year
-        # Crear una nueva fecha con el mismo día que la fecha original pero en el mes y año anterior
+        _, last_day_now = calendar.monthrange(date_now.year, date_now.month)
+        if last_day_now == date_now.day:
+            _, day_past_moth = calendar.monthrange(year_past, month_past)
+        else:
+            day_past_moth = date_now.day
 
-        date_past = date(year_past, month_past, date_now.day)
+        # Crear una nueva fecha con el mismo día que la fecha original pero en el mes y año anterior
+        date_past = date(year_past, month_past, day_past_moth)
         return date_past
 
     def _get_credit_balance_previous_month(self, employee):
