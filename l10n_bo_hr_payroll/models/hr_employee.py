@@ -141,3 +141,5 @@ class HrPayrollQuinquennialData(models.Model):
                     _('No puede borrar el registro si no esta en estado borrador.')
                 )
         return super(HrPayrollQuinquennialData, self).unlink()
+
+

@@ -25,7 +25,19 @@
                         </group>
                         <group col="3">
                             <group>
+                                <field name="basic" attrs="{'readonly': [('payslip_id', '!=', False)]}" />
+                                <field name="antiquity_bonus" attrs="{'readonly': [('payslip_id', '!=', False)]}" />
+                                <field name="production_bonus" attrs="{'readonly': [('payslip_id', '!=', False)]}" />
+                            </group>
+                            <group>
+                                <field name="frontier_subsidy" attrs="{'readonly': [('payslip_id', '!=', False)]}" />
+                                <field name="overtime_night_work" attrs="{'readonly': [('payslip_id', '!=', False)]}" />
+                                <field name="sunday_and_sun_work" attrs="{'readonly': [('payslip_id', '!=', False)]}" />
+                            </group>
+                            <group>
+                                <field name="other_bonuses" attrs="{'readonly': [('payslip_id', '!=', False)]}" />
                                 <field name="net_salary" attrs="{'readonly': [('payslip_id', '!=', False)]}" />
+                                <field name="credit_next_month" attrs="{'readonly': [('payslip_id', '!=', False)]}" />
                             </group>
                             <group>
                                 <field name="gross" attrs="{'readonly': [('payslip_id', '!=', False)]}" />

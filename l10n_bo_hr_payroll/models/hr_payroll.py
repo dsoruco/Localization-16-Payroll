@@ -20,7 +20,15 @@ class HrPayrollClosingTable(models.Model):
     date_from = fields.Date(string='Date From', required=True)
     date_to = fields.Date(string='Date To', required=True)
 # Reglas --------------------------------------------------
+    basic = fields.Float(string="Salario basico", required=True)
+    antiquity_bonus = fields.Float(string="Bono de antigüedad", required=True)
+    production_bonus = fields.Float(string="Bono de producción", required=True)
+    frontier_subsidy = fields.Float(string="Subsidio de frontera", required=True)
+    overtime_night_work = fields.Float(string="Trabajo extraordinario y nocturno", required=True)
+    sunday_and_sun_work = fields.Float(string="Dominical y Domingo Trabajado", required=True)
+    other_bonuses = fields.Float(string="Otros bonos", required=True)
     net_salary = fields.Float(string="Salario neto", required=True)
+    credit_next_month = fields.Float(string="Saldo proximo mes", required=True)
 
 # Categorias ----------------------------------------------
     gross = fields.Float(string="Salario devengado", required=True)
