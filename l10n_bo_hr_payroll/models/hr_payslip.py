@@ -17,6 +17,7 @@ class HrPayslip(models.Model):
         res.update({
             'leave_antiquity_bonus': leave_antiquity_bonus,
             'credit_balance_previous_month': credit_balance_previous_month,
+            'amount_christmas_bonus': amount_christmas_bonus,
         })
         return res
 
@@ -60,6 +61,20 @@ class HrPayslip(models.Model):
             credit = closing_table.credit_next_month
         return credit
 
+    def _get__get_amount_christmas_bonus(self, employee):
+        # Por definir los filtros
+        credit = 0
+        date_from = self.get_day_month_past(self.date_from)
+        date_to = self.get_day_month_past(self.date_to)
+
+        domain = [('date_from', '=', date_from),
+                  ('date_to', '=', date_to),
+                  ('employee_id', '=', employee.id)]
+        closing_table = self.env['hr.payroll.closing.table'].search(domain, limit=1)
+        if closing_table:
+            credit = closing_table.credit_next_month
+        return credit
+
 
 def leave_antiquity_bonus(payslip, employee):
     leave_leave_antiquity_bonus_percen = 0
@@ -75,4 +90,9 @@ def credit_balance_previous_month(payslip, employee):
     return credit_balance_previous_month_amount
 
 
+def amount_christmas_bonus(payslip, employee):
+    amount_christmas_bonus = 0
+    if payslip:
+        amount_christmas_bonus = payslip.dict._get_amount_christmas_bonus(employee)
+    return amount_christmas_bonus
 
