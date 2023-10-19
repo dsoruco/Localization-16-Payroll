@@ -27,6 +27,7 @@ class HrEmployee(models.Model):
         string='Extensión de documento', default='SC')
 
     # Datos de la AFP
+    
     afp_id = fields.Many2one('res.partner', string='Administradora de fondo de penciones',
                              domain=[('l10n_bo_afp', '=', True)])
     afp_code = fields.Char(related='afp_id.l10n_bo_afp_code', readonly=True, string="Código")
@@ -90,6 +91,9 @@ class HrEmployee(models.Model):
     afp_age_months = fields.Integer(string="Meses")
     afp_age_days = fields.Integer(string="Días")
 
+    give_aft = fields.Boolean(
+        string='Aporta AFT',help='Para idientificar que el empleado jubilado aporta AFT', default=False
+    )
 
     @api.depends('birthday', 'current_date')
     def _compute_age(self):
@@ -150,7 +154,7 @@ class HrEmployee(models.Model):
     health_box_code = fields.Char(related='health_box_id.l10n_bo_health_box_code', readonly=True, string="Código")
 
     insured_number = fields.Char(string="Número de Asegurado")
-
+    
     # Datos de la cuenta
 
     currency_id = fields.Many2one(related='bank_account_id.currency_id', readonly=True, string="Moneda de pago")
@@ -160,7 +164,13 @@ class HrEmployee(models.Model):
         ('E', 'Efectivo')],
         string='Metodo de pago', default='T')
 
-
+    # Datos de discapacidad
+    disabled = fields.Boolean(
+        string='Discapacitado',
+    )
+    tutor_disabled = fields.Boolean(
+        string='Tutor de Discapacitado',
+    )
 class HrAftQuotationType(models.Model):
     _name = "hr.aft.quotation.type"
     _description = "Tipo de cotización"
@@ -190,7 +200,7 @@ class HrAftQuotationType(models.Model):
 
 class HrAftQuotationTypeDetails(models.Model):
     _name = "hr.aft.quotation.type.details"
-
+    _description = "HrAftQuotationTypeDetails"
     code = fields.Char('Código', required=True)
     name = fields.Char(string="Desglose AFP", translate=True, required=True)
     percent = fields.Float("Porciento")

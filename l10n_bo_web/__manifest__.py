@@ -8,6 +8,7 @@
     'description': """
         Modificacion con respecto a todo lo que tiene que ver con los usuarios
     """,
+    'license': 'OPL-1',
     'author': "Datec",
     'category': 'Sitio Web',
     'version': '0.1.0.0.0.3',

@@ -9,12 +9,13 @@
     Bolivia Payroll Localization
     """,
     'data': [
+        'security/ir.model.access.csv',
         'data/res_partner_afp.xml',
         'data/res_partner_health_box.xml',
         'data/afp_quotation_type.xml',
         'data/afp_quotation_type_details.xml',
-        'security/ir.model.access.csv',
         'views/hr_employee_view.xml',
+        'wizard/hr_departure_wizard_views.xml',
         'views/hr_staff_division_view.xml',
         'views/hr_staffing_subdivision_view.xml',
         'views/hr_payroll_area_view.xml',
