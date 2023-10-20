@@ -436,20 +436,20 @@ result = 0
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="datec_l10n_bo_hr_payroll_overtime_night_work" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_overtime_amount" model="hr.salary.rule">
         <field name="category_id" ref="hr_payroll.ALW"/>
-        <field name="name">TRABAJO EXTRAORDINARIO Y NOCTURNO</field>
-        <field name="code">NOCTURNIDAD</field>
+        <field name="name">HORAS EXTRAS</field>
+        <field name="code">EXTRAS</field>
         <field name="sequence">11</field>
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = 0
+result = BASIC/30/8*2
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
 
-    <record id="datec_l10n_bo_hr_payroll_overtime_night_work" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_sunday_overtime" model="hr.salary.rule">
         <field name="category_id" ref="hr_payroll.ALW"/>
         <field name="name">Dominical y Dom. Trab. </field>
         <field name="code">DOMINGO</field>
@@ -457,7 +457,20 @@ result = 0
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = 0
+result = BASIC/30/8*2
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_night_overtime" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">RECARGO</field>
+        <field name="code">RECARGO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = BASIC/30/8*2
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>

@@ -44,7 +44,7 @@
 
         <!-- Salary Structure Aguinaldo-->
         <record id="structure_christmas_bonus" model="hr.payroll.structure">
-            <field name="name">Quinquenal</field>
+            <field name="name">AGUINALDO</field>
             <field name="type_id" ref="structure_type_christmas_bonus"/>
             <field name="country_id" eval="False"/>
         </record>
