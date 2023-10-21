@@ -20,12 +20,29 @@ class HrPayrollClosingTable(models.Model):
     date_from = fields.Date(string='Date From', required=True)
     date_to = fields.Date(string='Date To', required=True)
 # Reglas --------------------------------------------------
+    basic = fields.Float(string="Salario basico", required=True)
+    antiquity_bonus = fields.Float(string="Bono de antigüedad", required=True)
+    production_bonus = fields.Float(string="Bono de producción", required=True)
+    frontier_subsidy = fields.Float(string="Subsidio de frontera", required=True)
+    other_bonuses = fields.Float(string="Otros bonos", required=True)
     net_salary = fields.Float(string="Salario neto", required=True)
+    credit_next_month = fields.Float(string="Saldo proximo mes", required=True)
+
+    overtime_amount = fields.Float(string="Monto horas extras", required=True)
+    sunday_overtime_amount = fields.Float(string="Monto horas extras dominical", required=True)
+    night_overtime_hours_amount = fields.Float(string="Monto horas recargo nocturno", required=True)
 
 # Categorias ----------------------------------------------
     gross = fields.Float(string="Salario devengado", required=True)
 # Dias  ----------------------------------------------------
     worked_days = fields.Float(string="Días trabajados", required=True)
+    worked_hours = fields.Float(string="Horas trabajadas", required=True)
+    overtime = fields.Float(string="Horas extras", required=True)
+    sunday_overtime = fields.Float(string="Horas extra dominical", required=True)
+    night_overtime_hours = fields.Float(string="Horas recargo nocturno", required=True)
+
+
+
 
     @api.constrains('date_from', 'date_to', 'contract_id')
     def _check_leave(self):
