@@ -7,7 +7,7 @@
             <field name="model">res.company</field>
             <field name="arch" type="xml">
                 <xpath expr="//notebook//page[@name='general_info']" position="after">
-                    <page string="Configuración Bolivia" name="conf_bolivia" groups="base.group_no_one">
+                    <page string="Configuración Bolivia" name="conf_bolivia">
                         <group string="Contingente de Vacaciones">
                             <field name="vacation_quota_table_ids">
                                 <tree>
