@@ -501,6 +501,59 @@ result = payslip.rule_parameter('CURRENT_UFV')
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
+
+<!--    Reglas para aportes patronales-->
+    <record id="datec_l10n_bo_hr_payroll_a_risk_arp" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">Aporte Riesgo Profesional</field>
+        <field name="code">AP_ARP</field>
+        <field name="sequence">201</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = NET * payslip.rule_parameter('AP_ARP')/100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_a_risk_asp" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">Aporte Solidario Patronal</field>
+        <field name="code">AP_ASP</field>
+        <field name="sequence">201</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = NET * payslip.rule_parameter('AP_ASP')/100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_a_risk_apv" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">Aporte Pro-Vivienda</field>
+        <field name="code">AP_APV</field>
+        <field name="sequence">201</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = NET * payslip.rule_parameter('AP_APV')/100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_a_risk_as" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">Aporte de Salud</field>
+        <field name="code">AP_AS</field>
+        <field name="sequence">201</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = NET * payslip.rule_parameter('AP_AS')/100
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
 <!--    FIN SALARIO MENSUAL    *********************************    -->
 
 

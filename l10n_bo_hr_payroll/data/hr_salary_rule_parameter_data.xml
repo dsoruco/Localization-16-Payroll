@@ -65,7 +65,7 @@
         <field name="code">AFP_SNM</field>
         <field name="country_id" ref="base.bo"/>
     </record>
-    <record id="rule_parameter_value_ap_as" model="hr.rule.parameter.value">
+    <record id="rule_parameter_value_afp_snm" model="hr.rule.parameter.value">
         <field name="parameter_value">13000</field>
         <field name="rule_parameter_id" ref="rule_parameter_afp_snm"/>
         <field name="date_from" eval="datetime(2023, 1, 1).date()"/>
@@ -77,7 +77,7 @@
         <field name="code">PROV</field>
         <field name="country_id" ref="base.bo"/>
     </record>
-    <record id="rule_parameter_value_ap_as" model="hr.rule.parameter.value">
+    <record id="rule_parameter_value_prov" model="hr.rule.parameter.value">
         <field name="parameter_value">8.33</field>
         <field name="rule_parameter_id" ref="rule_parameter_prov"/>
         <field name="date_from" eval="datetime(2023, 1, 1).date()"/>
