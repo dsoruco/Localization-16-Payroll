@@ -17,7 +17,7 @@ class HrPayslip(models.Model):
         res.update({
             'leave_antiquity_bonus': leave_antiquity_bonus,
             'credit_balance_previous_month': credit_balance_previous_month,
-            'amount_christmas_bonus': amount_christmas_bonus,
+            'amount_total_gained_average': amount_total_gained_average,
         })
         return res
 
@@ -61,19 +61,31 @@ class HrPayslip(models.Model):
             credit = closing_table.credit_next_month
         return credit
 
-    def _get__get_amount_christmas_bonus(self, employee):
-        # Por definir los filtros
-        credit = 0
-        date_from = self.get_day_month_past(self.date_from)
-        date_to = self.get_day_month_past(self.date_to)
-
-        domain = [('date_from', '=', date_from),
-                  ('date_to', '=', date_to),
+    def _get_amount_total_gained(self, employee,  date_start_cal, date_to_ca, ruler):
+        amount = 0
+        domain = [('date_from', '>=', date_start_cal),
+                  ('date_to', '<=', date_to_ca),
                   ('employee_id', '=', employee.id)]
-        closing_table = self.env['hr.payroll.closing.table'].search(domain, limit=1)
-        if closing_table:
-            credit = closing_table.credit_next_month
-        return credit
+        closing_table = self.env['hr.payroll.closing.table'].search(domain)
+        for record in closing_table:
+            if ruler == 'BASIC':
+                amount += record.basic
+            if ruler == 'BONO_ANT':
+                amount += record.antiquity_bonus
+            if ruler == 'BONO_PROD':
+                amount += record.production_bonus
+            if ruler == 'SUBS_FRONTERA':
+                amount += record.frontier_subsidy
+            if ruler == 'EXTRAS':
+                amount += record.overtime_amount
+            if ruler == 'DOMINGO':
+                amount += record.sunday_overtime_amount
+            if ruler == 'RECARGO':
+                amount += record.night_overtime_hours_amount
+            if ruler == 'NET':
+                amount += record.net_salary
+
+        return amount
 
 
 def leave_antiquity_bonus(payslip, employee):
@@ -90,9 +102,15 @@ def credit_balance_previous_month(payslip, employee):
     return credit_balance_previous_month_amount
 
 
-def amount_christmas_bonus(payslip, employee):
+def amount_total_gained_average(payslip, employee, aguinaldo, ruler):
     amount_christmas_bonus = 0
     if payslip:
-        amount_christmas_bonus = payslip.dict._get_amount_christmas_bonus(employee)
-    return amount_christmas_bonus
+        if aguinaldo:
+            date_start_cal = date(payslip.dict.date_from.year, 9,1 )
+            date_to_cal = date(payslip.dict.date_from.year, 11, 30)
+        else:
+            date_start_cal = date(payslip.dict.date_from.year, 10, 1)
+            date_to_cal = date(payslip.dict.date_from.year, 12, 31)
+        amount_christmas_bonus = payslip.dict._get_amount_total_gained(employee, date_start_cal, date_to_cal, ruler)
+    return amount_christmas_bonus/3
 

@@ -572,6 +572,111 @@ result = employee.GetQuinquennial(payslip.date_from, payslip.date_to)
     </record>
 
 <!--     Reglas para aguinaldo   -->
+
+    <record id="datec_l10n_bo_hr_payroll_basic_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">BASICO PROMEDIO</field>
+        <field name="code">BASICO_PROMEDIO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, True, 'BASIC')
+        </field>
+        <field name="struct_id" ref="structure_christmas_bonus"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_antiquity_bonus_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">BONO DE ANTIGUEDAD PROMEDIO</field>
+        <field name="code">B_ANT_PRO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, True, 'BONO_ANT')
+        </field>
+        <field name="struct_id" ref="structure_christmas_bonus"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_production_bonus_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">BONO DE PRODUCCION PROMEDIO</field>
+        <field name="code">B_PROD</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, True, 'BONO_PROD')
+        </field>
+        <field name="struct_id" ref="structure_christmas_bonus"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_frontier_subsidy_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">SUBSIDIO EN FRONTERA PROMEDIO</field>
+        <field name="code">SUB_FRONT_PRO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, True, 'SUBS_FRONTERA')
+        </field>
+        <field name="struct_id" ref="structure_christmas_bonus"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_overtime_amount_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">HORAS EXTRAS PROMEDIO</field>
+        <field name="code">H_EXTRAS_PRO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, True, 'EXTRAS')
+        </field>
+        <field name="struct_id" ref="structure_christmas_bonus"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_night_overtime_hours_amount_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">RECARGO PROMEDIO</field>
+        <field name="code">RECARGOS_PRO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, True, 'RECARGO')
+        </field>
+        <field name="struct_id" ref="structure_christmas_bonus"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_sunday_overtime_amount_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">DOMINGO PROMEDIO</field>
+        <field name="code">DOMINGO_PRO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, True, 'DOMINGO')
+        </field>
+        <field name="struct_id" ref="structure_christmas_bonus"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_total_gained_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">TOTAL GANADO</field>
+        <field name="code">TOTAL_GANADO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, True, 'NET')
+        </field>
+        <field name="struct_id" ref="structure_christmas_bonus"/>
+    </record>
+
     <record id="datec_l10n_bo_hr_payroll_christmas_bonus" model="hr.salary.rule">
         <field name="category_id" ref="hr_payroll.ALW"/>
         <field name="name">AGUINALDO</field>
@@ -583,6 +688,125 @@ result = employee.GetQuinquennial(payslip.date_from, payslip.date_to)
 result = employee.GetQuinquennial(payslip.date_from, payslip.date_to)
         </field>
         <field name="struct_id" ref="structure_christmas_bonus"/>
+    </record>
+
+<!--     Reglas para Prima  -->
+
+    <record id="datec_l10n_bo_hr_payroll_prima_basic_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">BASICO PROMEDIO</field>
+        <field name="code">BASICO_PROMEDIO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, False, 'BASIC')
+        </field>
+        <field name="struct_id" ref="structure_prima"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_prima_antiquity_bonus_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">BONO DE ANTIGUEDAD PROMEDIO</field>
+        <field name="code">B_ANT_PRO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, False, 'BONO_ANT')
+        </field>
+        <field name="struct_id" ref="structure_prima"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_prima_production_bonus_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">BONO DE PRODUCCION PROMEDIO</field>
+        <field name="code">B_PROD</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, False, 'BONO_PROD')
+        </field>
+        <field name="struct_id" ref="structure_prima"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_prima_frontier_subsidy_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">SUBSIDIO EN FRONTERA PROMEDIO</field>
+        <field name="code">SUB_FRONT_PRO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, False, 'SUBS_FRONTERA')
+        </field>
+        <field name="struct_id" ref="structure_prima"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_prima_overtime_amount_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">HORAS EXTRAS PROMEDIO</field>
+        <field name="code">H_EXTRAS_PRO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, False, 'EXTRAS')
+        </field>
+        <field name="struct_id" ref="structure_prima"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_prima_night_overtime_hours_amount_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">RECARGO PROMEDIO</field>
+        <field name="code">RECARGOS_PRO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, False, 'RECARGO')
+        </field>
+        <field name="struct_id" ref="structure_prima"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_prima_sunday_overtime_amount_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">DOMINGO PROMEDIO</field>
+        <field name="code">DOMINGO_PRO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, False, 'DOMINGO')
+        </field>
+        <field name="struct_id" ref="structure_prima"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_prima_total_gained_average" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">TOTAL GANADO</field>
+        <field name="code">TOTAL_GANADO</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = amount_total_gained_average(payslip,employee, False, 'NET')
+        </field>
+        <field name="struct_id" ref="structure_prima"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_prima" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">PRIMA</field>
+        <field name="code">PRIMA</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = employee.GetQuinquennial(payslip.date_from, payslip.date_to)
+        </field>
+        <field name="struct_id" ref="structure_prima"/>
     </record>
 
 </odoo>
