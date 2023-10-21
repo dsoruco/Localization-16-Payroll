@@ -22,19 +22,19 @@ msgstr ""
 #. module: hr_employee_firstname
 #: model:ir.model,name:hr_employee_firstname.model_hr_employee_base
 msgid "Basic Employee"
-msgstr ""
+msgstr "Empleado basico"
 
 #. module: hr_employee_firstname
 #: model:ir.model,name:hr_employee_firstname.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Opciones de configuración"
 
 #. module: hr_employee_firstname
 #: model:ir.model.fields,field_description:hr_employee_firstname.field_hr_employee__display_name
 #: model:ir.model.fields,field_description:hr_employee_firstname.field_hr_employee_base__display_name
 #: model:ir.model.fields,field_description:hr_employee_firstname.field_res_config_settings__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nombre para mostrar"
 
 #. module: hr_employee_firstname
 #: model:ir.model,name:hr_employee_firstname.model_hr_employee
@@ -52,28 +52,28 @@ msgstr "Orden de los Nombres de Empleados"
 #: model:ir.model.fields,field_description:hr_employee_firstname.field_hr_employee_base__firstname
 #: model:ir.model.fields,field_description:hr_employee_firstname.field_hr_employee_public__firstname
 msgid "First name"
-msgstr ""
+msgstr "Nombre"
 
 #. module: hr_employee_firstname
 #: model:ir.model.fields,field_description:hr_employee_firstname.field_hr_employee__id
 #: model:ir.model.fields,field_description:hr_employee_firstname.field_hr_employee_base__id
 #: model:ir.model.fields,field_description:hr_employee_firstname.field_res_config_settings__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: hr_employee_firstname
 #: model:ir.model.fields,field_description:hr_employee_firstname.field_hr_employee____last_update
 #: model:ir.model.fields,field_description:hr_employee_firstname.field_hr_employee_base____last_update
 #: model:ir.model.fields,field_description:hr_employee_firstname.field_res_config_settings____last_update
 msgid "Last Modified on"
-msgstr ""
+msgstr "Última modificación en"
 
 #. module: hr_employee_firstname
 #: model:ir.model.fields,field_description:hr_employee_firstname.field_hr_employee__lastname
 #: model:ir.model.fields,field_description:hr_employee_firstname.field_hr_employee_base__lastname
 #: model:ir.model.fields,field_description:hr_employee_firstname.field_hr_employee_public__lastname
 msgid "Last name"
-msgstr ""
+msgstr "Apellido paterno"
 
 #. module: hr_employee_firstname
 #: code:addons/hr_employee_firstname/models/hr_employee.py:0
@@ -84,10 +84,10 @@ msgstr "Sin nombre establecido."
 #. module: hr_employee_firstname
 #: model:ir.model.fields,help:hr_employee_firstname.field_res_config_settings__employee_names_order
 msgid "Order to compose employee fullname"
-msgstr ""
+msgstr "Ordena para componer el primer nombre del empleado"
 
 #~ msgid "Firstname"
-#~ msgstr "Nombre propio"
+#~ msgstr "Nombre"
 
 #~ msgid "Lastname"
-#~ msgstr "Apellidos"
+#~ msgstr "2do nombre"
