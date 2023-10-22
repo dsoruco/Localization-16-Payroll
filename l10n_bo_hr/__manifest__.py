@@ -1,6 +1,6 @@
 {
     'name': "Datec: Nómina Bolivia empleado",
-    'version': '16.0.0.0.3',
+    'version': '16.0.0.0.4',
     'depends': ['hr_bo_employee_lastnames'],
     'author': "Datec",
     'license': 'OPL-1',
@@ -14,6 +14,7 @@
         'data/res_partner_health_box.xml',
         'data/afp_quotation_type.xml',
         'data/afp_quotation_type_details.xml',
+        'data/communications_forms.xml',
         'views/hr_employee_view.xml',
         'wizard/hr_departure_wizard_views.xml',
         'views/hr_staff_division_view.xml',
@@ -23,6 +24,7 @@
         'views/hr_personnel_area_view.xml',
         'views/res_partner_view.xml',
         'views/hr_afp_quotation_type_view.xml',
+        'views/hr_communications_forms_view.xml',
         # 'report/hr_employee_payroll_report_views.xml',
 
     ],

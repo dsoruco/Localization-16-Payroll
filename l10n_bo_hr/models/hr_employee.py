@@ -6,7 +6,7 @@ from datetime import date
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from odoo.tools.misc import DEFAULT_SERVER_DATE_FORMAT, DEFAULT_SERVER_DATETIME_FORMAT
-
+from odoo.exceptions import ValidationError
 
 class HrEmployee(models.Model):
     _inherit = "hr.employee"
@@ -19,7 +19,7 @@ class HrEmployee(models.Model):
 
     valid_date = fields.Date(string='Fecha de validez')
 
-    document_number = fields.Char(string="Numero de documento")
+    document_number = fields.Char(string="Número de documento", size=20)
 
     document_extension = fields.Selection([
         ('SC', 'SC Santa Cruz'),
@@ -28,7 +28,7 @@ class HrEmployee(models.Model):
 
     # Datos de la AFP
     
-    afp_id = fields.Many2one('res.partner', string='Administradora de fondo de penciones',
+    afp_id = fields.Many2one('res.partner', string='Administradora de fondo de pensiones',
                              domain=[('l10n_bo_afp', '=', True)])
     afp_code = fields.Char(related='afp_id.l10n_bo_afp_code', readonly=True, string="Código")
     afp_nua_cua = fields.Char(string="NUA/CUA")
@@ -83,8 +83,15 @@ class HrEmployee(models.Model):
 
     afp_retired = fields.Boolean(
         'Jubilado', help='Para identificar que el empleado esta jubilado', default=False)
-    afp_retired_date = fields.Date(string='Retire date',
+    afp_retired_date = fields.Date(string='Fecha de retiro',
                                    help='Identifica la fecha en que se jubila el empleado')
+
+    @api.constrains('afp_retired_date')
+    def _check_afp_retired_date(self):
+        for record in self:
+            if record.afp_retired_date and record.afp_retired_date >= fields.Date.today():
+                raise ValidationError('La fecha de retiro debe ser anterior a la fecha actual.')
+
     current_date = fields.Date(string='Current date', default=datetime.now().strftime('%Y-%m-%d'))
     afp_age_str = fields.Char(string="Edad", readonly=True, compute='_compute_age', store=True)
     afp_age = fields.Integer('Años')
@@ -153,7 +160,7 @@ class HrEmployee(models.Model):
                              domain=[('l10n_bo_health_box', '=', True)])
     health_box_code = fields.Char(related='health_box_id.l10n_bo_health_box_code', readonly=True, string="Código")
 
-    insured_number = fields.Char(string="Número de Asegurado")
+    insured_number = fields.Char(string="Número de Asegurado", size=15)
     
     # Datos de la cuenta
 
@@ -171,6 +178,13 @@ class HrEmployee(models.Model):
     tutor_disabled = fields.Boolean(
         string='Tutor de Discapacitado',
     )
+
+    # Datos comunicación
+    communications_forms_id = fields.Many2one('hr.communications.forms', string='Clase')
+    communications_code = fields.Char(related='communications_forms_id.code', readonly=True, string="Código")
+    communications_desc = fields.Char(string="ID Sistema")
+
+
 class HrAftQuotationType(models.Model):
     _name = "hr.aft.quotation.type"
     _description = "Tipo de cotización"
@@ -207,4 +221,11 @@ class HrAftQuotationTypeDetails(models.Model):
     percent = fields.Float("Porciento")
     aft_quotation_type_id = fields.Many2one('hr.aft.quotation.type', ondelete="cascade")
 
+
+class HrCommunicationsForms(models.Model):
+    _name = "hr.communications.forms"
+    _description = "Formas de comunicación"
+    _rec_name = 'name'
+    code = fields.Char('Código', required=True)
+    name = fields.Char(string="Formas de comunicación", translate=True, required=True)
 

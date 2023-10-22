@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id='hr_communications_forms_1' model='hr.communications.forms'>
+            <field name='code'>MAIL</field>
+            <field name='name'>correo electrónico oficina</field>
+        </record>
+        <record id='hr_communications_forms_2' model='hr.communications.forms'>
+            <field name='code'>CELL</field>
+            <field name='name'>Celular personal</field>
+        </record>
+    </data>
+</odoo>
