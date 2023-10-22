@@ -18,6 +18,7 @@ class HrPayslip(models.Model):
             'leave_antiquity_bonus': leave_antiquity_bonus,
             'credit_balance_previous_month': credit_balance_previous_month,
             'amount_total_gained_average': amount_total_gained_average,
+            'days_total_worked': days_total_worked,
         })
         return res
 
@@ -106,7 +107,12 @@ def amount_total_gained_average(payslip, employee, aguinaldo, ruler):
     amount_christmas_bonus = 0
     if payslip:
         if aguinaldo:
-            date_start_cal = date(payslip.dict.date_from.year, 9,1 )
+            date_limit = date(payslip.dict.date_from.year, 10, 1)
+            if employee.date_hired > date_limit:
+                return 0
+            date_start_cal = date(payslip.dict.date_from.year, 9, 1)
+            if employee.date_hired == date_limit:
+                date_start_cal = employee.date_hired
             date_to_cal = date(payslip.dict.date_from.year, 11, 30)
         else:
             date_start_cal = date(payslip.dict.date_from.year, 10, 1)
@@ -114,3 +120,22 @@ def amount_total_gained_average(payslip, employee, aguinaldo, ruler):
         amount_christmas_bonus = payslip.dict._get_amount_total_gained(employee, date_start_cal, date_to_cal, ruler)
     return amount_christmas_bonus/3
 
+
+def days_total_worked(payslip, employee, aguinaldo, ruler):
+    amount_christmas_bonus = 0
+    if payslip:
+        if aguinaldo:
+            date_limit = date(payslip.dict.date_from.year, 10, 1)
+            if employee.date_hired > date_limit:
+                return 0
+            date_start_cal = date(payslip.dict.date_from.year, 9, 1)
+            if employee.date_hired >= date_start_cal:
+                days = 30 - employee.date_hired.day + 1
+                return 60 + days
+            else:
+                return 360
+        else:
+            date_start_cal = date(payslip.dict.date_from.year, 10, 1)
+            date_to_cal = date(payslip.dict.date_from.year, 12, 31)
+        amount_christmas_bonus = payslip.dict._get_amount_total_gained(employee, date_start_cal, date_to_cal, ruler)
+    return amount_christmas_bonus/3
