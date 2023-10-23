@@ -89,6 +89,32 @@ class HrPayslip(models.Model):
 
         return amount
 
+    def get_total_average_earned(self, date_to, employee, ruler, months):
+        domain = [('date_to', '<=', date_to), ('employee_id', '=', employee.id)]
+        closing_table = self.env['hr.payroll.closing.table'].search(domain, order='date_to desc', limit=months)
+        if not closing_table:
+            return 0
+        else:
+            amount = 0
+            for record in closing_table:
+                if ruler == 'BASIC':
+                    amount += record.basic
+                if ruler == 'BONO_ANT':
+                    amount += record.antiquity_bonus
+                if ruler == 'BONO_PROD':
+                    amount += record.production_bonus
+                if ruler == 'SUBS_FRONTERA':
+                    amount += record.frontier_subsidy
+                if ruler == 'EXTRAS':
+                    amount += record.overtime_amount
+                if ruler == 'DOMINGO':
+                    amount += record.sunday_overtime_amount
+                if ruler == 'RECARGO':
+                    amount += record.night_overtime_hours_amount
+                if ruler == 'NET':
+                    amount += record.net_salary
+        return amount
+
 
 def special_round(number):
     parte_decimal = number - int(number)  # Obtener la parte decimal del número
@@ -148,3 +174,10 @@ def days_total_worked(payslip, employee, aguinaldo, ruler):
             date_to_cal = date(payslip.dict.date_from.year, 12, 31)
         amount_christmas_bonus = payslip.dict._get_amount_total_gained(employee, date_start_cal, date_to_cal, ruler)
     return amount_christmas_bonus/3
+
+
+def total_average_earned(self, date_to, employee, ruler, months):
+    average_earned = get_total_average_earned(self, date_to, employee, ruler, months)
+    return average_earned
+
+
