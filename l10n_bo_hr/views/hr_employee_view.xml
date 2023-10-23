@@ -43,6 +43,11 @@
                     <field name="health_box_id"/>
                     <field name="insured_number"/>
                 </group>
+                <group string="Comunicación" >
+                    <field name="communications_code"/>
+                    <field name="communications_forms_id"/>
+                    <field name="communications_desc"/>
+                </group>
             </xpath>
             <xpath expr="//group[@name='departure']" position="replace">
 

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+<!--    Formas de comunicación   -->
+    <record id="hr_communications_form_form" model="ir.ui.view">
+            <field name="name">hr.communications.forms.form</field>
+            <field name="model">hr.communications.forms</field>
+            <field name="arch" type="xml">
+                <form string="Formas de comunicación">
+                    <group col="4">
+                        <field colspan="4" name="code"/>
+                        <field colspan="4" name="name"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_communications_form_tree" model="ir.ui.view">
+            <field name="name">hr.communications.forms.tree</field>
+            <field name="model">hr.communications.forms</field>
+            <field name="arch" type="xml">
+                <tree string="Formas de comunicación">
+                      <field colspan="4" name="code"/>
+                      <field colspan="4" name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_communications_form_search" model="ir.ui.view">
+            <field name="name">hr.communications.forms.search</field>
+            <field name="model">hr.communications.forms</field>
+            <field name="arch" type="xml">
+                <search string="Search Formas de comunicación">
+                    <field name="code" string="Code"/>
+                    <field name="name" />
+               </search>
+            </field>
+        </record>
+
+        <record id="action_hr_communications_form" model="ir.actions.act_window">
+            <field name="name">Formas de Comunicacion</field>
+            <field name="res_model">hr.communications.forms</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="hr_communications_form_search"/>
+        </record>
+
+        <menuitem
+            id="menu_hr_communications_form"
+            action="action_hr_communications_form"
+            parent="hr_menu_empleado_bolivia"
+            sequence="6"
+            groups="hr.group_hr_manager"/>
+</odoo>
