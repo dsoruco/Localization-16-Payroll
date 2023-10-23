@@ -19,6 +19,7 @@ class HrPayslip(models.Model):
             'credit_balance_previous_month': credit_balance_previous_month,
             'amount_total_gained_average': amount_total_gained_average,
             'days_total_worked': days_total_worked,
+            'special_round': special_round,
         })
         return res
 
@@ -87,6 +88,14 @@ class HrPayslip(models.Model):
                 amount += record.net_salary
 
         return amount
+
+
+def special_round(number):
+    parte_decimal = number - int(number)  # Obtener la parte decimal del número
+    if parte_decimal < 0.5:
+        return int(number)
+    else:
+        return int(number) + 1
 
 
 def leave_antiquity_bonus(payslip, employee):

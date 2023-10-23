@@ -444,7 +444,7 @@ result = 0
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = BASIC/30/8*2
+result = special_round(BASIC/30/8*2)
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
@@ -457,7 +457,7 @@ result = BASIC/30/8*2
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = BASIC/30/8*2
+result = special_round(BASIC/30/8*2)
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
@@ -470,7 +470,7 @@ result = BASIC/30/8*2
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = BASIC/30/8*2
+result = special_round(BASIC/30/8*2)
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
@@ -511,7 +511,7 @@ result = payslip.rule_parameter('CURRENT_UFV')
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = NET * payslip.rule_parameter('AP_ARP')/100
+result = special_round(NET * payslip.rule_parameter('AP_ARP')/100)
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
@@ -524,7 +524,7 @@ result = NET * payslip.rule_parameter('AP_ARP')/100
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = NET * payslip.rule_parameter('AP_ASP')/100
+result = special_round(NET * payslip.rule_parameter('AP_ASP')/100)
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
@@ -537,7 +537,7 @@ result = NET * payslip.rule_parameter('AP_ASP')/100
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = NET * payslip.rule_parameter('AP_APV')/100
+result = special_round(NET * payslip.rule_parameter('AP_APV')/100)
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
@@ -550,10 +550,63 @@ result = NET * payslip.rule_parameter('AP_APV')/100
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = NET * payslip.rule_parameter('AP_AS')/100
+result = special_round(NET * payslip.rule_parameter('AP_AS')/100)
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
+
+    <record id="datec_l10n_bo_hr_payroll_prov_indemnification" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">Prov Indemnización</field>
+        <field name="code">PROV_INDEN</field>
+        <field name="sequence">201</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = special_round(NET * 8.33 / 100)
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_christmas_bonus_accruals" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">Prov Aguinaldo</field>
+        <field name="code">PROV_AGUI</field>
+        <field name="sequence">201</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = special_round(NET * 8.33 / 100)
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_second_christmas_bonus_accruals" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">Prov Segundo Aguinaldo</field>
+        <field name="code">PROV_2_AGUI</field>
+        <field name="sequence">201</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = special_round(NET * 8.33 / 100)
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
+    <record id="datec_l10n_bo_hr_payroll_provisions_utility_bonus" model="hr.salary.rule">
+        <field name="category_id" ref="BASIC_INF"/>
+        <field name="name">Prov Prima utilidades</field>
+        <field name="code">PROV_PRIMA</field>
+        <field name="sequence">201</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = special_round(NET * 8.33 / 100)
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
 <!--    FIN SALARIO MENSUAL    *********************************    -->
 
 
