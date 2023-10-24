@@ -20,6 +20,7 @@ class HrPayslip(models.Model):
             'amount_total_gained_average': amount_total_gained_average,
             'days_total_worked': days_total_worked,
             'special_round': special_round,
+            'total_average_earned': total_average_earned,
         })
         return res
 
@@ -89,7 +90,7 @@ class HrPayslip(models.Model):
 
         return amount
 
-    def get_total_average_earned(self, date_to, employee, ruler, months):
+    def _get_total_average_earned(self, date_to, employee, ruler, months):
         domain = [('date_to', '<=', date_to), ('employee_id', '=', employee.id)]
         closing_table = self.env['hr.payroll.closing.table'].search(domain, order='date_to desc', limit=months)
         if not closing_table:
@@ -113,7 +114,7 @@ class HrPayslip(models.Model):
                     amount += record.night_overtime_hours_amount
                 if ruler == 'NET':
                     amount += record.net_salary
-        return amount
+        return amount/months
 
 
 def special_round(number):
@@ -176,8 +177,8 @@ def days_total_worked(payslip, employee, aguinaldo, ruler):
     return amount_christmas_bonus/3
 
 
-def total_average_earned(self, date_to, employee, ruler, months):
-    average_earned = get_total_average_earned(self, date_to, employee, ruler, months)
+def total_average_earned(payslip, employee, ruler, months):
+    average_earned = payslip.dict._get_total_average_earned(payslip.date_to, employee, ruler, months)
     return average_earned
 
 

@@ -475,6 +475,21 @@ result = special_round(BASIC/30/8*2)
         <field name="struct_id" ref="structure_month"/>
     </record>
 
+    <record id="datec_l10n_bo_hr_payroll_vac" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="name">VACACIONES</field>
+        <field name="code">VAC</field>
+        <field name="sequence">11</field>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+if worked_days.VAC:
+    wage = total_average_earned(payslip, employee, 'NET', 3)/30 * worked_days.VAC.number_of_days
+result = wage
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
 <!-- REGLAS TEMPORALES A MODIFICAR                          -->
     <record id="datec_l10n_bo_hr_payroll_last_ufv" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
