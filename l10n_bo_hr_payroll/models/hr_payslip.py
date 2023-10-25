@@ -116,6 +116,96 @@ class HrPayslip(models.Model):
                     amount += record.net_salary
         return amount/months
 
+    def _get_worked_day_lines_values(self, domain=None):
+        self.ensure_one()
+        res = []
+        if self.struct_id.country_id.code != 'CO':
+            super()._get_worked_day_lines_values(domain=domain)
+
+        hours_per_day = self._get_worked_day_lines_hours_per_day()
+        date_from = datetime.combine(self.date_from, datetime.min.time())
+        date_to = datetime.combine(self.date_to, datetime.max.time())
+        work_hours = self.contract_id._get_work_hours(date_from, date_to, domain=domain)
+        work_hours_ordered = sorted(work_hours.items(), key=lambda x: x[1])
+        biggest_work = work_hours_ordered[-1][0] if work_hours_ordered else 0
+        add_days_rounding = 0
+        overtime_hours = self.env['hr.payroll.overtime.hours.list'].search([('employee_id', '=', self.employee_id.id),
+                                                                    ('contract_id', '=', self.contract_id.id),
+                                                                    ('date_from', '>=', self.date_from),
+                                                                    ('date_to', '<=', self.date_to),
+                                                                    ('state', '=', 'open')], limit=1)
+
+        for work_entry_type_id, hours in work_hours_ordered:
+            work_entry_type = self.env['hr.work.entry.type'].browse(work_entry_type_id)
+            if work_entry_type.code != 'WORK100':
+                if work_entry_type.code in ['DAA', 'IGE', 'IRL', 'IGP', 'LMA', 'LPA', 'VPP', 'VCO', 'VDI','VRE','LNR','SLN','LR','LT','VPM']:
+                    if overtime_hours:
+                        we_type = self.env.ref('l10n_co_hr_payroll.hr_work_entry_type_{}'.format(work_entry_type.code))
+                        field_name = 'sw_{}'.format(work_entry_type.code.lower())
+                        valor = getattr(overtime_hours, field_name)
+                        attendance_line = {
+                            'sequence': we_type.sequence,
+                            'work_entry_type_id': we_type.id,
+                            'number_of_days': valor,
+                            'number_of_hours': valor * hours_per_day,
+                        }
+                        res.append(attendance_line)
+                else:
+                    days = round(hours / hours_per_day, 5) if hours_per_day else 0
+                    if work_entry_type_id == biggest_work:
+                        days += add_days_rounding
+                    day_rounded = self._round_days(work_entry_type, days)
+                    add_days_rounding += (days - day_rounded)
+                    attendance_line = {
+                        'sequence': work_entry_type.sequence,
+                        'work_entry_type_id': work_entry_type_id,
+                        'number_of_days': day_rounded,
+                        'number_of_hours': hours,
+                    }
+                    res.append(attendance_line)
+
+        # obtener el tiempo de trabajo horas extras
+
+        if overtime_hours:
+            # overtime
+            we_type = self.env.ref('l10n_bo_hr_payroll.hr_work_entry_type_overtime')
+            if overtime_hours.overtime != 0:
+                res.append({
+                    'sequence': we_type.sequence,
+                    'work_entry_type_id': we_type.id,
+                    'number_of_days': overtime_hours.overtime / hours_per_day,
+                    'number_of_hours': overtime_hours.overtime,
+                })
+            # hours_night_overtime
+            we_type = self.env.ref('l10n_bo_hr_payroll.hr_work_entry_type_hours_night_overtime')
+            if overtime_hours.hours_night_overtime != 0:
+                res.append({
+                    'sequence': we_type.sequence,
+                    'work_entry_type_id': we_type.id,
+                    'number_of_days': overtime_hours.hours_night_overtime / hours_per_day,
+                    'number_of_hours': overtime_hours.hours_night_overtime,
+                })
+            # sunday_overtime
+            we_type = self.env.ref('l10n_bo_hr_payroll.hr_work_entry_type_sunday_overtime')
+            if overtime_hours.sunday_overtime != 0:
+                res.append({
+                    'sequence': we_type.sequence,
+                    'work_entry_type_id': we_type.id,
+                    'number_of_days': overtime_hours.sunday_overtime / hours_per_day,
+                    'number_of_hours': overtime_hours.sunday_overtime,
+                })
+            # sunday_worked
+            we_type = self.env.ref('l10n_bo_hr_payroll.hr_work_entry_type_sunday_worked')
+            if overtime_hours.sunday_worked != 0:
+                res.append({
+                    'sequence': we_type.sequence,
+                    'work_entry_type_id': we_type.id,
+                    'number_of_days': overtime_hours.sunday_worked / hours_per_day,
+                    'number_of_hours': overtime_hours.sunday_worked,
+                })
+
+        return res
+
 
 def special_round(number):
     parte_decimal = number - int(number)  # Obtener la parte decimal del número
