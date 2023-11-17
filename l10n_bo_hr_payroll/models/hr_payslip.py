@@ -91,6 +91,8 @@ class HrPayslip(models.Model):
                 amount += record.night_overtime_hours_amount
             if ruler == 'NET':
                 amount += record.net_salary
+            if ruler == 'PRIMA':
+                amount += record.prima
 
         return amount
 

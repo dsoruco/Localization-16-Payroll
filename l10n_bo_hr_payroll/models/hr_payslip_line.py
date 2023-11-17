@@ -19,7 +19,6 @@ class HrPayslipLine(models.Model):
                 line.total = special_round(line.total)
 
 
-
 def special_round(number):
     parte_decimal = number - int(number)  # Obtener la parte decimal del número
     if parte_decimal < 0.5:

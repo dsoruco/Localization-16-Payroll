@@ -194,7 +194,7 @@ result = SMN * 2
     </record>
 
     <!--   2 VACACIONES              -->
-    <record id="datec_l10n_bo_hr_payroll_vac" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_vac_payed" model="hr.salary.rule">
         <field name="category_id" ref="FOR_TAX"/>
         <field name="name">Vacaciones</field>
         <field name="code">VAC_PAGADA</field>
@@ -202,13 +202,13 @@ result = SMN * 2
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = amount_total_gained_in_month(payslip,employee, False, 'VAC')
+result = amount_total_gained_in_month(payslip,employee, 'VAC')
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
 
     <!--   2 PRIMA              -->
-    <record id="datec_l10n_bo_hr_payroll_prima" model="hr.salary.rule">
+    <record id="datec_l10n_bo_hr_payroll_prima_payed" model="hr.salary.rule">
         <field name="category_id" ref="FOR_TAX"/>
         <field name="name">Prima</field>
         <field name="code">PRIMA_PAGADA</field>
@@ -216,7 +216,7 @@ result = amount_total_gained_in_month(payslip,employee, False, 'VAC')
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = amount_total_gained_in_month(payslip,employee, False, 'PRIMA')
+result = amount_total_gained_in_month(payslip,employee, 'PRIMA')
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
@@ -231,10 +231,10 @@ result = amount_total_gained_in_month(payslip,employee, False, 'PRIMA')
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
 total = 0
-if VAC:
-    total += VAC
-if PRIMA:
-    total += PRIMA
+if VAC_PAGADA:
+    total += VAC_PAGADA
+if PRIMA_PAGADA:
+    total += PRIMA_PAGADA
 result = NET + total
         </field>
         <field name="struct_id" ref="structure_month"/>
