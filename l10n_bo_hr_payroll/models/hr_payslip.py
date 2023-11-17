@@ -24,6 +24,7 @@ class HrPayslip(models.Model):
             'total_average_earned': total_average_earned,
             'get_ufv_from_code': get_ufv_from_code,
             'get_medical_leave_percent': get_medical_leave_percent,
+            'amount_total_gained_in_month': amount_total_gained_in_month,
         })
         return res
 
@@ -337,6 +338,13 @@ def amount_total_gained_average(payslip, employee, aguinaldo, ruler):
             else:
                 amount_christmas_bonus = payslip.dict._get_amount_total_gained(employee, date_start_cal, date_to_cal, ruler)
     return amount_christmas_bonus/3
+
+
+def amount_total_gained_in_month(payslip, employee, ruler):
+    amount_in_month = 0
+    if payslip:
+        amount_in_month = payslip.dict._get_amount_total_gained(employee, payslip.date_from, payslip.date_to, ruler)
+    return amount_in_month
 
 
 def days_total_worked(payslip, employee, aguinaldo):
