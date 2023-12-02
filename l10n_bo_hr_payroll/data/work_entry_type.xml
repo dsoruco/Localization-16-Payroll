@@ -56,5 +56,10 @@
             <field name="sequence">26</field>
         </record>
 
+        <record id="hr_work_entry_type_leave_hours" model="hr.work.entry.type">
+            <field name="name">Horas de ausencia</field>
+            <field name="code">LEAVE_HOURS</field>
+            <field name="sequence">26</field>
+        </record>
     </data>
 </odoo>

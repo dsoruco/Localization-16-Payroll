@@ -179,6 +179,21 @@ result = -total_afp
         <field name="struct_id" ref="structure_month"/>
     </record>
 
+<!--    Horas de ausencia-->
+    <record id="datec_l10n_bo_hr_payroll_leave_hours" model="hr.salary.rule">
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="name">Horas de ausencia</field>
+        <field name="code">LEAVE_HOURS</field>
+        <field name="sequence">102</field>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = worked_days.LEAVE_HOURS</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">
+result = worked_days.LEAVE_HOURS.number_of_hours * BC_DIARIA_HORAS
+        </field>
+        <field name="struct_id" ref="structure_month"/>
+    </record>
+
     <!--   2 SMN              -->
     <record id="datec_l10n_bo_hr_payroll_anc_amount_two_smn" model="hr.salary.rule">
         <field name="category_id" ref="BASIC_INF"/>
@@ -755,6 +770,7 @@ else:
         </field>
         <field name="struct_id" ref="structure_month"/>
     </record>
+
 
 <!-- REGLAS TEMPORALES A MODIFICAR                          -->
     <record id="datec_l10n_bo_hr_payroll_last_ufv" model="hr.salary.rule">
