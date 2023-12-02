@@ -30,7 +30,7 @@ class HrEmployee(models.Model):
             sum_day = 0
             sum_salary = 0
             for register in registers:
-                sum_salary += register.net_salary
+                sum_salary += register.gross
                 sum_day += register.worked_days
             return sum_salary/months
 
