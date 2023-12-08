@@ -3,11 +3,11 @@
 
 ###################################################################################
 {
-    'name': 'Open Datec Loan Management',
+    'name': 'Open Datec Loan Accounting',
     'version': '16.0.1.0.0',
-    'summary': 'Manage Loan Requests',
+    'summary': 'Open Datec Loan Accounting',
     'description': """
-        Le ayuda a gestionar las solicitudes de préstamo del personal de su empresa.
+        Create accounting entries for loan requests.
         """,
     'category': 'Línea base Bolivia/Human Resources/Payroll',
     'author': "Datec",
@@ -16,15 +16,11 @@
     'live_test_url': '',
     'website': "",
     'depends': [
-        'base', 'l10n_bo_hr_payroll', 'hr', 'account',
+        'base', 'l10n_bo_hr_payroll', 'hr', 'account', 'l10n_bo_loan',
     ],
     'data': [
-        'security/ir.model.access.csv',
-        'security/security.xml',
-        'views/hr_loan_seq.xml',
-        'data/salary_rule_loan.xml',
-        'views/hr_loan.xml',
-        'views/hr_payroll.xml',
+        'views/hr_loan_config.xml',
+        'views/hr_loan_acc.xml',
     ],
     'images': ['static/description/banner.png'],
     'license': 'AGPL-3',
