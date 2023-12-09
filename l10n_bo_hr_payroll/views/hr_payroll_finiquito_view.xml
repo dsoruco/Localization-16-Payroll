@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+<!--    SUPPLEMENTARY WORK    -->
+        <record id="hr_payroll_finiquito_view_form" model="ir.ui.view">
+            <field name="name">hr.payroll.finiquito.form</field>
+            <field name="model">hr.payroll.finiquito</field>
+            <field name="arch" type="xml">
+                <form string="Supplementary Work">
+                    <header>
+                        <field name="state" readonly="1"/>
+                        <button string="Abrir" name="action_period_open" type="object" states="draft"/>
+                        <button string="A borrador" name="action_period_draft" states="open" type='object' />
+                    </header>
+                    <group>
+                        <field name="employee_id"/>
+                        <field name="date_hire"/>
+                        <field name="date_end"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="hr_payroll_finiquito_view_tree" model="ir.ui.view">
+            <field name="name">hr.payroll.finiquito.tree</field>
+            <field name="model">hr.payroll.finiquito</field>
+            <field name="arch" type="xml">
+                <tree string="Finiquito">
+                      <field colspan="4" name="employee_id"/>
+                      <field colspan="4" name="date_hire"/>
+                      <field colspan="4" name="date_end"/>
+                      <field colspan="4" name="report_date"/>
+                      <field colspan="4" name="monthly_compensation_total"/>
+                      <field colspan="4" name="seniority_bonus_total"/>
+                      <field colspan="4" name="commissions_total"/>
+                      <field colspan="4" name="overtime_total"/>
+                      <field colspan="4" name="other_bonuses_total"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="hr_payroll_finiquito_view_search" model="ir.ui.view">
+            <field name="name">hr.payroll.finiquito.search</field>
+            <field name="model">hr.payroll.finiquito</field>
+            <field name="arch" type="xml">
+                <search string="Finiquito">
+                    <field name="employee_id"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_hr_payroll_finiquito" model="ir.actions.act_window">
+            <field name="name">Finiquito</field>
+            <field name="res_model">hr.payroll.finiquito</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="hr_payroll_finiquito_view_search"/>
+        </record>
+
+        <menuitem
+            id="hr_co_menu_hr_payroll_finiquito"
+            action="action_hr_payroll_finiquito"
+            parent="hr_work_entry_contract_enterprise.menu_hr_payroll_root"
+            sequence="45"
+            groups="hr_payroll.group_hr_payroll_manager" />
+</odoo>
