@@ -50,9 +50,9 @@ result = amount_total_gained_average(payslip,employee, False, 'BONO_PROD')
         <field name="condition_select">none</field>
         <field name="amount_select">code</field>
         <field name="amount_python_compute">
-result = amount_total_gained_average(payslip,employee, True, 'BONOS')
+result = amount_total_gained_average(payslip,employee, False, 'BONOS')
         </field>
-        <field name="struct_id" ref="structure_christmas_bonus"/>
+        <field name="struct_id" ref="structure_prima"/>
     </record>
 
     <record id="datec_l10n_bo_hr_payroll_prima_frontier_subsidy_average" model="hr.salary.rule">
