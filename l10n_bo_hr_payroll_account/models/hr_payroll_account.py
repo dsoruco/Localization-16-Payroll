@@ -236,9 +236,12 @@ class HrPayslip(models.Model):
                             leave_env = self.env['hr.leave']
                             # work_days_data = leave_env._get_work_days_data_batch(finiquito_element.date_end, date_to)
                             if finiquito_element.leave_id:
-                                leave_element = leave_env.search([('id', '=', finiquito_element.leave_id)])
+                                leave_element = leave_env.search([('id', '=', finiquito_element.leave_id.id)])
                                 if leave_element:
-                                    move = leave_element.sudo().write(values)
+                                    leave_element.update({
+                                        'state': 'draft',
+                                    })
+                                    move = leave_element.sudo().unlink()
                             leave = leave_env.sudo().create(values)
                             leave.update({
                                 'state': 'validate',
@@ -271,7 +274,7 @@ class HrPayslip(models.Model):
                                                                     ('report_date', '<=', slip.date_to),
                                                                     ('state', '=', 'paid')])
                     if finiquito_element:
-                        move = finiquito_element.sudo().write({'state': 'open'})
+                        move = finiquito_element.sudo().update({'state': 'open'})
                         leave_env = self.env['hr.leave']
                         if finiquito_element.leave_id:
                             leave_element = leave_env.search([('id', '=', finiquito_element.leave_id.id)])
