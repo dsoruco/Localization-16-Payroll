@@ -38,7 +38,14 @@
                     <field name="employee_id"/>
                     <field name="salary_rule_id"/>
                     <group expand="0" string="Group By">
-                        <filter string="Empleado" name="employee_id" domain="[]" context="{'group_by':'employee_id'}"/>
+                        <filter string="Empleado" name="employee_id" domain="[]"
+                                context="{'group_by':'employee_id'}"/>
+                        <filter string="Pago" name="retroactive" domain="[]"
+                                context="{'group_by':'retroactive'}"/>
+                        <filter string="Mes" name="month" domain="[]"
+                                context="{'group_by':'month'}"/>
+                        <filter string="Regla" name="code" domain="[]"
+                                context="{'group_by':'code'}"/>
                     </group>
                     <separator/>
                     <group expand="1" string="Categoría">
