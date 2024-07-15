@@ -2,7 +2,6 @@ from odoo import models, fields
 from odoo.exceptions import UserError
 import logging
 import json
-import datetime
 
 _logger = logging.getLogger(__name__)
 
@@ -39,28 +38,56 @@ class ReporteFiniquito(models.TransientModel):
         id = self._context.get("active_id")
         employee = self.env["hr.payroll.finiquito"].browse(id)
         return employee
-    
-    def generate_data(self,employee):
+
+    def generate_data(self, employee):
         data = {
             "document_type": self.doc_type,
             "name": employee.employee_id.display_name,
-            "date_hire":employee.date_hire.strftime("%Y-%m-%d"),
-            "date_end":employee.date_end.strftime("%Y-%m-%d"),
-            "concept":[]
+            "date_hire": employee.date_hire.strftime("%Y-%m-%d"),
+            "date_end": employee.date_end.strftime("%Y-%m-%d"),
+            "months": {
+                "concept": [],
+                "month_total_compensation":round(employee.monthly_compensation_total,2),
+                "seniority_bonus_total":round(employee.seniority_bonus_total,2),
+                "border_bonus_total":round(employee.border_bonus_total,2),
+                "commissions_total":round(employee.commissions_total,2),
+                "overtime_total":round(employee.overtime_total,2),
+                "other_bonuses_total":round(employee.other_bonuses_total,2),
+                "average": round(employee.average,2),
+                "total_months":round(employee.total_total,2)
+            },
+            "eviction": round(employee.eviction,2),
+            "penalties":round(employee.penalties,2),
+            "indemnity_year":employee.indemnity_year,
+            "indemnity_year_amount":round(employee.indemnity_year_amount,2),
+            "indemnity_month":employee.indemnity_month,
+            "indemnity_month_amount":round(employee.indemnity_month_amount,2),
+            "indemnity_day":employee.indemnity_day,
+            "indemnity_day_amount":round(employee.indemnity_day_amount,2),
+            "christmas_bonus_day":employee.christmas_bonus_day,
+            "christmas_bonus_day_amount":round(employee.christmas_bonus_day_amount,2),
+            "christmas_bonus_month":employee.christmas_bonus_month,
+            "christmas_bonus_month_amount":round(employee.christmas_bonus_month_amount,2),
+            "christmas_bonus_one":employee.christmas_bonus_one,
+            "christmas_bonus_two":employee.christmas_bonus_two,
+            "holidays_days":employee.holidays_days,
+            "holidays_amount":round(employee.holidays_amount,2),
+            "other_extraordinary_bonuses":round(employee.other_extraordinary_bonuses,2),
+            "finiquito":round(employee.finiquito,2)
         }
-        
-        for i in range(1,4):
+
+        for i in range(1, 4):
             month_data = {
-                f"compensation{i}": getattr(employee,f"monthly_compensation{i}"),
-                f"seniority_bonus{i}":getattr(employee,f"seniority_bonus{i}"),
-                f"border_bonus{i}":getattr(employee,f"border_bonus{i}"),
-                f"commissions{i}":getattr(employee,f"commissions{i}"),
-                f"overtime{i}":getattr(employee,f"overtime{i}"),
-                f"other_bonuses{i}":getattr(employee,f"other_bonuses{i}"),
-                f"total_month{i}":getattr(employee,f"total{i}"),
+                f"compensation{i}": round(getattr(employee, f"monthly_compensation{i}"),2),
+                f"seniority_bonus{i}": round(getattr(employee, f"seniority_bonus{i}"),2),
+                f"border_bonus{i}": round(getattr(employee, f"border_bonus{i}"),2),
+                f"commissions{i}": round(getattr(employee, f"commissions{i}"),2),
+                f"overtime{i}": round(getattr(employee, f"overtime{i}"),2),
+                f"other_bonuses{i}": round(getattr(employee, f"other_bonuses{i}"),2),
+                f"total_month{i}": round(getattr(employee, f"total{i}"),2),
             }
-            data["concept"].append(month_data)
-        
+            data["months"]["concept"].append(month_data)
+
         return json.dumps(data)
 
     def action_generate_report(self):
