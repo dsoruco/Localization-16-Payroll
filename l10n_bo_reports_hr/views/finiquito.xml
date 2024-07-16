@@ -7,13 +7,13 @@
         <field name="inherit_id" ref="l10n_bo_hr_payroll.hr_payroll_finiquito_view_form" />
         <field name="arch" type="xml">
             <xpath expr="header" position="inside">
-                <button name="finiquito_open_form_action" type="object" string="Generar"
+                <button name="action_generate_report" type="object" string="Generar"
                     class="oe_highlight" />
             </xpath>
         </field>
     </record>
     <!-- formulario -->
-    <record id="view_finiquito_wizard_form" model="ir.ui.view">
+    <!-- <record id="view_finiquito_wizard_form" model="ir.ui.view">
         <field name="name">view.finiquito.wizard.form</field>
         <field name="model">reporte.finiquito</field>
         <field name="arch" type="xml">
@@ -28,5 +28,5 @@
                 </footer>
             </form>
         </field>
-    </record>
+    </record> -->
 </odoo>
