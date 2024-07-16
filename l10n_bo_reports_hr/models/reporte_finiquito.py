@@ -95,9 +95,9 @@ class ReporteFiniquito(models.TransientModel):
             raise UserError("Selecciona el formato de documento")
 
         employee = self.get_employee()
-        api_key = ""
-        url_service = ""
+        company = self.env.user.company_id
+        api_key = company.report_api_key
+        url_service = company.url_report_service
         data = self.generate_data(employee)
-        _logger.info(data)
 
         return True
