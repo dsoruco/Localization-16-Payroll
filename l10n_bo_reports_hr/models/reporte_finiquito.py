@@ -1,7 +1,9 @@
-from odoo import _,models, fields
+from odoo import _, models, fields
 from odoo.exceptions import UserError
 import logging
 import json
+import base64
+from ..hooks.fetch import useFetch
 
 _logger = logging.getLogger(__name__)
 
@@ -14,7 +16,8 @@ class HrPayrollFiniquito(models.Model):
             ("pdf", "PDF"),
             ("csv", "CSV"),
         ],
-        string="Formato de Documento", default="pdf"
+        string="Formato de Documento",
+        default="pdf",
     )
     report_file = fields.Binary("Archivo de reporte", readonly=True)
     file_name = fields.Char("Nombre de archivo")
@@ -27,8 +30,16 @@ class HrPayrollFiniquito(models.Model):
     def generate_data(self, employee):
         data = {
             "document_type": self.doc_type,
-            "report":"finiquito",
+            "report": "finiquito",
+            "company": employee.employee_id.company_id.display_name,
+            "address_company": employee.employee_id.company_id.partner_id.contact_address_complete,
             "name": employee.employee_id.display_name,
+            "address_employee": employee.employee_id.address_home_id.display_name,
+            "age": employee.employee_id.afp_age,
+            "contract_wage": employee.employee_id.contract_id.contract_wage,
+            "marital": employee.employee_id.marital,
+            "job_title": employee.employee_id.job_title,
+            "passport_id": employee.employee_id.passport_id,
             "date_hire": employee.date_hire.strftime("%Y-%m-%d"),
             "date_end": employee.date_end.strftime("%Y-%m-%d"),
             "months": {
@@ -53,10 +64,11 @@ class HrPayrollFiniquito(models.Model):
             "indemnity_day": employee.indemnity_day,
             "indemnity_day_amount": round(employee.indemnity_day_amount, 2),
             "christmas_bonus_day": employee.christmas_bonus_day,
-            "christmas_bonus_day_amount": round(employee.christmas_bonus_day_amount, 2),
             "christmas_bonus_month": employee.christmas_bonus_month,
-            "christmas_bonus_month_amount": round(
-                employee.christmas_bonus_month_amount, 2
+            "christmas_bonus_amount": round(
+                employee.christmas_bonus_month_amount
+                + employee.christmas_bonus_day_amount,
+                2,
             ),
             "christmas_bonus_one": employee.christmas_bonus_one,
             "christmas_bonus_two": employee.christmas_bonus_two,
@@ -70,6 +82,7 @@ class HrPayrollFiniquito(models.Model):
 
         for i in range(1, 4):
             month_data = {
+                f"month{i}": getattr(employee, f"month{i}"),
                 f"compensation{i}": round(
                     getattr(employee, f"monthly_compensation{i}"), 2
                 ),
@@ -92,18 +105,20 @@ class HrPayrollFiniquito(models.Model):
 
         employee = self.get_employee()
         company = self.env.user.company_id
-        api_key = company.report_api_key
         url_service = company.url_report_service
         data = self.generate_data(employee)
-        # TODO: hacer conexión con servicio
-        resp = False
+
+        data = json.dumps(data)
+        resp = useFetch(url_service, data)
 
         if resp:
-            self.file_name = 'report.pdf'
+            self.file_name = employee.employee_id.display_name
+            file = base64.b64decode(resp["data"]["document"])
+            self.report_file = base64.b64encode(file).decode("utf-8")
             return {
-                'type': 'ir.actions.act_url',
-                'url': f'/web/content?model={self._name}&id={self.id}&field=report_file&filename_field=file_name&download=true',
-                'target': 'new',
+                "type": "ir.actions.act_url",
+                "url": f"/web/content?model={self._name}&id={self.id}&field=report_file&filename_field=file_name&download=true",
+                "target": "new",
             }
         else:
             notification = {
@@ -117,7 +132,7 @@ class HrPayrollFiniquito(models.Model):
                 },
             }
             return notification
-        
+
     # action para abrir popup en caso de necesitarse
     def finiquito_open_form_action(self):
         action = {
@@ -134,4 +149,3 @@ class HrPayrollFiniquito(models.Model):
 # class ReporteFiniquito(models.TransientModel):
 #     _name = "reporte.finiquito"
 #     _description = "Formulario para reporte de finiquitos"
-

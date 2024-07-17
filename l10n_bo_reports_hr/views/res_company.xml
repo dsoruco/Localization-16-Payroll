@@ -8,7 +8,6 @@
             <xpath expr="//page[@name='general_info']" position="after">
                 <page string="Servicio de reportes">
                     <group string="Configuración de Kardex">
-                        <field name="report_api_key" password="True" />
                         <field name="url_report_service" />
                     </group>
                 </page>
