@@ -27,6 +27,7 @@ class HrPayrollFiniquito(models.Model):
     def generate_data(self, employee):
         data = {
             "document_type": self.doc_type,
+            "report":"finiquito",
             "name": employee.employee_id.display_name,
             "date_hire": employee.date_hire.strftime("%Y-%m-%d"),
             "date_end": employee.date_end.strftime("%Y-%m-%d"),
@@ -101,7 +102,7 @@ class HrPayrollFiniquito(models.Model):
             self.file_name = 'report.pdf'
             return {
                 'type': 'ir.actions.act_url',
-                'url': f'/web/content?model={self.employee_id.display_name}&id={self.id}&field=report_file&filename_field=file_name&download=true',
+                'url': f'/web/content?model={self._name}&id={self.id}&field=report_file&filename_field=file_name&download=true',
                 'target': 'new',
             }
         else:
