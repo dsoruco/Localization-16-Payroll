@@ -39,7 +39,11 @@ class HrPayrollFiniquito(models.Model):
             "contract_wage": employee.employee_id.contract_id.contract_wage,
             "marital": employee.employee_id.marital,
             "job_title": employee.employee_id.job_title,
-            "passport_id": employee.employee_id.passport_id,
+            "passport_id": (
+                employee.employee_id.passport_id
+                if employee.employee_id.passport_id
+                else "NA"
+            ),
             "date_hire": employee.date_hire.strftime("%Y-%m-%d"),
             "date_end": employee.date_end.strftime("%Y-%m-%d"),
             "months": {
@@ -105,13 +109,10 @@ class HrPayrollFiniquito(models.Model):
 
         employee = self.get_employee()
         company = self.env.user.company_id
-        url_service = company.url_report_service
         data = self.generate_data(employee)
 
-        data = json.dumps(data)
-        resp = useFetch(url_service, data)
-
-        if resp:
+        resp = useFetch(company.url_report_service, data)
+        try:
             self.file_name = employee.employee_id.display_name
             file = base64.b64decode(resp["data"]["document"])
             self.report_file = base64.b64encode(file).decode("utf-8")
@@ -120,7 +121,7 @@ class HrPayrollFiniquito(models.Model):
                 "url": f"/web/content?model={self._name}&id={self.id}&field=report_file&filename_field=file_name&download=true",
                 "target": "new",
             }
-        else:
+        except:
             notification = {
                 "type": "ir.actions.client",
                 "tag": "display_notification",
