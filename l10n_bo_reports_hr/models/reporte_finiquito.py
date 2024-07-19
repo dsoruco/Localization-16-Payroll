@@ -133,20 +133,3 @@ class HrPayrollFiniquito(models.Model):
                 },
             }
             return notification
-
-    # action para abrir popup en caso de necesitarse
-    def finiquito_open_form_action(self):
-        action = {
-            "type": "ir.actions.act_window",
-            "view_mode": "form",
-            "res_model": "reporte.finiquito",
-            "target": "new",
-        }
-
-        return action
-
-
-# popup a generarse para reporte csv y pdf
-# class ReporteFiniquito(models.TransientModel):
-#     _name = "reporte.finiquito"
-#     _description = "Formulario para reporte de finiquitos"
