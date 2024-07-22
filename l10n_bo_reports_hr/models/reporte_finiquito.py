@@ -54,7 +54,9 @@ class HrPayrollFiniquito(models.Model):
                 "seniority_bonus_total": round(employee.seniority_bonus_total, 2),
                 "commissions_total": round(employee.commissions_total, 2),
                 "overtime_total": round(employee.overtime_total, 2),
-                "other_bonuses_total": round(employee.other_bonuses_total+employee.border_bonus_total, 2),
+                "other_bonuses_total": round(
+                    employee.other_bonuses_total + employee.border_bonus_total, 2
+                ),
                 "average": round(employee.average, 2),
                 "total_months": round(employee.total_total, 2),
             },
@@ -65,7 +67,12 @@ class HrPayrollFiniquito(models.Model):
             "indemnity_month_amount": round(employee.indemnity_month_amount, 2),
             "indemnity_day": employee.indemnity_day,
             "indemnity_day_amount": round(employee.indemnity_day_amount, 2),
-            "indemnity_amount": round(employee.indemnity_day_amount+employee.indemnity_month_amount+employee.indemnity_year_amount, 2),
+            "indemnity_amount": round(
+                employee.indemnity_day_amount
+                + employee.indemnity_month_amount
+                + employee.indemnity_year_amount,
+                2,
+            ),
             "christmas_bonus_day": employee.christmas_bonus_day,
             "christmas_bonus_month": employee.christmas_bonus_month,
             "christmas_bonus_amount": round(
@@ -78,10 +85,23 @@ class HrPayrollFiniquito(models.Model):
             "holidays_days": employee.holidays_days,
             "holidays_amount": round(employee.holidays_amount, 2),
             "other_extraordinary_bonuses": round(
-                employee.other_extraordinary_bonuses+employee.penalties, 2
+                employee.other_extraordinary_bonuses + employee.penalties, 2
             ),
-            "departure":employee.employee_id.departure_reason_id.name,
-            "prima":"",
+            "point_4_total": round(
+                employee.christmas_bonus_month_amount
+                + employee.christmas_bonus_day_amount
+                + employee.indemnity_day_amount
+                + employee.indemnity_month_amount
+                + employee.indemnity_year_amount
+                + employee.holidays_amount,
+                2,
+            ),
+            "paid_place":"",
+            "paid_day":employee.employee_id.departure_date.day,
+            "paid_month":employee.employee_id.departure_date.month,
+            "paid_year":employee.employee_id.departure_date.year,
+            "departure": employee.employee_id.departure_reason_id.name,
+            "prima": "",
             "finiquito": round(employee.finiquito, 2),
         }
 
@@ -96,7 +116,13 @@ class HrPayrollFiniquito(models.Model):
                 ),
                 f"commissions{i}": round(getattr(employee, f"commissions{i}"), 2),
                 f"overtime{i}": round(getattr(employee, f"overtime{i}"), 2),
-                f"other_bonuses{i}": round((getattr(employee, f"other_bonuses{i}")+getattr(employee, f"border_bonus{i}")), 2),
+                f"other_bonuses{i}": round(
+                    (
+                        getattr(employee, f"other_bonuses{i}")
+                        + getattr(employee, f"border_bonus{i}")
+                    ),
+                    2,
+                ),
                 f"total_month{i}": round(getattr(employee, f"total{i}"), 2),
             }
             data["months"]["concept"].append(month_data)
