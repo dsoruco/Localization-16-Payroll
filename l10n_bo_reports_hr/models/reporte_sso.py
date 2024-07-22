@@ -11,6 +11,9 @@ class ReporteFiniquito(models.TransientModel):
         default="xlsx",
     )
 
+    def generate_data():
+        pass
+    
     # action para abrir popup en caso de necesitarse
     # def finiquito_open_form_action(self):
     #     action = {
