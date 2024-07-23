@@ -27,6 +27,8 @@
         'security/ir.model.access.csv',
         'views/res_company.xml',
         'views/finiquito.xml',
+        'views/reportes_menu.xml',
+        'views/reportes.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

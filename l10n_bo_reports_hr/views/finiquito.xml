@@ -12,21 +12,4 @@
             </xpath>
         </field>
     </record>
-    <!-- formulario -->
-    <!-- <record id="view_finiquito_wizard_form" model="ir.ui.view">
-        <field name="name">view.finiquito.wizard.form</field>
-        <field name="model">reporte.finiquito</field>
-        <field name="arch" type="xml">
-            <form string="Formulario para generar documentos">
-                <group>
-                    <field name="doc_type" />
-                </group>
-                <footer>
-                    <button name="action_generate_report" type="object" string="Generar"
-                        class="oe_highlight" />
-                    <button string="Cancelar" special="cancel" class="oe_link" />
-                </footer>
-            </form>
-        </field>
-    </record> -->
 </odoo>
