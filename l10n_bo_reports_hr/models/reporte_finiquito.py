@@ -7,6 +7,28 @@ from ..hooks.fetch import useFetch
 
 _logger = logging.getLogger(__name__)
 
+meses = {
+    1: "Enero",
+    2: "Febrero",
+    3: "Marzo",
+    4: "Abril",
+    5: "Mayo",
+    6: "Junio",
+    7: "Julio",
+    8: "Agosto",
+    9: "Septiembre",
+    10: "Octubre",
+    11: "Noviembre",
+    12: "Diciembre",
+}
+estado_civil = {
+    "single": "Soltero(a)",
+    "married": "Casado(a)",
+    "cohabitant": "Cohabitante legal",
+    "widower": "Viudo(a)",
+    "divorced": "Divorciado(a)",
+}
+
 
 class HrPayrollFiniquito(models.Model):
     _inherit = "hr.payroll.finiquito"
@@ -29,7 +51,7 @@ class HrPayrollFiniquito(models.Model):
 
     def generate_data(self, employee):
         data = {
-            "bbc": self.doc_type,
+            "extension": self.doc_type,
             "report": "finiquito",
             "company": employee.employee_id.company_id.display_name,
             "address_company": employee.employee_id.company_id.partner_id.contact_address_complete,
@@ -37,7 +59,7 @@ class HrPayrollFiniquito(models.Model):
             "address_employee": employee.employee_id.address_home_id.display_name,
             "age": employee.employee_id.afp_age,
             "contract_wage": employee.employee_id.contract_id.contract_wage,
-            "marital": employee.employee_id.marital,
+            "marital": estado_civil[employee.employee_id.marital],
             "job_title": employee.employee_id.job_title,
             "passport_id": (
                 employee.employee_id.passport_id
@@ -96,12 +118,23 @@ class HrPayrollFiniquito(models.Model):
                 + employee.holidays_amount,
                 2,
             ),
-            "paid_place":"",
-            "paid_day":employee.employee_id.departure_date.day,
-            "paid_month":employee.employee_id.departure_date.month,
-            "paid_year":employee.employee_id.departure_date.year,
+            "paid_place": employee.employee_id.staff_division_id.name,
+            "paid_day": employee.employee_id.departure_date.day,
+            "paid_month": meses[employee.employee_id.departure_date.month],
+            "paid_year": employee.employee_id.departure_date.year,
             "departure": employee.employee_id.departure_reason_id.name,
-            "prima": "",
+            "pay_in": True if employee.employee_id.pay_in == "chk" else False,
+            "bank_id": (
+                employee.employee_id.bank_id.name
+                if employee.employee_id.pay_in == "chk"
+                else ""
+            ),
+            "prima_month": 0,
+            "prima_day": 0,
+            "prima_amount": 0,
+            "gestion_month": 0,
+            "gestion_day": 0,
+            "gestion_amount": 0,
             "finiquito": round(employee.finiquito, 2),
         }
 

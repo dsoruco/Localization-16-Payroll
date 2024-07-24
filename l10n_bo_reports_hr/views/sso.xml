@@ -1,18 +1,18 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
     <!-- formulario -->
-    <record id="view_finiquito_wizard_form" model="ir.ui.view">
-        <field name="name">view.finiquito.wizard.form</field>
-        <field name="model">reporte.sso</field>
+    <record id="view_sso_form_wizard" model="ir.ui.view">
+        <field name="name">Seguro Social</field>
+        <field name="model">hr.payroll.reporte.sso</field>
         <field name="arch" type="xml">
             <form string="Formulario para generar documentos">
                 <group>
                     <field name="doc_type" />
                 </group>
                 <footer>
-                    <!-- <button name="action_generate_report" type="object" string="Generar"
+                    <button name="action_generate_report" type="object" string="Generar"
                         class="oe_highlight" />
-                    <button string="Cancelar" special="cancel" class="oe_link" /> -->
+                    <button string="Cancelar" special="cancel" class="oe_link" />
                 </footer>
             </form>
         </field>

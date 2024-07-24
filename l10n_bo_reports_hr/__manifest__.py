@@ -27,6 +27,7 @@
         'security/ir.model.access.csv',
         'views/res_company.xml',
         'views/finiquito.xml',
+        'views/sso.xml',
         'views/reportes.xml',
         'views/reportes_menu.xml',
     ],
