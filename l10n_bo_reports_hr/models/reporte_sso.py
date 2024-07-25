@@ -5,6 +5,11 @@ import base64
 import json
 
 
+gender = {
+    "male":"Masculino",
+    "female":"Femenino",
+    "other":"Otro"
+}
 class ReporteFiniquito(models.TransientModel):
     _name = "hr.payroll.reporte.sso"
     _description = "Formulario para reporte de seguro social obligatorio"
@@ -46,6 +51,21 @@ class ReporteFiniquito(models.TransientModel):
             "document_type":"",
             "document_value":"",
             "birthday": employee.birthday.strftime("%d/%m/%Y"),
+            "date_hire":employee.contract_id.date_start.strftime("%d/%m/%Y"),
+            "full_name":employee.display_name,
+            "date_fire":employee.contract_id.date_end.strftime("%d/%m/%Y") if employee.contract_id.date_end.strftime("%d/%m/%Y") else "",
+            "country_birth":employee.country_of_birth.name,
+            "gender":gender[employee.gender],
+            "job_title":employee.job_title,
+            "paid_hour":"",
+            "basic_days":"",
+            "paid_days":"",
+            "salary":"",
+            "extra_time":"",
+            "extra_time_amount":"",
+            "senior_bonus":"",
+            "other_bonuses":"",
+            "total_payment":"",
         }
 
         return json.dumps(data)
