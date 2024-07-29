@@ -5,11 +5,9 @@ import base64
 import json
 
 
-gender = {
-    "male":"Masculino",
-    "female":"Femenino",
-    "other":"Otro"
-}
+gender = {"male": "Masculino", "female": "Femenino", "other": "Otro"}
+
+
 class ReporteFiniquito(models.TransientModel):
     _name = "hr.payroll.reporte.sso"
     _description = "Formulario para reporte de seguro social obligatorio"
@@ -21,61 +19,85 @@ class ReporteFiniquito(models.TransientModel):
     )
     month = fields.Selection(
         [
-            ("01", "Enero"),
-            ("02", "Febrero"),
-            ("03", "Marzo"),
-            ("04", "Abril"),
-            ("05", "Mayo"),
-            ("06", "Junio"),
-            ("07", "Julio"),
-            ("08", "Agosto"),
-            ("09", "Septiembre"),
+            ("1", "Enero"),
+            ("2", "Febrero"),
+            ("3", "Marzo"),
+            ("4", "Abril"),
+            ("5", "Mayo"),
+            ("6", "Junio"),
+            ("7", "Julio"),
+            ("8", "Agosto"),
+            ("9", "Septiembre"),
             ("10", "Octubre"),
             ("11", "Noviembre"),
             ("12", "Diciembre"),
         ],
         string="Mes",
-        default="01",
+        default="4",
     )
-    year = fields.Char("Año", default="2021")
+    year = fields.Char("Año", default="2023")
     file_name = fields.Char("Nombre de archivo")
     report_file = fields.Binary("Archivo de reporte", readonly=True)
 
     def get_employee_ids(self):
-        return self.env["hr.employee"].search([("active", "=", True)])
+        employees = self.env["hr.payslip"].search([("state", "=", "paid")])
+        data = []
+        for pay in employees:
+            if pay.date_from.year == int(self.year) and pay.date_from.month == int(self.month):
+                data.append(pay)
+        return data
 
-    def employee_sso_data(self, employee, position=0):
+    def employee_sso_data(self, employee, payment, position=0):
 
         data = {
-            "nro":position,
-            "document_type":"",
-            "document_value":"",
-            "birthday": employee.birthday.strftime("%d/%m/%Y"),
-            "date_hire":employee.contract_id.date_start.strftime("%d/%m/%Y"),
-            "full_name":employee.display_name,
-            "date_fire":employee.contract_id.date_end.strftime("%d/%m/%Y") if employee.contract_id.date_end.strftime("%d/%m/%Y") else "",
-            "country_birth":employee.country_of_birth.name,
-            "gender":gender[employee.gender],
-            "job_title":employee.job_title,
-            "paid_hour":"",
-            "basic_days":"",
-            "paid_days":"",
-            "salary":"",
-            "extra_time":"",
-            "extra_time_amount":"",
-            "senior_bonus":"",
-            "other_bonuses":"",
-            "total_payment":"",
+            "nro": position,
+            "document_type": "",
+            "document_value": "",
+            "birthday": employee.birthday.strftime("%d/%m/%Y") if employee.birthday else "",
+            "date_hire": employee.contract_id.date_start.strftime("%d/%m/%Y"),
+            "full_name": employee.display_name,
+            "date_fire": (
+                employee.contract_id.date_end.strftime("%d/%m/%Y")
+                if employee.contract_id.date_end
+                else ""
+            ),
+            "country_birth": employee.country_of_birth.name,
+            "gender": gender[employee.gender] if employee.gender else "",
+            "job_title": employee.job_title,
+            "paid_hour": payment.sum_worked_hours,
+            "basic_days": 0,
+            "paid_days": 0,
+            "salary": payment.basic_wage,
+            "extra_time": 0,
+            "extra_time_amount": payment.net_wage-payment.basic_wage,
+            "senior_bonus": 0,
+            "other_bonuses": 0,
+            "total_payment": payment.net_wage,
         }
+        
+        if employee.identification_documents:
+            for document in employee.identification_documents:
+                if document.type_identification_document_id.code == "01":
+                    data["document_type"] = "CI"
+                    data["document_value"] = int(document.document_number)
+                    
+        for wd in payment.worked_days_line_ids:
+            if wd.code == "WORK100":
+                data["basic_days"] = wd.number_of_days
+            else:
+                data["extra_time"] += wd.number_of_days
+            
+                        
+            data["paid_days"] += wd.number_of_days
 
         return json.dumps(data)
 
     def generate_data(self):
-        employee_ids = self.get_employee_ids()
+        payments = self.get_employee_ids()
         employee_data = []
         index = 1
-        for employee in employee_ids:
-            employee_data.append(self.employee_sso_data(employee, position=index))
+        for payment in payments:
+            employee_data.append(self.employee_sso_data(payment.employee_id, payment, position=index))
             index += 1
         return json.dumps({"data": employee_data})
 
