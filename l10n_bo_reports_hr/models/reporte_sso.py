@@ -13,7 +13,7 @@ class ReporteFiniquito(models.TransientModel):
     _description = "Formulario para reporte de seguro social obligatorio"
 
     doc_type = fields.Selection(
-        [("xlsx", "Excel"), ("csv", "CSV")],
+        [("xlsx", "Excel"), ("txt", "TXT")],
         string="Formato de documento",
         default="xlsx",
     )
@@ -43,7 +43,9 @@ class ReporteFiniquito(models.TransientModel):
         employees = self.env["hr.payslip"].search([("state", "=", "paid")])
         data = []
         for pay in employees:
-            if pay.date_from.year == int(self.year) and pay.date_from.month == int(self.month):
+            if pay.date_from.year == int(self.year) and pay.date_from.month == int(
+                self.month
+            ):
                 data.append(pay)
         return data
 
@@ -53,7 +55,10 @@ class ReporteFiniquito(models.TransientModel):
             "nro": position,
             "document_type": "",
             "document_value": "",
-            "birthday": employee.birthday.strftime("%d/%m/%Y") if employee.birthday else "",
+            "insured_number": employee.insured_number if employee.insured_number else "",
+            "birthday": (
+                employee.birthday.strftime("%d/%m/%Y") if employee.birthday else ""
+            ),
             "date_hire": employee.contract_id.date_start.strftime("%d/%m/%Y"),
             "full_name": employee.display_name,
             "date_fire": (
@@ -69,37 +74,42 @@ class ReporteFiniquito(models.TransientModel):
             "paid_days": 0,
             "salary": payment.basic_wage,
             "extra_time": 0,
-            "extra_time_amount": payment.net_wage-payment.basic_wage,
+            "extra_time_amount": payment.net_wage - payment.basic_wage,
             "senior_bonus": 0,
             "other_bonuses": 0,
             "total_payment": payment.net_wage,
         }
-        
+
         if employee.identification_documents:
             for document in employee.identification_documents:
                 if document.type_identification_document_id.code == "01":
                     data["document_type"] = "CI"
                     data["document_value"] = int(document.document_number)
-                    
+
         for wd in payment.worked_days_line_ids:
             if wd.code == "WORK100":
                 data["basic_days"] = wd.number_of_days
             else:
                 data["extra_time"] += wd.number_of_days
-            
-                        
+
             data["paid_days"] += wd.number_of_days
 
-        return json.dumps(data)
+        return data
 
     def generate_data(self):
         payments = self.get_employee_ids()
         employee_data = []
         index = 1
         for payment in payments:
-            employee_data.append(self.employee_sso_data(payment.employee_id, payment, position=index))
+            employee_data.append(
+                self.employee_sso_data(payment.employee_id, payment, position=index)
+            )
             index += 1
-        return json.dumps({"data": employee_data})
+        return json.dumps({
+            "report":"sso",
+            "extension":self.doc_type,
+            "data": employee_data
+            })
 
     def action_generate_report(self):
         if not self.doc_type:

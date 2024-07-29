@@ -8,6 +8,8 @@
             <form string="Formulario para generar documentos">
                 <group>
                     <field name="doc_type" />
+                    <field name="month" />
+                    <field name="year" />
                 </group>
                 <footer>
                     <button name="action_generate_report" type="object" string="Generar"
