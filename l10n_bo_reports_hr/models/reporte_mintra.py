@@ -155,7 +155,7 @@ class HrPayrollMintraWizard(models.TransientModel):
             "payed_days": employee.contract_id.worked_days,
             "payed_hours": employee.contract_id.worked_hours,
             "salary": employee.contract_id.wage,
-            "antiquity_bonus": "", # Preguntar como calcular el bono de antiguedad
+            "antiquity_bonus": employee.seniority_bonus_total,
             "extra_hours_total_time": 0, # Preguntar como calcular las horas extras
             "extra_hours_total_amount": 0, # Preguntar como calcular las horas extras
             "extra_hours_night_time": 0, # Preguntar como calcular las horas extras
