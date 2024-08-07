@@ -59,32 +59,32 @@ class ReporteFiniquito(models.TransientModel):
             "birthday": (
                 employee.birthday.strftime("%d/%m/%Y") if employee.birthday else ""
             ),
-            "date_hire": employee.contract_id.date_start.strftime("%d/%m/%Y"),
+            "date_hire": employee.contract_id.date_start.strftime("%d/%m/%Y") if employee.contract_id.date_start else "",
             "full_name": employee.display_name,
             "date_fire": (
                 employee.contract_id.date_end.strftime("%d/%m/%Y")
                 if employee.contract_id.date_end
                 else ""
             ),
-            "country_birth": employee.country_of_birth.name,
+            "country_birth": employee.country_of_birth.name if employee.country_of_birth.name else "",
             "gender": gender[employee.gender] if employee.gender else "",
-            "job_title": employee.job_title,
+            "job_title": employee.job_title if employee.job_title else "",
             "paid_hour": payment.sum_worked_hours,
             "basic_days": 0,
             "paid_days": 0,
-            "salary": payment.basic_wage,
+            "salary": payment.basic_wage if payment.basic_wage else 0,
             "extra_time": 0,
             "extra_time_amount": payment.net_wage - payment.basic_wage,
             "senior_bonus": 0,
             "other_bonuses": 0,
-            "total_payment": payment.net_wage,
+            "total_payment": payment.net_wage if payment.net_wage else 0,
         }
 
         if employee.identification_documents:
             for document in employee.identification_documents:
                 if document.type_identification_document_id.code == "01":
                     data["document_type"] = "CI"
-                    data["document_value"] = int(document.document_number)
+                    data["document_value"] = document.document_number
 
         for wd in payment.worked_days_line_ids:
             if wd.code == "WORK100":
@@ -120,7 +120,7 @@ class ReporteFiniquito(models.TransientModel):
 
         resp = useFetch(company.url_report_service, data)
         try:
-            self.file_name = "reporte actualizado"
+            self.file_name = f"reporte actualizado.{self.doc_type}"
             file = base64.b64decode(resp["data"]["document"])
             self.report_file = base64.b64encode(file).decode("utf-8")
             return {
