@@ -112,52 +112,8 @@ class HrPayrollMintraWizard(models.TransientModel):
             employee_data.append(self.employee_mintra_data(employee, position=index))
             index += 1
         data = json.dumps({
-            
-            "header": [
-                "Código",
-                "Tipo de documento",
-                "Número de documento",
-                "Ciudad de expedición",
-                "Fecha de nacimiento",
-                "Apellido paterno",
-                "Apellido materno",
-                "Nombres",
-                "Nacionalidad",
-                "Género",
-                "Retirado",
-                "Aporta a AFP",
-                "Discapacidad",
-                "Tutor de discapacidad",
-                "Fecha de ingreso",
-                "Fecha de salida",
-                "Motivo de salida",
-                "Caja de salud",
-                "Aporta a AFP",
-                "Número de afiliación",
-                "Número de sucursal",
-                "Clasificación laboral",
-                "Nombre del cargo",
-                "Tipo de contrato",
-                "Formato de contrato",
-                "Días pagados",
-                "Horas pagadas",
-                "Salario",
-                "Bono de antigüedad",
-                "Horas extras totales",
-                "Monto total de horas extras",
-                "Horas extras nocturnas",
-                "Horas extras dominicales",
-                "Monto de horas extras dominicales",
-                "Domingos trabajados total",
-                "Monto de domingos trabajados",
-                "Salario de domingos trabajados",
-                "Bono productivo",
-                "Bono fronterizo",
-                "Otros bonos",
-                "Descuento de impuestos",
-                "Descuento de caja de salud",
-                "Otros descuentos",
-            ],
+            "extension": 'csv',
+            "report": "mintra",
             "data": employee_data
         })
         _logger.info(data)
@@ -169,6 +125,7 @@ class HrPayrollMintraWizard(models.TransientModel):
     def employee_mintra_data(self, employee, position=0):
         employee_data = {
             "code": position,
+            "personal_number": employee.id,
             "document_type": employee.address_id.l10n_bo_document_type,
             "document_number": employee.address_id.vat,
             "expedition_city": employee.address_id.l10n_bo_document_city_id.name,
@@ -208,6 +165,7 @@ class HrPayrollMintraWizard(models.TransientModel):
             "extra_hours_total_time": 0,  # Preguntar como calcular las horas extras
             "extra_hours_total_amount": 0,  # Preguntar como calcular las horas extras
             "extra_hours_night_time": 0,  # Preguntar como calcular las horas extras
+            "extra_hours_night_amount": 0,  # Preguntar como calcular las horas extras
             "extra_hours_dominical_time": 0,  # Preguntar como calcular las horas extras
             "extra_hours_dominical_amount": 0,  # Preguntar como calcular las horas extras
             "worked_sunday_total": 0,  # Preguntar como calcular los domingos trabajados
@@ -218,6 +176,20 @@ class HrPayrollMintraWizard(models.TransientModel):
             "other_bonuses": 0,  # Preguntar como calcular otros bonos
             "tax_discount": 0,  # Preguntar como calcular los descuentos RC-IVA
             "health_box_discount": 0,  # Preguntar como calcular los descuentos de la caja de salud
+            "afp_discount": 0,  # Preguntar como calcular los descuentos de la AFP
             "other_discounts": 0,  # Preguntar como calcular otros descuentos
         }
         return employee_data
+
+
+class HrEmployee(models.Model):
+    _inherit = 'hr.employee'
+
+    def compute_extra_hours_total_time(self, date_from, date_to):
+        self.ensure_one()
+        payroll_time_model = self.env['hr.payroll.overtime.hours.list']
+        overtime_hours = payroll_time_model.search([
+            ('employee_id', '=', self.id),
+            ('date', '>=', date_from),
+            ('date', '<=', date_to),
+        ])
