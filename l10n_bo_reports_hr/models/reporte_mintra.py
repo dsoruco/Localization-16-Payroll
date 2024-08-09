@@ -90,16 +90,25 @@ class HrPayrollMintraWizard(models.TransientModel):
 
     def action_generate_mintra(self):
         data = self.generate_data()
-        url = f"{self.env.user.company_id.url_report_service}/api/v1/mintra"
+        url = f"{self.env.user.company_id.url_report_service}/process"
         headers = {"Content-Type": "application/json"}
         response = requests.post(url, headers=headers, data=data)
         if response.status_code == 200:
-            # Return the file
+            json_response = response.json()
+            base64_doc = json_response['data']['document']
+            attachment = self.env['ir.attachment'].create({
+                'name': f"Reporte Mintra {self.month}/{self.year}",
+                'type': 'binary',
+                'datas': base64_doc,
+                'store_fname': f"Reporte Mintra {self.month}/{self.year}.csv",
+                'res_model': 'hr.payroll.mintra.wizard',
+                'res_id': self.id,
+            })
+            # Return the attachment to download it
             return {
-                "name": "Reporte Mintra",
-                "type": "ir.actions.act_url",
-                "url": f"{url}/{self.year}/{self.month}",
-                "target": "new",
+                'type': 'ir.actions.act_url',
+                'url': f'/web/content/{attachment.id}?download=true',
+                'target': 'self',
             }
         else:
             raise UserError(_("Error al generar el reporte mintra"))
@@ -116,31 +125,40 @@ class HrPayrollMintraWizard(models.TransientModel):
             "report": "mintra",
             "data": employee_data
         })
-        _logger.info(data)
-        return json.dumps({"data": data})
+        # url = ""
+        # headers = {"Content-Type": "application/json"}
+        # response = requests.post(url, headers=headers, data=data)
+        # if response.status_code == 200:
+        #     return response.content
+        # else:
+        #     raise UserError(_("Error al generar el reporte mintra"))
+        return data
 
     def get_employee_ids(self):
         return self.env["hr.employee"].search([("active", "=", True)])
+
+    def _bool_to_number(self, value):
+        return 1 if value else 0
 
     def employee_mintra_data(self, employee, position=0):
         employee_data = {
             "code": position,
             "personal_number": employee.id,
-            "document_type": employee.address_id.l10n_bo_document_type,
-            "document_number": employee.address_id.vat,
-            "expedition_city": employee.address_id.l10n_bo_document_city_id.name,
+            "document_type": employee.address_id.l10n_bo_document_type or "ci",
+            "document_number": employee.address_id.vat or "0",
+            "expedition_city": employee.address_id.l10n_bo_document_city_id.name or "",
             "date_of_birth": (
                 employee.birthday.strftime("%d/%m/%Y") if employee.birthday else ""
-            ),
-            "last_name": employee.lastname,
-            "mother_last_name": employee.lastname2,
-            "first_name": f"{employee.firstname} {employee.firstname2}".strip(),
-            "nationality": employee.country_id.name,
-            "gender": employee.gender,
-            "retired": employee.is_retired,
-            "contributes_to_afp": employee.afp_id.name if employee.afp_id else "",
-            "disabled": employee.has_disability,
-            "disability_tutor": employee.disability_tutor,
+            ) or "",
+            "last_name": employee.lastname or "",
+            "mother_last_name": employee.lastname2 or "",
+            "first_name": f"{employee.firstname} {employee.firstname2}".strip() or "",
+            "nationality": employee.country_id.name or "",
+            "gender": employee.gender or "",
+            "retired": self._bool_to_number(employee.is_retired),
+            "contributes_to_afp": self._bool_to_number(employee.afp_code),
+            "disabled": self._bool_to_number(employee.has_disability),
+            "disability_tutor": self._bool_to_number(employee.disability_tutor),
             "date_of_entry": (
                 employee.date_hired.strftime("%d/%m/%Y") if employee.date_hired else ""
             ),
@@ -149,35 +167,36 @@ class HrPayrollMintraWizard(models.TransientModel):
                 if employee.contract_id.date_end
                 else ""
             ),
-            "reason_for_exit": employee.contract_id.notes,
-            "health_box": employee.health_box_id.name,
-            "afp_contributing": employee.afp_code,
-            "membership_number": employee.afp_nua_cua,
-            "branch_number": employee.company_id.id,
+            "reason_for_exit": employee.contract_id.notes or "",
+            "health_box": employee.health_box_id.id or 0,
+            "afp_contributing": self._bool_to_number(employee.afp_code is not False),
+            "membership_number": int(employee.afp_nua_cua) or 0,
+            "branch_number": employee.company_id.id or 0,
             "laboral_clasication": employee.laboral_clasication or "",
-            "job_name": employee.job_id.name,
-            "contract_type": employee.contract_id.contract_type_id.name,
-            "contract_type_format": "ESCRITO",
-            "payed_days": "30",
+            "job_name": employee.job_id.name if employee.job_id else "",
+            "contract_type": employee.contract_id.contract_type_id.id if employee.contract_id.contract_type_id else 0,
+            "contract_type_format": 1,
+            "payed_days": 30,
             "payed_hours": employee.contract_id.structure_type_id.default_resource_calendar_id.full_time_required_hours,
             "salary": employee.contract_id.wage,
             "antiquity_bonus": 0,
-            "extra_hours_total_time": 0,  # Preguntar como calcular las horas extras
-            "extra_hours_total_amount": 0,  # Preguntar como calcular las horas extras
-            "extra_hours_night_time": 0,  # Preguntar como calcular las horas extras
-            "extra_hours_night_amount": 0,  # Preguntar como calcular las horas extras
-            "extra_hours_dominical_time": 0,  # Preguntar como calcular las horas extras
-            "extra_hours_dominical_amount": 0,  # Preguntar como calcular las horas extras
-            "worked_sunday_total": 0,  # Preguntar como calcular los domingos trabajados
-            "worked_sunday_amount": 0,  # Preguntar como calcular los domingos trabajados
-            "worked_sundsay_salary": 0,  # Preguntar como calcular los domingos trabajados
-            "productive_bonus": 0,  # Preguntar como calcular el bono productivo
-            "frontier_bonus": 0,  # Preguntar como calcular el bono fronterizo
-            "other_bonuses": 0,  # Preguntar como calcular otros bonos
-            "tax_discount": 0,  # Preguntar como calcular los descuentos RC-IVA
-            "health_box_discount": 0,  # Preguntar como calcular los descuentos de la caja de salud
-            "afp_discount": 0,  # Preguntar como calcular los descuentos de la AFP
-            "other_discounts": 0,  # Preguntar como calcular otros descuentos
+            "extra_hours_total_time": 0,
+            "extra_hours_total_amount": 0,
+            "extra_hours_night_time": 0,
+            "extra_hours_night_amount": 0,
+            "extra_hours_dominical_time": 0,
+            "extra_hours_dominical_amount": 0,
+            "total_dominical": 0,
+            "worked_sunday_total": 0,
+            "worked_sunday_amount": 0,
+            "worked_sundsay_salary": 0,
+            "productive_bonus": 0,
+            "frontier_bonus": 0,
+            "other_bonuses": 0,
+            "tax_discount": 0,
+            "health_box_discount": 0,
+            "afp_discount": 0,
+            "other_discounts": 0,
         }
         return employee_data
 
