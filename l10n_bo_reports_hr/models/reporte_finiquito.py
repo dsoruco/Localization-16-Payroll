@@ -61,11 +61,7 @@ class HrPayrollFiniquito(models.Model):
             "contract_wage": employee.employee_id.contract_id.contract_wage,
             "marital": estado_civil[employee.employee_id.marital],
             "job_title": employee.employee_id.job_title,
-            "passport_id": (
-                employee.employee_id.passport_id
-                if employee.employee_id.passport_id
-                else ""
-            ),
+            "passport_id": "",
             "date_hire": employee.date_hire.strftime("%d/%m/%Y"),
             "date_end": employee.date_end.strftime("%d/%m/%Y"),
             "months": {
@@ -137,6 +133,10 @@ class HrPayrollFiniquito(models.Model):
             "gestion_amount": 0,
             "finiquito": round(employee.finiquito, 2),
         }
+        if employee.employee_id.identification_documents:
+            for document in employee.employee_id.identification_documents:
+                if document.type_identification_document_id.code == "01":
+                    data["passport_id"] = document.document_number
 
         for i in range(1, 4):
             month_data = {
