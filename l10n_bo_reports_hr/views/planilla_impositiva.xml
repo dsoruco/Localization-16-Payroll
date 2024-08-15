@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_rpi_form_wizard" model="ir.ui.view">
+        <field name="name">Reporte Planilla Impositiva</field>
+        <field name="model">hr.payroll.rpi</field>
+        <field name="arch" type="xml">
+            <form string="Generar Planilla Impositiva">
+                <group>
+                    <field name="doc_type" />
+                    <field name="month" />
+                    <field name="year" />
+                </group>
+                <footer>
+                    <button name="action_generate_report" type="object" string="Generar"
+                        class="oe_highlight" />
+                    <button string="Cancelar" special="cancel" class="oe_link" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
