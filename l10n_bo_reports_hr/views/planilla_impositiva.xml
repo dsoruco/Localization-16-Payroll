@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form string="Generar Planilla Impositiva">
                 <group>
-                    <field name="doc_type" />
+                    <field name="form_type" widget="radio" />
                     <field name="month" />
                     <field name="year" />
                 </group>
