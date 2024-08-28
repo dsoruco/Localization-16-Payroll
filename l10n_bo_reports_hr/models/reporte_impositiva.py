@@ -42,36 +42,61 @@ class HrPayrollRpi(models.Model):
             ):
                 data.append(pay)
         return data
+    
+    def get_salary(self):
+        basic_salary = self.env["hr.rule.parameter.value"].search(
+            [("code", "=", "SMN")]
+        )
+        for record in basic_salary:
+            if record.date_from.year == int(self.year):
+                basic_salary = int(record.parameter_value)
+        return basic_salary
 
     def get_rpi_data(self, index, employee):
+        basic_salary = self.get_salary()
         data = {
             "nro": index,
             "year": self.year,
             "month": self.month,
-            "tax_code":"",
-            "name":"",
-            "last_name1":"",
-            "last_name2":"",
-            "document_value":"",
-            "document_type":"",
-            "employee_status":"",
-            "contract_wage":employee.contract_id.contract_wage,
-            "tax_free":"",
-            "tax_base":"",
-            "tax_iva":"",
-            "tax_2smn":"",
-            "net_tax":"",
-            "f110":"",
-            "tax_to_pay":"",
-            "dependent_balance":"",
-            "last_dependent_balance":"20",
-            "last_ufv_dependent_balance":"",
-            "updated_dependent_balance":"",
-            "balance_used":"",
-            "withheld_tax":"",
-            "updated_balance_credit":""
-            
+            "tax_code": "",
+            "name": (
+                f"{employee.employee_id.firstname} {employee.employee_id.firstname2}"
+                if employee.employee_id.firstname2
+                else employee.employee_id.firstname
+            ),
+            "last_name1": (
+                employee.employee_id.lastname if employee.employee_id.lastname else ""
+            ),
+            "last_name2": (
+                employee.employee_id.lastname2 if employee.employee_id.lastname2 else ""
+            ),
+            "document_value": "",
+            "document_type": "",
+            "employee_status": employee.contract_id.active,
+            "contract_wage": employee.contract_id.contract_wage,
+            "tax_free": "",
+            "tax_base": "",
+            "tax_iva": "",
+            "tax_2smn": "",
+            "net_tax": "",
+            "f110": "",
+            "tax_to_pay": "",
+            "dependent_balance": "",
+            "last_dependent_balance": "20",
+            "last_ufv_dependent_balance": "",
+            "updated_dependent_balance": "",
+            "balance_used": "",
+            "withheld_tax": "",
+            "updated_balance_credit": "",
         }
+        if employee.employee_id.identification_documents:
+            for document in employee.employee_id.identification_documents:
+                if document.type_identification_document_id.code == "01":
+                    data["document_value"] = document.document_number
+                    data["document_type"] = "CI"
+            for document in employee.employee_id.identification_documents:
+                if document.type_identification_document_id.code == "03":
+                    data["tax_code"] = document.document_number
         return data
 
     def generate_data(self):
@@ -83,7 +108,11 @@ class HrPayrollRpi(models.Model):
             employee_data.append(self.get_rpi_data(index, employee))
             index += 1
         return json.dumps(
-            {"report": f'rpi_{self.form_type}', "extension": "csv", "data": employee_data}
+            {
+                "report": f"rpi_{self.form_type}",
+                "extension": "csv",
+                "data": employee_data,
+            }
         )
 
     def action_generate_report(self):
