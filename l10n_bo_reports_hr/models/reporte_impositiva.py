@@ -42,7 +42,7 @@ class HrPayrollRpi(models.Model):
             ):
                 data.append(pay)
         return data
-    
+
     def get_salary(self):
         basic_salary = self.env["hr.rule.parameter.value"].search(
             [("code", "=", "SMN")]
@@ -54,6 +54,7 @@ class HrPayrollRpi(models.Model):
 
     def get_rpi_data(self, index, employee):
         basic_salary = self.get_salary()
+        basic_tax = basic_salary / 13
         data = {
             "nro": index,
             "year": self.year,
@@ -74,20 +75,29 @@ class HrPayrollRpi(models.Model):
             "document_type": "",
             "employee_status": employee.contract_id.active,
             "contract_wage": employee.contract_id.contract_wage,
-            "tax_free": "",
-            "tax_base": "",
-            "tax_iva": "",
-            "tax_2smn": "",
-            "net_tax": "",
-            "f110": "",
-            "tax_to_pay": "",
-            "dependent_balance": "",
+            "salary_afp": round(
+                employee.contract_id.contract_wage
+                - (employee.contract_id.contract_wage / 12.71),
+                2,
+            ),
+            "tax_base": (
+                basic_salary * 2
+                if employee.contract_id.contract_wage > basic_salary * 2
+                else employee.contract_id.contract_wage
+            ),
+            "taxable_amount": "13",
+            "rc_iva": "14",
+            "tax_2smn": "15",
+            "net_tax": "16",
+            "f110": "17",
+            "tax_to_pay": "18",
+            "dependent_balance": "19",
             "last_dependent_balance": "20",
-            "last_ufv_dependent_balance": "",
-            "updated_dependent_balance": "",
-            "balance_used": "",
-            "withheld_tax": "",
-            "updated_balance_credit": "",
+            "last_ufv_dependent_balance": "21",
+            "updated_dependent_balance": "22",
+            "balance_used": "23",
+            "withheld_tax": "24",
+            "updated_balance_credit": "25",
         }
         if employee.employee_id.identification_documents:
             for document in employee.employee_id.identification_documents:
@@ -97,6 +107,17 @@ class HrPayrollRpi(models.Model):
             for document in employee.employee_id.identification_documents:
                 if document.type_identification_document_id.code == "03":
                     data["tax_code"] = document.document_number
+        if employee.contract_id.contract_wage > basic_salary * 2:
+            data["taxable_amount"] = (
+                employee.contract_id.contract_wage - basic_salary * 2
+            )
+        data["rc_iva"] = round(data["taxable_amount"] / 13, 2)
+        data["tax_2smn"] = round(
+            (basic_tax * 2 if data["rc_iva"] < basic_tax * 2 else data["rc_iva"]), 2
+        )
+        data["net_tax"]= round(data["rc_iva"] - basic_tax*2,2) if data["rc_iva"] > basic_tax*2 else 0
+        #TODO: HACER DEL PUNTO 17 EN ADELANTE
+        
         return data
 
     def generate_data(self):
