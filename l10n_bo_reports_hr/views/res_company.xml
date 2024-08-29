@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//page[@name='general_info']" position="after">
                 <page string="Servicio de reportes">
-                    <group string="Configuración de Kardex">
+                    <group string="Configuración">
                         <field name="url_report_service" />
                     </group>
                 </page>

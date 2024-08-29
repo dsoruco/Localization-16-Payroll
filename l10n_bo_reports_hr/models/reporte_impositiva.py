@@ -89,15 +89,15 @@ class HrPayrollRpi(models.Model):
             "rc_iva": "14",
             "tax_2smn": "15",
             "net_tax": "16",
-            "f110": "17",
-            "tax_to_pay": "18",
+            "form_110": 0,
+            "form_110_payment": "18",
             "dependent_balance": "19",
-            "last_dependent_balance": "20",
-            "last_ufv_dependent_balance": "21",
-            "updated_dependent_balance": "22",
-            "balance_used": "23",
-            "withheld_tax": "24",
-            "updated_balance_credit": "25",
+            "last_dependent_balance": 0,
+            "last_ufv_dependent_balance": 0,
+            "updated_dependent_balance": 0,
+            "balance_used": 0,
+            "withheld_tax": 0,
+            "updated_balance_credit": 0,
         }
         if employee.employee_id.identification_documents:
             for document in employee.employee_id.identification_documents:
@@ -115,9 +115,28 @@ class HrPayrollRpi(models.Model):
         data["tax_2smn"] = round(
             (basic_tax * 2 if data["rc_iva"] < basic_tax * 2 else data["rc_iva"]), 2
         )
-        data["net_tax"]= round(data["rc_iva"] - basic_tax*2,2) if data["rc_iva"] > basic_tax*2 else 0
-        #TODO: HACER DEL PUNTO 17 EN ADELANTE
-        
+        data["net_tax"] = (
+            round(data["rc_iva"] - basic_tax * 2, 2)
+            if data["rc_iva"] > basic_tax * 2
+            else 0
+        )
+        data["form_110_payment"] = round(
+            (
+                data["net_tax"] - data["form_110"]
+                if data["net_tax"] > data["form_110"]
+                else 0
+            ),
+            2,
+        )
+        data["dependent_balance"] = round(
+            (
+                data["form_110"] - data["net_tax"]
+                if data["form_110"] > data["net_tax"]
+                else 0
+            ),
+            2,
+        )
+        # TODO: HACER DEL PUNTO 26 EN ADELANTE
         return data
 
     def generate_data(self):
