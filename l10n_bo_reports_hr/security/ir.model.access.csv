@@ -3,3 +3,4 @@ access_l10n_bo_reports_hr_l10n_bo_reports_hr,l10n_bo_reports_hr.l10n_bo_reports_
 access_l10n_bo_mintra_report, Report mintra permissions,l10n_bo_reports_hr.model_hr_payroll_mintra_wizard,base.group_user,1,1,1,1
 access_l10n_bo_sso_report, Report sso permissions,l10n_bo_reports_hr.model_hr_payroll_reporte_sso,base.group_user,1,1,1,1
 access_l10n_bo_rpi_report, Report rpi permissions,l10n_bo_reports_hr.model_hr_payroll_rpi,base.group_user,1,1,1,1
+access_l10n_bo_aguinaldo_report, Report aguinaldo permissions,l10n_bo_reports_hr.model_hr_payroll_aguinaldo_wizard,base.group_user,1,1,1,1

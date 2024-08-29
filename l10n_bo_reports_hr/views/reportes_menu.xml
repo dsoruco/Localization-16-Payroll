@@ -20,8 +20,16 @@
         <field name="view_id" ref="view_rpi_form_wizard" />
         <field name="target">new</field>
     </record>
+    <record id="aguinaldo_action_window" model="ir.actions.act_window">
+        <field name="name">Reporte Aguinaldo</field>
+        <field name="res_model">hr.payroll.aguinaldo.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_reportes_aguinaldo_form" />
+        <field name="target">new</field>
+    </record>
 
     <menuitem id="menu_mintra" name="Reporte Mintra" parent="hr.hr_menu_hr_reports" sequence="10" action="mintra_action_window" groups="hr.group_hr_user" />
     <menuitem id="menu_sso" name="Reporte Seguro Social" parent="hr.hr_menu_hr_reports" sequence="11" action="sso_action_window" groups="hr.group_hr_user" />
     <menuitem id="menu_rpi" name="Reporte Planilla Impositiva" parent="hr.hr_menu_hr_reports" sequence="12" action="rpi_action_window" groups="hr.group_hr_user" />
+    <menuitem id="menu_aguinaldo" name="Reporte Aguinaldo" parent="hr.hr_menu_hr_reports" sequence="13" action="aguinaldo_action_window" groups="hr.group_hr_user" />
 </odoo>

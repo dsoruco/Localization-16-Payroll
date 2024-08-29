@@ -5,7 +5,7 @@
     'author': 'Datec LTDA - AMS',
     'website': "https://datec.com.bo",
     'category': 'Línea base Bolivia/Human Resources/Payroll',
-    'version': '1.2',
+    'version': '1.3',
     'depends': ['base','hr','l10n_bo_hr','l10n_bo_hr_holidays','l10n_bo_hr_payroll'],
     'data': [
         'security/ir.model.access.csv',
@@ -14,6 +14,7 @@
         'views/sso.xml',
         'views/reportes.xml',
         'views/planilla_impositiva.xml',
+        'views/reportes_aguinaldo.xml',
         'views/reportes_menu.xml',
     ],
     'images':['static/description/icon.svg'],
