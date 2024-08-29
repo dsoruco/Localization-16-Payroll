@@ -147,7 +147,7 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
         })
 
     def get_employee_ids(self):
-        return self.env["hr.employee"].search([("active", "=", True)])
+        return self.env["hr.employee"].search([])
 
     def _bool_to_number(self, value):
         return 1 if value else 0
@@ -192,8 +192,25 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
             "total_ganado_despues_duodecimas": "",  # Requiere cálculo o dato adicional
         }
 
-        # Aquí se agrega el log para ver el resultado
+        # Aquí se agrega el log para ver el resultado de cada empleado
         _logger.info("Datos generados para el empleado %s: %s",
-                     employee.name, json.dumps(data, indent=4, ensure_ascii=False))
+                    employee.name, json.dumps(data, indent=4, ensure_ascii=False))
 
         return data
+
+
+def generate_data(self):
+    employee_ids = self.get_employee_ids()
+    employee_data = []
+    for index, employee in enumerate(employee_ids, start=1):
+        employee_data.append(
+            self.employee_aguinaldo_data(employee, position=index))
+
+    # Log para ver cuántos empleados se procesaron
+    _logger.info("Se generaron datos para %d empleados", len(employee_data))
+
+    return json.dumps({
+        "extension": 'csv',
+        "report": "aguinaldo",
+        "data": employee_data
+    })
