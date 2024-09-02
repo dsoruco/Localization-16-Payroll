@@ -52,13 +52,33 @@ class HrPayrollRpi(models.Model):
                 basic_salary = int(record.parameter_value)
         return basic_salary
 
+    def get_form608_data(self):
+        employee_ids = self.get_employee_ids()
+        basic_salary = self.get_salary()
+        data = {
+            "contract_wage":0,
+            "tax_free_wage":0,
+        }
+        # Datos extraibles
+        for e in employee_ids:
+            data["contract_wage"] += float(e.contract_id.contract_wage)
+            data["tax_free_wage"] += basic_salary * 2
+
+        # Datos calculables
+        data["tax_payable"] = data["contract_wage"] - data["tax_free_wage"] if data["contract_wage"] > data["tax_free_wage"] else 0
+        data["rc_iva"] = data["tax_payable"] / 13 if data["tax_payable"] > 0 else 0
+        data["rc_iva_2smn"] = data["tax_free_wage"] / 13
+        data["net_rc_iva"] = data["rc_iva"] - data["rc_iva_2smn"] if data["rc_iva"] > data["rc_iva_2smn"] else 0
+
+        return data
+
     def get_rpi_data(self, index, employee):
         basic_salary = self.get_salary()
         basic_tax = basic_salary / 13
         data = {
             "nro": index,
-            "year": self.year,
-            "month": self.month,
+            "year": int(self.year),
+            "month": int(self.month),
             "tax_code": "",
             "name": (
                 f"{employee.employee_id.firstname} {employee.employee_id.firstname2}"
@@ -136,7 +156,7 @@ class HrPayrollRpi(models.Model):
             ),
             2,
         )
-        # TODO: HACER DEL PUNTO 26 EN ADELANTE
+
         return data
 
     def generate_data(self):
@@ -144,9 +164,13 @@ class HrPayrollRpi(models.Model):
         index = 1
         employee_data = []
 
-        for employee in employee_ids:
-            employee_data.append(self.get_rpi_data(index, employee))
-            index += 1
+        if self.form_type == "planilla":
+            for employee in employee_ids:
+                employee_data.append(self.get_rpi_data(index, employee))
+                index += 1
+        elif self.form_type == "form608":
+            employee_data = self.get_form608_data()
+
         return json.dumps(
             {
                 "report": f"rpi_{self.form_type}",
