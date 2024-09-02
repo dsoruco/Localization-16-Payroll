@@ -37,7 +37,7 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
 
     def action_generate_aguinaldo(self):
         data = self.generate_data()
-        url = f"{self.env.user.company_id.url_report_service}/process"
+        url = f"{self.env.user.company_id.url_report_service}"
         headers = {"Content-Type": "application/json"}
         response = requests.post(url, headers=headers, data=data)
 
