@@ -29,14 +29,8 @@ class HrEmployee(models.Model):
             ("3", "Ocupaciones de técnicos y profesionales de apoyo."),
             ("4", "Empleados de oficina."),
             ("5", "Trabajadores de los servicios y vendedores del comercio."),
-            (
-                "6",
-                "Productores y trabajadores en la agricultura, pecuaria, agropecuaria y pesca.",
-            ),
-            (
-                "7",
-                "Trabajadores de la industria extractiva, construcción, industria manufacturera y otros oficios.",
-            ),
+            ("6", "Productores y trabajadores en la agricultura, pecuaria, agropecuaria y pesca."),
+            ("7", "Trabajadores de la industria extractiva, construcción, industria manufacturera y otros oficios."),
             ("8", "Operadores de instalaciones y maquinarias."),
             ("9", "Trabajadores no calificados."),
             ("10", "Fuerzas armadas."),
@@ -56,8 +50,7 @@ class HrEmployee(models.Model):
             ('date', '>=', date_from),
             ('date', '<=', date_to),
         ])
-        # Assuming you want to return something, otherwise, this function needs a clearer purpose
-        return overtime_hours  # Adjust based on actual requirements
+        return overtime_hours
 
 
 class HrPayrollAguinaldoWizard(models.TransientModel):
@@ -65,28 +58,16 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
 
     name = fields.Char("Nombre", default="Reporte aguinaldo")
     doc_type = fields.Selection(
-        [
-            ("xlsx", "Excel"),
-            ("csv", "CSV"),
-        ]
+        [("xlsx", "Excel"), ("csv", "CSV")]
     )
     month = fields.Selection(
         [
-            ("01", "Enero"),
-            ("02", "Febrero"),
-            ("03", "Marzo"),
-            ("04", "Abril"),
-            ("05", "Mayo"),
-            ("06", "Junio"),
-            ("07", "Julio"),
-            ("08", "Agosto"),
-            ("09", "Septiembre"),
-            ("10", "Octubre"),
-            ("11", "Noviembre"),
-            ("12", "Diciembre"),
+            ("01", "Enero"), ("02", "Febrero"), ("03", "Marzo"),
+            ("04", "Abril"), ("05", "Mayo"), ("06", "Junio"),
+            ("07", "Julio"), ("08", "Agosto"), ("09", "Septiembre"),
+            ("10", "Octubre"), ("11", "Noviembre"), ("12", "Diciembre"),
         ],
-        string="Mes",
-        default="01",
+        string="Mes", default="01"
     )
     year = fields.Char("Año", default=lambda self: str(
         fields.Date.today().year))
@@ -140,6 +121,8 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
         for index, employee in enumerate(employee_ids, start=1):
             employee_data.append(
                 self.employee_aguinaldo_data(employee, position=index))
+        _logger.info("Se generaron datos para %d empleados",
+                     len(employee_data))
         return json.dumps({
             "extension": 'csv',
             "report": "aguinaldo",
@@ -153,64 +136,53 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
         return 1 if value else 0
 
     def employee_aguinaldo_data(self, employee, position=0):
+        def calcular_promedio_concepto(concept_code):
+            payslip_lines = self.env['hr.payslip.line'].search([
+                ('employee_id', '=', employee.id),
+                ('code', '=', concept_code),
+                ('slip_id.date_from', '>=', f'{self.year}-09-01'),
+                ('slip_id.date_to', '<=', f'{self.year}-11-30')
+            ])
+            total = sum(line.total for line in payslip_lines)
+            count = len(payslip_lines)
+            return total / count if count > 0 else 0.0
+
         data = {
             "cod_sucursal": position,
             "nro": employee.id,
-            "tipo_documento": "CI",  # Si necesitas asignar un tipo de documento específico
+            "tipo_documento": "CI" if employee.identification_id else "Pasaporte",
             "numero_documento": employee.identification_id or employee.passport_id or "",
-            "lugar_expedicion": employee.country_of_birth.id if employee.country_of_birth else "",
-            "fecha_nacimiento": employee.birthday,
-            "apellido_paterno": employee.lastname,
-            "apellido_materno": employee.lastname2,
-            "nombres": employee.firstname,
-            "pais_nacionalidad": employee.company_country_id.id if employee.company_country_id else employee.country_id.id if employee.country_id else "",
-            "sexo": employee.gender,
-            "jubilado": employee.afp_retired,
-            "aporta_afp": employee.afp_id.id if employee.afp_id else "",
-            "persona_con_discapacidad": employee.has_disability,
-            "tutor_persona_discapacidad": employee.disability_tutor,
-            "fecha_ingreso": employee.date_hired,
-            "fecha_retiro": employee.departure_date,
-            "motivo_retiro": employee.departure_reason_id.id if employee.departure_reason_id else "",
-            "caja_salud": employee.health_box_id.id if employee.health_box_id else "",
-            "afp_aporta": employee.afp_id.id if employee.afp_id else "",
-            "nua_cua": employee.afp_nua_cua or "",
-            "sucursal_ubicacion_adicional": employee.staffing_subdivision_id.id if employee.staffing_subdivision_id else "",
+            "lugar_expedicion": employee.country_of_birth.code if employee.country_of_birth else "",
+            "fecha_nacimiento": employee.birthday.strftime('%d/%m/%Y') if employee.birthday else "",
+            "apellido_paterno": employee.lastname or "",
+            "apellido_materno": employee.lastname2 or "",
+            # Campo adicional para apellido de casada
+            "apellido_casada": employee.married_name or "",
+            "nombres": employee.firstname or "",
+            "otro_nombre": employee.firstname2 or "",  # Campo adicional para otro nombre
+            "pais_nacionalidad": employee.company_country_id.name if employee.company_country_id else employee.country_id.name if employee.country_id else "",
+            "sexo": 'M' if employee.gender == 'male' else 'F' if employee.gender == 'female' else "",
+            "jubilado": 1 if employee.afp_retired else 0,
+            "afp": employee.afp_id.afp_code if employee.afp_id else "",
+            "numero_afiliado": employee.afp_nua_cua or "",
             "clasificacion_laboral": employee.laboral_clasication or "",
-            "cargo": employee.job_id.id if employee.job_id else "",
-            "modalidad_contrato": employee.contract_id.id if employee.contract_id else "",
-            "promedio_haber_basico": "",  # Requiere cálculo o dato adicional
-            "promedio_bono_antiguedad": "",  # Requiere cálculo o dato adicional
-            "promedio_bono_produccion": "",  # Requiere cálculo o dato adicional
-            "promedio_subsidio_frontera": employee.frontier_subsidy or "",
-            # Requiere cálculo o dato adicional
-            "promedio_trabajo_extraordinario_nocturno": "",
-            "promedio_pago_dominical_trabajado": "",  # Requiere cálculo o dato adicional
-            "promedio_otros_bonos": "",  # Requiere cálculo o dato adicional
-            "promedio_total_ganado": "",  # Requiere cálculo o dato adicional
+            "cargo": employee.job_id.name if employee.job_id else "",
+            "fecha_ingreso": employee.date_hired.strftime('%d/%m/%Y') if employee.date_hired else "",
+            "modalidad_contrato": employee.contract_id.contract_type or "",
+            "fecha_retiro": employee.departure_date.strftime('%d/%m/%Y') if employee.departure_date else "",
+            "promedio_haber_basico": calcular_promedio_concepto('BASIC'),
+            "promedio_bono_antiguedad": calcular_promedio_concepto('BONO_ANTIG'),
+            "promedio_bono_produccion": calcular_promedio_concepto('BONO_PROD'),
+            "promedio_subsidio_frontera": calcular_promedio_concepto('SUB_FRONTERA'),
+            "promedio_trabajo_extraordinario_nocturno": calcular_promedio_concepto('EXTRA_NOCTURNO'),
+            "promedio_pago_dominical_trabajado": calcular_promedio_concepto('PAGO_DOMINICAL'),
+            "promedio_otros_bonos": calcular_promedio_concepto('OTROS_BONOS'),
+            "promedio_total_ganado": calcular_promedio_concepto('TOTAL_GANADO'),
             "meses_trabajados": employee.years_of_service or "",
-            "total_ganado_despues_duodecimas": "",  # Requiere cálculo o dato adicional
+            "total_ganado_despues_duodecimas": "",  # Requiere cálculo adicional
+            "ubicacion": employee.work_location_id.name if employee.work_location_id else "",
         }
 
-        # Aquí se agrega el log para ver el resultado de cada empleado
         _logger.info("Datos generados para el empleado %s: %s",
-                    employee.name, json.dumps(data, indent=4, ensure_ascii=False))
-
+                     employee.name, json.dumps(data, indent=4, ensure_ascii=False))
         return data
-
-
-def generate_data(self):
-    employee_ids = self.get_employee_ids()
-    employee_data = []
-    for index, employee in enumerate(employee_ids, start=1):
-        employee_data.append(
-            self.employee_aguinaldo_data(employee, position=index))
-
-    # Log para ver cuántos empleados se procesaron
-    _logger.info("Se generaron datos para %d empleados", len(employee_data))
-
-    return json.dumps({
-        "extension": 'csv',
-        "report": "aguinaldo",
-        "data": employee_data
-    })
