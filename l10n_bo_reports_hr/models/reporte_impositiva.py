@@ -56,8 +56,8 @@ class HrPayrollRpi(models.Model):
         employee_ids = self.get_employee_ids()
         basic_salary = self.get_salary()
         data = {
-            "contract_wage":0,
-            "tax_free_wage":0,
+            "contract_wage": 0,
+            "tax_free_wage": 0,
         }
         # Datos extraibles
         for e in employee_ids:
@@ -65,10 +65,32 @@ class HrPayrollRpi(models.Model):
             data["tax_free_wage"] += basic_salary * 2
 
         # Datos calculables
-        data["tax_payable"] = data["contract_wage"] - data["tax_free_wage"] if data["contract_wage"] > data["tax_free_wage"] else 0
+        data["tax_payable"] = (
+            data["contract_wage"] - data["tax_free_wage"]
+            if data["contract_wage"] > data["tax_free_wage"]
+            else 0
+        )
         data["rc_iva"] = data["tax_payable"] / 13 if data["tax_payable"] > 0 else 0
         data["rc_iva_2smn"] = data["tax_free_wage"] / 13
-        data["net_rc_iva"] = data["rc_iva"] - data["rc_iva_2smn"] if data["rc_iva"] > data["rc_iva_2smn"] else 0
+        data["net_rc_iva"] = (
+            data["rc_iva"] - data["rc_iva_2smn"]
+            if data["rc_iva"] > data["rc_iva_2smn"]
+            else 0
+        )
+        # 13% de las facturas presentadas por los trabajadores
+        data["total_form110"] = 0
+        data["treasury_balance"] = 0
+        data["dependent_balance"] = 0
+        data["last_dependent_balance"] = 0
+        data["maintenance_dependant_value"] = 0
+        data["total_dependent_last_balance"] = (
+            data["last_dependent_balance"] + data["maintenance_dependant_value"]
+        )
+        data["balance_used"] = 0
+        data["withheld_tax"] = 0
+        data["dependent_new_balance"] = 0
+        data["total_dependents"] = len(employee_ids)
+        data["total_form110"] = len(employee_ids)
 
         return data
 
