@@ -12,7 +12,8 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
     _name = "hr.payroll.aguinaldo.wizard"
 
     name = fields.Char("Nombre", default="Reporte aguinaldo")
-    doc_type = fields.Selection([("xlsx", "Excel"), ("csv", "CSV")])
+    doc_type = fields.Selection(
+        [("xlsx", "Excel"), ("csv", "CSV")], required=True, default="xlsx")
     month = fields.Selection(
         [
             ("01", "Enero"), ("02", "Febrero"), ("03", "Marzo"),
@@ -20,10 +21,10 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
             ("07", "Julio"), ("08", "Agosto"), ("09", "Septiembre"),
             ("10", "Octubre"), ("11", "Noviembre"), ("12", "Diciembre"),
         ],
-        string="Mes", default="01"
+        string="Mes", default="01", required=True
     )
     year = fields.Char("Año", default=lambda self: str(
-        fields.Date.today().year))
+        fields.Date.today().year), required=True)
 
     @api.onchange("month", "year")
     def _onchange_month_year(self):
@@ -34,12 +35,21 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
     def _onchange_year(self):
         if self.year and not self.year.isdigit():
             raise UserError(_("El año debe ser un número"))
+        if len(self.year) != 4:
+            raise UserError(_("El año debe ser de 4 dígitos"))
 
     def action_generate_aguinaldo(self):
+        # Prepare the data for the report
         data = self.generate_data()
         url = f"{self.env.user.company_id.url_report_service}"
         headers = {"Content-Type": "application/json"}
-        response = requests.post(url, headers=headers, data=data)
+
+        try:
+            response = requests.post(url, headers=headers, data=data)
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            raise UserError(
+                _("Error al conectar con el servicio de reportes: %s") % str(e))
 
         if response.status_code == 200:
             try:
@@ -51,7 +61,7 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
                     raise UserError(
                         _("El documento no se generó correctamente."))
 
-                # Crear un attachment en Odoo
+                # Create an attachment in Odoo
                 file_name = f"Reporte_Aguinaldo_{self.month}_{self.year}.{self.doc_type or 'xlsx'}"
                 attachment = self.env['ir.attachment'].create({
                     'name': file_name,
@@ -62,7 +72,7 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
                     'mimetype': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' if self.doc_type == 'xlsx' else 'text/csv',
                 })
 
-                # Devolver la URL de descarga
+                # Return the download URL
                 return {
                     'type': 'ir.actions.act_url',
                     'url': f'/web/content/{attachment.id}?download=true',
@@ -80,8 +90,10 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
         employee_ids = self.get_employee_ids()
         employee_data = [self.employee_aguinaldo_data(
             employee, position=index) for index, employee in enumerate(employee_ids, start=1)]
+
         _logger.info("Se generaron datos para %d empleados",
                      len(employee_data))
+
         return json.dumps({
             "extension": self.doc_type or 'xlsx',
             "report": "aguinaldo",
@@ -89,6 +101,7 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
         })
 
     def get_employee_ids(self):
+        # Fetch all employees; can be refined with filters as necessary
         return self.env["hr.employee"].search([])
 
     def employee_aguinaldo_data(self, employee, position=0):
@@ -109,9 +122,10 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
             except (ValueError, TypeError):
                 return default
 
+        # Generación de datos para el reporte
         data = {
-            "cod_sucursal": position,
-            "nro": employee.id,
+            "cod_sucursal": employee.id,
+            "nro": position,
             "tipo_documento": "CI" if employee.identification_id else "Pasaporte",
             "numero_documento": employee.identification_id or employee.passport_id or "",
             "lugar_expedicion": employee.country_of_birth.code if employee.country_of_birth else "",
@@ -144,7 +158,7 @@ class HrPayrollAguinaldoWizard(models.TransientModel):
             "promedio_otros_bonos": calcular_promedio_concepto('OTROS_BONOS'),
             "promedio_total_ganado": calcular_promedio_concepto('TOTAL_GANADO'),
             "meses_trabajados": employee.years_of_service or 0,
-            "total_ganado_despues_duodecimas": 0.0,
+            "total_ganado_despues_duodecimas": calcular_promedio_concepto('TOTAL_GANADO') / 12 * employee.years_of_service or 0,
         }
 
         _logger.info("Datos generados para el empleado %s: %s",
