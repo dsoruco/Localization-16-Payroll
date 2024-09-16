@@ -1,6 +1,7 @@
-from odoo import models, fields
+from odoo import _,models, fields
+from ..hooks.fetch import useFetch
 import json
-
+import base64
 
 class HrPayrollRpi(models.Model):
     _name = "hr.payroll.rpi"
@@ -45,15 +46,6 @@ class HrPayrollRpi(models.Model):
                 data.append(pay)
         return data
 
-    def get_salary(self):
-        basic_salary = self.env["hr.rule.parameter.value"].search(
-            [("code", "=", "SMN")]
-        )
-        for record in basic_salary:
-            if record.date_from.year == int(self.year):
-                basic_salary = int(record.parameter_value)
-        return basic_salary
-
     def get_form608_data(self):
         employee_ids = self.get_employee_ids()
         data = {
@@ -72,6 +64,8 @@ class HrPayrollRpi(models.Model):
             "SALDO_UTILIZADO":0,
             "IMP_RET_PAGAR":0,
             "SAL_PROX_MES":0,
+            "TOTAL_DEPEN":len(employee_ids),
+            "TOTAL_FORM110":len(employee_ids),
         }
         # Datos extraibles
         for employee in employee_ids:
@@ -154,5 +148,25 @@ class HrPayrollRpi(models.Model):
 
     def action_generate_report(self):
         data = self.generate_data()
-        self.file_name = f"PLA_NIT_{self.year}_{self.month}"
-        return True
+        resp = useFetch(self.env.company.url_report_service, data)
+        try:
+            self.file_name = f"PLA_{self.env.company.vat}_{self.year}_{self.month}.csv"
+            file = base64.b64decode(resp["data"]["document"])
+            self.report_file = base64.b64encode(file).decode("utf-8")
+            return {
+                "type": "ir.actions.act_url",
+                "url": f"/web/content?model={self._name}&id={self.id}&field=report_file&filename_field=file_name&download=true",
+                "target": "new",
+            }
+        except:
+            notification = {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": _("Advertencia"),
+                    "type": "warning",
+                    "message": "Error al realizar petición, por favor intenta de nuevo!",
+                    "sticky": True,
+                },
+            }
+            return notification
