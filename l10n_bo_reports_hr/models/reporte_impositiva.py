@@ -37,8 +37,10 @@ class HrPayrollRpi(models.Model):
         employees = self.env["hr.payslip"].search([("state", "=", "paid")])
         data = []
         for pay in employees:
-            if pay.date_from.year == int(self.year) and pay.date_from.month == int(
-                self.month
+            if (
+                pay.date_from.year == int(self.year)
+                and pay.date_from.month == int(self.month)
+                and pay.payslip_run_id
             ):
                 data.append(pay)
         return data
@@ -54,49 +56,32 @@ class HrPayrollRpi(models.Model):
 
     def get_form608_data(self):
         employee_ids = self.get_employee_ids()
-        basic_salary = self.get_salary()
         data = {
-            "contract_wage": 0,
-            "tax_free_wage": 0,
+            "GROSS":0,
+            "TWO_SMN":0,
+            "BASE_IMPONIBLE":0,
+            "IMPUESTO":0,
+            "TAX_2_SMN":0,
+            "IMP_NETO_RC_IVA":0,
+            "IVA_FORM_110":0,
+            "SALDO_A_FAVOR_FISCO":0,
+            "SALDO_A_FAVOR_DEPEND":0,
+            "SALDO_A_FAVOR_MES_ANT":0,
+            "CURRENT_UFV":0,
+            "SAL_ANT_ACT":0,
+            "SALDO_UTILIZADO":0,
+            "IMP_RET_PAGAR":0,
+            "SAL_PROX_MES":0,
         }
         # Datos extraibles
-        for e in employee_ids:
-            data["contract_wage"] += float(e.contract_id.contract_wage)
-            data["tax_free_wage"] += basic_salary * 2
-
-        # Datos calculables
-        data["tax_payable"] = (
-            data["contract_wage"] - data["tax_free_wage"]
-            if data["contract_wage"] > data["tax_free_wage"]
-            else 0
-        )
-        data["rc_iva"] = data["tax_payable"] / 13 if data["tax_payable"] > 0 else 0
-        data["rc_iva_2smn"] = data["tax_free_wage"] / 13
-        data["net_rc_iva"] = (
-            data["rc_iva"] - data["rc_iva_2smn"]
-            if data["rc_iva"] > data["rc_iva_2smn"]
-            else 0
-        )
-        # 13% de las facturas presentadas por los trabajadores
-        data["total_form110"] = 0
-        data["treasury_balance"] = 0
-        data["dependent_balance"] = 0
-        data["last_dependent_balance"] = 0
-        data["maintenance_dependant_value"] = 0
-        data["total_dependent_last_balance"] = (
-            data["last_dependent_balance"] + data["maintenance_dependant_value"]
-        )
-        data["balance_used"] = 0
-        data["withheld_tax"] = 0
-        data["dependent_new_balance"] = 0
-        data["total_dependents"] = len(employee_ids)
-        data["total_form110"] = len(employee_ids)
+        for employee in employee_ids:
+            for item in employee.line_ids:
+                if item.code in data.keys():
+                    data[item.code] += item.amount
 
         return data
 
     def get_rpi_data(self, index, employee):
-        basic_salary = self.get_salary()
-        basic_tax = basic_salary / 13
         data = {
             "nro": index,
             "year": int(self.year),
@@ -116,68 +101,34 @@ class HrPayrollRpi(models.Model):
             "document_value": "",
             "document_type": "",
             "employee_status": employee.contract_id.active,
-            "contract_wage": employee.contract_id.contract_wage,
-            "salary_afp": round(
-                employee.contract_id.contract_wage
-                - (employee.contract_id.contract_wage / 12.71),
-                2,
-            ),
-            "tax_base": (
-                basic_salary * 2
-                if employee.contract_id.contract_wage > basic_salary * 2
-                else employee.contract_id.contract_wage
-            ),
-            "taxable_amount": "13",
-            "rc_iva": "14",
-            "tax_2smn": "15",
-            "net_tax": "16",
-            "form_110": 0,
-            "form_110_payment": "18",
-            "dependent_balance": "19",
-            "last_dependent_balance": 0,
-            "last_ufv_dependent_balance": 0,
-            "updated_dependent_balance": 0,
-            "balance_used": 0,
-            "withheld_tax": 0,
-            "updated_balance_credit": 0,
+            "GROSS":0,
+            "NETO_IMPONIBLE":0,
+            "TWO_SMN":0,
+            "BASE_IMPONIBLE":0,
+            "IMPUESTO":0,
+            "TAX_2_SMN":0,
+            "IMP_NETO_RC_IVA":0,
+            "IVA_FORM_110":0,
+            "SALDO_A_FAVOR_FISCO":0,
+            "SALDO_A_FAVOR_DEPEND":0,
+            "SALDO_A_FAVOR_MES_ANT":0,
+            "LAST_UFV":0,
+            "SAL_ANT_ACT":0,
+            "SALDO_UTILIZADO":0,
+            "IMP_RET_PAGAR":0,
+            "SAL_PROX_MES":0,
         }
         if employee.employee_id.identification_documents:
             for document in employee.employee_id.identification_documents:
                 if document.type_identification_document_id.code == "01":
                     data["document_value"] = document.document_number
                     data["document_type"] = "CI"
-            for document in employee.employee_id.identification_documents:
                 if document.type_identification_document_id.code == "03":
                     data["tax_code"] = document.document_number
-        if employee.contract_id.contract_wage > basic_salary * 2:
-            data["taxable_amount"] = (
-                employee.contract_id.contract_wage - basic_salary * 2
-            )
-        data["rc_iva"] = round(data["taxable_amount"] / 13, 2)
-        data["tax_2smn"] = round(
-            (basic_tax * 2 if data["rc_iva"] < basic_tax * 2 else data["rc_iva"]), 2
-        )
-        data["net_tax"] = (
-            round(data["rc_iva"] - basic_tax * 2, 2)
-            if data["rc_iva"] > basic_tax * 2
-            else 0
-        )
-        data["form_110_payment"] = round(
-            (
-                data["net_tax"] - data["form_110"]
-                if data["net_tax"] > data["form_110"]
-                else 0
-            ),
-            2,
-        )
-        data["dependent_balance"] = round(
-            (
-                data["form_110"] - data["net_tax"]
-                if data["form_110"] > data["net_tax"]
-                else 0
-            ),
-            2,
-        )
+
+        for item in employee.line_ids:
+            if item.code in data.keys():
+                data[item.code] = item.amount
 
         return data
 
