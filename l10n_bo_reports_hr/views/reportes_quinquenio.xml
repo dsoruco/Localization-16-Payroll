@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- boton para abrir wizard -->
+    <record id="quinquenio_button_wizard" model="ir.ui.view">
+        <field name="name">quinquenio.button.wizard</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="is_quinquenio" invisible="1" />
+                <button name="action_generate_report" type="object" string="Generar"
+                    class="oe_highlight" 
+                    attrs="{'invisible':[('is_quinquenio', '=', False)]}" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
