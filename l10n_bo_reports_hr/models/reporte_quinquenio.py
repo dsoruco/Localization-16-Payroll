@@ -37,6 +37,8 @@ class HrQuinquenio(models.Model):
     def get_data(self):
         employee = self.employee_id
         data = {
+            "extension": "pdf",
+            "report": "quinquenio",
             "company": employee.company_id.display_name,
             "company_address": employee.address_id.contact_address_complete,
             "employee_name": employee.display_name,
