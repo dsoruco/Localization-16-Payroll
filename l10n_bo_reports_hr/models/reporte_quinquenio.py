@@ -62,7 +62,7 @@ class HrQuinquenio(models.Model):
         for i in self.line_ids:
             data[i.code] = i.total
 
-        return json.dumps(data).encode("utf-8")
+        return json.dumps(data, ensure_ascii=False)
 
     def action_generate_report(self):
         data = self.get_data()
