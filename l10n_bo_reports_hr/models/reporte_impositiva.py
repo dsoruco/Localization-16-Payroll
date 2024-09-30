@@ -80,7 +80,7 @@ class HrPayrollRpi(models.Model):
             "nro": index,
             "year": int(self.year),
             "month": int(self.month),
-            "tax_code": "",
+            "tax_code": "" if not employee.employee_id.afp_nua_cua else str(employee.employee_id.afp_nua_cua),
             "name": (
                 f"{employee.employee_id.firstname} {employee.employee_id.firstname2}"
                 if employee.employee_id.firstname2
@@ -94,7 +94,7 @@ class HrPayrollRpi(models.Model):
             ),
             "document_value": "",
             "document_type": "",
-            "employee_status": employee.contract_id.active,
+            "employee_status": "V" if employee.contract_id.active else "D",
             "GROSS":0,
             "NETO_IMPONIBLE":0,
             "TWO_SMN":0,

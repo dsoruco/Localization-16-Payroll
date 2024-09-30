@@ -53,44 +53,67 @@ class HrDisabilityReport(models.Model):
         data = {
             "extension": self.form_type,
             "report": "incapacidad",
-            "data":employees_data
+            "data": employees_data,
         }
         for e in employees:
             i_data = {
-                "insured_number":e.employee_id.insured_number,
-                "lastname":e.employee_id.lastname,
-                "lastname2":e.employee_id.lastname2,
-                "names":e.employee_id.firstname if not e.employee_id.firstname2 else f"{e.employee_id.firstname} {e.employee_id.firstname2}",
-                "married_name":e.employee_id.married_name if e.employee_id.married_name else "",
-                "birthday":"" if not e.employee_id.birthday else f"{e.employee_id.birthday.day}/{e.employee_id.birthday.month}/{e.employee_id.birthday.year}",
-                "date_end":"" if not e.employee_id.contract_id.date_end else f"{e.employee_id.contract_id.date_end.day}/{e.employee_id.contract_id.date_end.month}/{e.employee_id.contract_id.date_end.year}",
-                "date_start":"" if not e.employee_id.contract_id.date_start else f"{e.employee_id.contract_id.date_start.day}/{e.employee_id.contract_id.date_start.month}/{e.employee_id.contract_id.date_start.year}",
-                "AFP_CM":0,
-                "BC_DIARIA":0,
-                # "":0,#subsidio diario
-                "BMEC_DAYS":0,
-                "BMEC":0,
-                "BM_ACC_LAB_DAY":0,
-                "BM_ACC_LAB":0,
-                "BM_RIESG_EXT_DAY":0,
-                "BM_RIESG_EXT":0,
+                "insured_number": e.employee_id.insured_number,
+                "lastname": e.employee_id.lastname,
+                "lastname2": e.employee_id.lastname2,
+                "names": (
+                    e.employee_id.firstname
+                    if not e.employee_id.firstname2
+                    else f"{e.employee_id.firstname} {e.employee_id.firstname2}"
+                ),
+                "married_name": (
+                    e.employee_id.married_name if e.employee_id.married_name else ""
+                ),
+                "birthday": (
+                    ""
+                    if not e.employee_id.birthday
+                    else f"{e.employee_id.birthday.day}/{e.employee_id.birthday.month}/{e.employee_id.birthday.year}"
+                ),
+                "date_end": (
+                    ""
+                    if not e.employee_id.contract_id.date_end
+                    else f"{e.employee_id.contract_id.date_end.day}/{e.employee_id.contract_id.date_end.month}/{e.employee_id.contract_id.date_end.year}"
+                ),
+                "date_start": (
+                    ""
+                    if not e.employee_id.contract_id.date_start
+                    else f"{e.employee_id.contract_id.date_start.day}/{e.employee_id.contract_id.date_start.month}/{e.employee_id.contract_id.date_start.year}"
+                ),
+                "GROSS": 0,
+                "BC_DIARIA": 0,
+                "SUB_DIARIO": 0,
+                "BMEC_DAYS": 0,
+                "BMEC": 0,
+                "BM_ACC_LAB_DAY": 0,
+                "BM_ACC_LAB": 0,
+                "BM_RIESG_EXT_DAY": 0,
+                "BM_RIESG_EXT": 0,
             }
             for i in e.line_ids:
                 if i.code in i_data.keys():
                     i_data[i.code] = i.total
-                    
+
                 # maternidad prenatal
-                if i.code == "BM_PRENATAL_DAYS":
+                if i.code == "BM_PRENATAL_DAYS" and i.total > 0:
                     i_data[i.code] = i.total
-                elif i.code == "BM_PRENATAL":
+                elif i.code == "BM_PRENATAL" and i.total > 0:
                     i_data[i.code] = i.total
-                #maternidad postnatal
-                elif i.code == "BM_POSTNATAL_DAYS":
+                    i_data["SUB_DIARIO"] = i_data[i.code] * (i_data["GROSS"] / 30)
+                # maternidad postnatal
+                elif i.code == "BM_POSTNATAL_DAYS" and i.total > 0:
                     i_data[i.code] = i.total
-                elif i.code == "BM_POSTNATAL":
+                elif i.code == "BM_POSTNATAL" and i.total > 0:
                     i_data[i.code] = i.total
+                    i_data["SUB_DIARIO"] = i_data[i.code] * (i_data["GROSS"] / 30)
+                elif i.code == "BM_ACC_LAB" and i.total > 0:
+                    i_data[i.code] = i.total
+                    i_data["SUB_DIARIO"] = i_data[i.code] * (i_data["GROSS"] / 30)
             employees_data.append(i_data)
-                    
+
         return json.dumps(data, ensure_ascii=False)
 
     def action_generate_report(self):
