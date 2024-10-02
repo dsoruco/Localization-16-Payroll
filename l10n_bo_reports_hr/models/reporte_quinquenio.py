@@ -2,6 +2,8 @@ from odoo import _, fields, models, api
 from ..hooks.fetch import useFetch
 import base64
 import json
+import datetime
+import calendar
 
 meses = {
     1: "Enero",
@@ -34,31 +36,73 @@ class HrQuinquenio(models.Model):
             else:
                 rec.is_quinquenio = False
 
+    def restar_meses(self, fecha_inicial, meses_a_restar):
+        """Resta un número específico de meses a una fecha dada.
+
+        Args:
+            fecha_inicial: Un objeto datetime.datetime representando la fecha inicial.
+            meses_a_restar: Un entero representando el número de meses a restar.
+
+        Returns:
+            Un nuevo objeto datetime.datetime con los meses restados.
+        """
+
+        dias_a_restar = 0
+        fecha_actual = fecha_inicial
+        for _ in range(meses_a_restar):
+            dias_a_restar += calendar.monthrange(fecha_actual.year, fecha_actual.month)[
+                1
+            ]
+            fecha_actual -= datetime.timedelta(
+                days=1
+            )  # Avanzamos un día para el siguiente mes
+
+        fecha_final = fecha_inicial - datetime.timedelta(days=dias_a_restar)
+        return fecha_final
+
     def get_data(self):
-        employee = self.employee_id
+
         data = {
             "extension": "pdf",
             "report": "quinquenio",
-            "company": employee.company_id.display_name,
-            "company_address": employee.address_id.contact_address_complete,
-            "employee_name": employee.display_name,
-            "employee_age": employee.afp_age,
-            "employee_address": employee.address_home_id.contact_address_complete,
-            "job_title": employee.job_title,
-            "contract_date_start": f"{employee.contract_id.date_start.day} de {meses[employee.contract_id.date_start.month]} {employee.contract_id.date_start.year}",
+            "company": self.employee_id.company_id.display_name,
+            "company_address": self.employee_id.address_id.contact_address_complete,
+            "employee_name": self.employee_id.display_name,
+            "employee_age": self.employee_id.afp_age,
+            "employee_address": self.employee_id.address_home_id.contact_address_complete,
+            "job_title": self.employee_id.job_title,
+            "contract_date_start": f"{self.employee_id.contract_id.date_start.day} de {meses[self.employee_id.contract_id.date_start.month]} {self.employee_id.contract_id.date_start.year}",
             "contract_date_end": (
-                f"{employee.contract_id.date_end.day} de {meses[employee.contract_id.date_end.month]} {employee.contract_id.date_end.year}"
-                if employee.contract_id.date_end
+                f"{self.employee_id.contract_id.date_end.day} de {meses[self.employee_id.contract_id.date_end.month]} {self.employee_id.contract_id.date_end.year}"
+                if self.employee_id.contract_id.date_end
                 else ""
             ),
             "reason_measurement": (
-                employee.contract_id.reason_measurement_id.display_name
-                if employee.contract_id.measurement_staff == "baja"
+                self.employee_id.contract_id.reason_measurement_id.display_name
+                if self.employee_id.contract_id.measurement_staff == "baja"
                 else ""
             ),
-            "years_of_service":employee.years_of_service,
-            
+            "years_of_service": self.employee_id.years_of_service,
+            "details": [],
         }
+        fechas = [
+            self.restar_meses(self.date, 2),
+            self.restar_meses(self.date, 1),
+            self.date,
+        ]
+        for fecha in fechas:
+            planilla = self.employee_id.slip_ids.filtered(
+                lambda p: p.date_from.month == fecha.month
+                and p.date_from.year == fecha.year
+                and p.struct_id.name == "MENSUAL"
+            )
+            if planilla:
+                data["details"].append({
+                    "month":meses[planilla.date_from.month],
+                    "basic_wage":planilla.basic_wage,
+                    "extras": planilla.line_ids.filtered(lambda t: t.code == "EXTRAS").amount
+                })
+
         for i in self.line_ids:
             data[i.code] = i.total
 
