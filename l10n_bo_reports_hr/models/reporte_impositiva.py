@@ -129,9 +129,8 @@ class HrPayrollRpi(models.Model):
     def generate_data(self):
         employee_ids = self.get_employee_ids()
         index = 1
-        employee_data = []
-
         if self.form_type == "planilla":
+            employee_data=[]
             for employee in employee_ids:
                 employee_data.append(self.get_rpi_data(index, employee))
                 index += 1

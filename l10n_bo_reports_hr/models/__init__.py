@@ -8,3 +8,5 @@ from . import reporte_impositiva
 from . import reporte_aguinaldo
 from . import reporte_quinquenio
 from . import reporte_incapacidad
+from . import reporte_fns
+from . import reporte_sip
