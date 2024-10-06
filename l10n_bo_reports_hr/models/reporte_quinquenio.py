@@ -19,7 +19,13 @@ meses = {
     11: "Noviembre",
     12: "Diciembre",
 }
-
+estado_civil = {
+    "single": "Soltero(a)",
+    "married": "Casado(a)",
+    "cohabitant": "Cohabitante legal",
+    "widower": "Viudo(a)",
+    "divorced": "Divorciado(a)",
+}
 
 class HrQuinquenio(models.Model):
     _inherit = "hr.payslip"
@@ -37,16 +43,6 @@ class HrQuinquenio(models.Model):
                 rec.is_quinquenio = False
 
     def restar_meses(self, fecha_inicial, meses_a_restar):
-        """Resta un número específico de meses a una fecha dada.
-
-        Args:
-            fecha_inicial: Un objeto datetime.datetime representando la fecha inicial.
-            meses_a_restar: Un entero representando el número de meses a restar.
-
-        Returns:
-            Un nuevo objeto datetime.datetime con los meses restados.
-        """
-
         dias_a_restar = 0
         fecha_actual = fecha_inicial
         for _ in range(meses_a_restar):
@@ -69,6 +65,13 @@ class HrQuinquenio(models.Model):
             "company_address": self.employee_id.address_id.contact_address_complete,
             "employee_name": self.employee_id.display_name,
             "employee_age": self.employee_id.afp_age,
+            "document_number": self.employee_id.identification_documents.filtered(
+                lambda d: d.type_identification_document_id.code == "01"
+            ).document_number,
+            "document_name": self.employee_id.identification_documents.filtered(
+                lambda d: d.type_identification_document_id.code == "01"
+            ).type_identification_document_id.display_name,
+            "marital":estado_civil[self.employee_id.marital],
             "employee_address": self.employee_id.address_home_id.contact_address_complete,
             "job_title": self.employee_id.job_title,
             "contract_date_start": f"{self.employee_id.contract_id.date_start.day} de {meses[self.employee_id.contract_id.date_start.month]} {self.employee_id.contract_id.date_start.year}",
@@ -86,9 +89,9 @@ class HrQuinquenio(models.Model):
             "details": [],
         }
         fechas = [
+            self.restar_meses(self.date, 3),
             self.restar_meses(self.date, 2),
             self.restar_meses(self.date, 1),
-            self.date,
         ]
         for fecha in fechas:
             planilla = self.employee_id.slip_ids.filtered(
@@ -97,11 +100,33 @@ class HrQuinquenio(models.Model):
                 and p.struct_id.name == "MENSUAL"
             )
             if planilla:
-                data["details"].append({
-                    "month":meses[planilla.date_from.month],
-                    "basic_wage":planilla.basic_wage,
-                    "extras": planilla.line_ids.filtered(lambda t: t.code == "EXTRAS").amount
-                })
+                data["details"].append(
+                    {
+                        "month": meses[planilla.date_from.month],
+                        "BASIC": planilla.line_ids.filtered(
+                            lambda t: t.code == "BASIC"
+                        ).amount,
+                        "BONO_ANT": planilla.line_ids.filtered(
+                            lambda t: t.code == "BONO_ANT"
+                        ).amount,
+                        "BONO_PROD": planilla.line_ids.filtered(
+                            lambda t: t.code == "BONO_PROD"
+                        ).amount,
+                        "EXTRAS": planilla.line_ids.filtered(
+                            lambda t: t.code == "EXTRAS"
+                        ).amount,
+                        "SUBS_FRONTERA": planilla.line_ids.filtered(
+                            lambda t: t.code == "SUBS_FRONTERA"
+                        ).amount,
+                        "RECARGO": planilla.line_ids.filtered(
+                            lambda t: t.code == "RECARGO"
+                        ).amount,
+                        "DOMINGO": planilla.line_ids.filtered(
+                            lambda t: t.code == "DOMINGO"
+                        ).amount
+                        + planilla.line_ids.filtered(lambda t: t.code == "DT").amount,
+                    }
+                )
 
         for i in self.line_ids:
             data[i.code] = i.total
