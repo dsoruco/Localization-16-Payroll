@@ -5,3 +5,5 @@ access_l10n_bo_sso_report, Report sso permissions,l10n_bo_reports_hr.model_hr_pa
 access_l10n_bo_rpi_report, Report rpi permissions,l10n_bo_reports_hr.model_hr_payroll_rpi,base.group_user,1,1,1,1
 access_l10n_bo_aguinaldo_report, Report aguinaldo permissions,l10n_bo_reports_hr.model_hr_payroll_aguinaldo_wizard,base.group_user,1,1,1,1
 access_l10n_bo_disability_report, Report disability permissions,l10n_bo_reports_hr.model_hr_payroll_disability,base.group_user,1,1,1,1
+access_l10n_bo_sip_report, Report sip permissions,l10n_bo_reports_hr.model_hr_payroll_sip,base.group_user,1,1,1,1
+access_l10n_bo_fns_report, Report fns permissions,l10n_bo_reports_hr.model_hr_payroll_fns,base.group_user,1,1,1,1

@@ -34,10 +34,26 @@
         <field name="view_id" ref="view_reportes_disability_form" />
         <field name="target">new</field>
     </record>
+    <record id="sip_action_window" model="ir.actions.act_window">
+        <field name="name">Reporte de gestora SIP</field>
+        <field name="res_model">hr.payroll.sip</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_reportes_sip_form" />
+        <field name="target">new</field>
+    </record>
+    <record id="fns_action_window" model="ir.actions.act_window">
+        <field name="name">Reporte de gestora FNS</field>
+        <field name="res_model">hr.payroll.fns</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_reportes_fns_form" />
+        <field name="target">new</field>
+    </record>
 
     <menuitem id="menu_mintra" name="Reporte Mintra" parent="hr.hr_menu_hr_reports" sequence="10" action="mintra_action_window" groups="hr.group_hr_user" />
     <menuitem id="menu_sso" name="Reporte Seguro Social" parent="hr.hr_menu_hr_reports" sequence="11" action="sso_action_window" groups="hr.group_hr_user" />
     <menuitem id="menu_rpi" name="Reporte Planilla Impositiva" parent="hr.hr_menu_hr_reports" sequence="12" action="rpi_action_window" groups="hr.group_hr_user" />
     <menuitem id="menu_aguinaldo" name="Reporte Aguinaldo" parent="hr.hr_menu_hr_reports" sequence="13" action="aguinaldo_action_window" groups="hr.group_hr_user" />
     <menuitem id="menu_disability" name="Reporte de Incapacidad" parent="hr.hr_menu_hr_reports" sequence="13" action="disability_action_window" groups="hr.group_hr_user" />
+    <menuitem id="menu_sip" name="Reporte de gestora SIP" parent="hr.hr_menu_hr_reports" sequence="14" action="sip_action_window" groups="hr.group_hr_user" />
+    <menuitem id="menu_fns" name="Reporte de gestora FNS" parent="hr.hr_menu_hr_reports" sequence="15" action="fns_action_window" groups="hr.group_hr_user" />
 </odoo>
