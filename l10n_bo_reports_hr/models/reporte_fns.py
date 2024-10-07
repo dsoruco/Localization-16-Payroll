@@ -34,8 +34,23 @@ class HrReportSip(models.Model):
     year = fields.Char("Año", default="2023")
     report_file = fields.Binary("Archivo de reporte", readonly=True)
     file_name = fields.Char("Nombre de archivo")
-    
-    
+
+    def get_employee_ids(self):
+        employees = self.env["hr.payslip"].search([("state", "=", "paid")])
+        data = []
+        for pay in employees:
+            if (
+                pay.date_from.year == int(self.year)
+                and pay.date_from.month == int(self.month)
+                and pay.payslip_run_id
+            ):
+                data.append(pay)
+        return data
+
+    def generate_data(self):
+
+        return True
+
     def action_generate_report(self):
         data = self.generate_data()
         resp = useFetch(self.env.company.url_report_service, data)
