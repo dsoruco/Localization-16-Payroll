@@ -57,10 +57,14 @@ class HrQuinquenio(models.Model):
         return fecha_final
 
     def get_data(self):
-
+        index = 1
         data = {
             "extension": "pdf",
             "report": "quinquenio",
+            "date_day":self.create_date.day,
+            "date_month":meses[self.create_date.month],
+            "date_year":self.create_date.year,
+            "city":self.employee_id.staff_division_id.display_name,
             "company": self.employee_id.company_id.display_name,
             "company_address": self.employee_id.address_id.contact_address_complete,
             "employee_name": self.employee_id.display_name,
@@ -102,31 +106,32 @@ class HrQuinquenio(models.Model):
             if planilla:
                 data["details"].append(
                     {
-                        "month": meses[planilla.date_from.month],
-                        "BASIC": planilla.line_ids.filtered(
+                        f"month{index}": meses[planilla.date_from.month],
+                        f"BASIC{index}": planilla.line_ids.filtered(
                             lambda t: t.code == "BASIC"
                         ).amount,
-                        "BONO_ANT": planilla.line_ids.filtered(
+                        f"BONO_ANT{index}": planilla.line_ids.filtered(
                             lambda t: t.code == "BONO_ANT"
                         ).amount,
-                        "BONO_PROD": planilla.line_ids.filtered(
+                        f"BONO_PROD{index}": planilla.line_ids.filtered(
                             lambda t: t.code == "BONO_PROD"
                         ).amount,
-                        "EXTRAS": planilla.line_ids.filtered(
+                        f"EXTRAS{index}": planilla.line_ids.filtered(
                             lambda t: t.code == "EXTRAS"
                         ).amount,
-                        "SUBS_FRONTERA": planilla.line_ids.filtered(
+                        f"SUBS_FRONTERA{index}": planilla.line_ids.filtered(
                             lambda t: t.code == "SUBS_FRONTERA"
                         ).amount,
-                        "RECARGO": planilla.line_ids.filtered(
+                        f"RECARGO{index}": planilla.line_ids.filtered(
                             lambda t: t.code == "RECARGO"
                         ).amount,
-                        "DOMINGO": planilla.line_ids.filtered(
+                        f"DOMINGO{index}": planilla.line_ids.filtered(
                             lambda t: t.code == "DOMINGO"
                         ).amount
                         + planilla.line_ids.filtered(lambda t: t.code == "DT").amount,
                     }
                 )
+            index+=1
 
         for i in self.line_ids:
             data[i.code] = i.total

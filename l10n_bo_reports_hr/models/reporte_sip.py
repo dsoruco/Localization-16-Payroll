@@ -52,11 +52,30 @@ class HrReportSip(models.Model):
         data = {"extension": "pdf", "report": "gestora_sip", "data": []}
         for e in employees:
             detail = {
+                "document_type": "CI",
+                "document_number": "",
+                "document_extension": "NA",
                 "nua_cua": e.employee_id.afp_nua_cua,
+                "lastname": e.employee_id.lastname,
+                "lastname2": e.employee_id.lastname2,
+                "married_name": (
+                    ""
+                    if not e.employee_id.marital == "married"
+                    else e.employee_id.married_name
+                ),
+                "firstname": e.employee_id.firstname,
+                "firstname2": e.employee_id.firstname2,
+                "staff_division": e.employee_id.staff_division_id.name,
+                "contract_status": "I" if e.contract_id.active else "R",
+                "contract_date_status": (
+                    f"{e.contract_id.date_start.day}/{e.contract_id.date_start.month}/{e.contract_id.date_start.year}"
+                    if e.contract_id.active
+                    else f"{e.contract_id.date_end.day}/{e.contract_id.date_end.month}/{e.contract_id.date_end.year}"
+                ),
+                "worked_days": e.worked_days_line_ids(lambda x : x.code == "WORK100").number_of_days,   
             }
             for i in e.employee_id.identification_documents:
                 if i.type_identification_document_id.code == "01":
-                    detail["document_type"] = "CI"
                     detail["document_number"] = i.document_number
                     detail["document_extension"] = i.document_extension_id.code
 
