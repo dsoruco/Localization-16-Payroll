@@ -72,13 +72,23 @@ class HrReportSip(models.Model):
                     if e.contract_id.active
                     else f"{e.contract_id.date_end.day}/{e.contract_id.date_end.month}/{e.contract_id.date_end.year}"
                 ),
-                "worked_days": e.worked_days_line_ids(lambda x : x.code == "WORK100").number_of_days,   
+                "worked_days": e.worked_days_line_ids(lambda x : x.code == "WORK100").number_of_days,
+                "employee_category":"",
+                "total_employee_category_16":0,
+                "total_employee_category_17":0,
+                "total_employee_category_18":0,
+                "total_employee_category_19":0,
+                "additional_quote":0,
             }
+            rules = ["AP_APV","AFP_AS","AFP_MINERO"]
             for i in e.employee_id.identification_documents:
                 if i.type_identification_document_id.code == "01":
                     detail["document_number"] = i.document_number
                     detail["document_extension"] = i.document_extension_id.code
-
+            for l in self.line_ids:
+                if l.code in rules:
+                    detail[l.code] = l.total
+                
             data["data"].append(detail)
 
         return json.dumps(data)

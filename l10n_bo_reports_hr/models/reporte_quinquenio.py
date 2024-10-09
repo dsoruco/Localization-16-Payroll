@@ -27,6 +27,7 @@ estado_civil = {
     "divorced": "Divorciado(a)",
 }
 
+
 class HrQuinquenio(models.Model):
     _inherit = "hr.payslip"
 
@@ -61,10 +62,10 @@ class HrQuinquenio(models.Model):
         data = {
             "extension": "pdf",
             "report": "quinquenio",
-            "date_day":self.create_date.day,
-            "date_month":meses[self.create_date.month],
-            "date_year":self.create_date.year,
-            "city":self.employee_id.staff_division_id.display_name,
+            "date_day": self.create_date.day,
+            "date_month": meses[self.create_date.month],
+            "date_year": self.create_date.year,
+            "city": self.employee_id.staff_division_id.display_name,
             "company": self.employee_id.company_id.display_name,
             "company_address": self.employee_id.address_id.contact_address_complete,
             "employee_name": self.employee_id.display_name,
@@ -75,15 +76,11 @@ class HrQuinquenio(models.Model):
             "document_name": self.employee_id.identification_documents.filtered(
                 lambda d: d.type_identification_document_id.code == "01"
             ).type_identification_document_id.display_name,
-            "marital":estado_civil[self.employee_id.marital],
+            "marital": estado_civil[self.employee_id.marital],
             "employee_address": self.employee_id.address_home_id.contact_address_complete,
             "job_title": self.employee_id.job_title,
             "contract_date_start": f"{self.employee_id.contract_id.date_start.day} de {meses[self.employee_id.contract_id.date_start.month]} {self.employee_id.contract_id.date_start.year}",
-            "contract_date_end": (
-                f"{self.employee_id.contract_id.date_end.day} de {meses[self.employee_id.contract_id.date_end.month]} {self.employee_id.contract_id.date_end.year}"
-                if self.employee_id.contract_id.date_end
-                else ""
-            ),
+            "contract_date_end": f"{self.employee_id.contract_id.date_end.day}/{self.employee_id.contract_id.date_end.month}/{self.employee_id.contract_id.date_end.year}",
             "reason_measurement": (
                 self.employee_id.contract_id.reason_measurement_id.display_name
                 if self.employee_id.contract_id.measurement_staff == "baja"
@@ -131,7 +128,7 @@ class HrQuinquenio(models.Model):
                         + planilla.line_ids.filtered(lambda t: t.code == "DT").amount,
                     }
                 )
-            index+=1
+            index += 1
 
         for i in self.line_ids:
             data[i.code] = i.total
